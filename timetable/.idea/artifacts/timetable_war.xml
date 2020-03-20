@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="timetable:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>timetable</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="timetable.war">
+      <element id="artifact" artifact-name="timetable:war exploded" />
+    </root>
+  </artifact>
+</component>
