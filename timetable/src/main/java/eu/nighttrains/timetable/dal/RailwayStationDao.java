@@ -1,4 +1,6 @@
 package eu.nighttrains.timetable.dal;
 
-public interface RailwayStationDao {
+import eu.nighttrains.timetable.model.RailwayStation;
+
+public interface RailwayStationDao extends Dao<RailwayStation, Long> {
 }
