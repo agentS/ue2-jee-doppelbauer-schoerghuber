@@ -1,3 +1,105 @@
 INSERT INTO railwaystation(id, name) VALUES(0, 'Wien Hauptbanhof');
 INSERT INTO railwaystation(id, name) VALUES(1, 'Wien Meidling');
 INSERT INTO railwaystation(id, name) VALUES(2, 'St. Pölten');
+INSERT INTO railwaystation(id, name) VALUES(3, 'Amstetten');
+INSERT INTO railwaystation(id, name) VALUES(4, 'Linz/Donau');
+INSERT INTO railwaystation(id, name) VALUES(5, 'Wels');
+INSERT INTO railwaystation(id, name) VALUES(6, 'Attnang-Puchheim');
+INSERT INTO railwaystation(id, name) VALUES(7, 'Salzburg');
+INSERT INTO railwaystation(id, name) VALUES(8, 'Innsbruck');
+INSERT INTO railwaystation(id, name) VALUES(9, 'Landeck-Zams');
+INSERT INTO railwaystation(id, name) VALUES(10, 'Bludenz');
+INSERT INTO railwaystation(id, name) VALUES(11, 'Feldkirch');
+INSERT INTO railwaystation(id, name) VALUES(12, 'Buchs SG');
+INSERT INTO railwaystation(id, name) VALUES(13, 'Sargans');
+INSERT INTO railwaystation(id, name) VALUES(14, 'Zürich');
+INSERT INTO railwaystation(id, name) VALUES(15, 'Wr.Neustadt');
+INSERT INTO railwaystation(id, name) VALUES(16, 'Bruck/Mur');
+INSERT INTO railwaystation(id, name) VALUES(17, 'Leoben');
+INSERT INTO railwaystation(id, name) VALUES(18, 'Knittelfeld');
+INSERT INTO railwaystation(id, name) VALUES(19, 'Friesach in Kärnten');
+INSERT INTO railwaystation(id, name) VALUES(20, 'Klagenfurt');
+INSERT INTO railwaystation(id, name) VALUES(21, 'Villach');
+INSERT INTO railwaystation(id, name) VALUES(22, 'Tarvisio Boscoverde');
+INSERT INTO railwaystation(id, name) VALUES(23, 'Bologna');
+INSERT INTO railwaystation(id, name) VALUES(24, 'Firenze');
+INSERT INTO railwaystation(id, name) VALUES(25, 'Arezzo');
+INSERT INTO railwaystation(id, name) VALUES(26, 'Chiusi-Chianciano Terme');
+INSERT INTO railwaystation(id, name) VALUES(27, 'Orvieto');
+INSERT INTO railwaystation(id, name) VALUES(28, 'Roma');
+INSERT INTO railwaystation(id, name) VALUES(29, 'Breclav');
+INSERT INTO railwaystation(id, name) VALUES(30, 'Ostrava');
+INSERT INTO railwaystation(id, name) VALUES(31, 'Bohumin');
+INSERT INTO railwaystation(id, name) VALUES(32, 'Chalupki');
+INSERT INTO railwaystation(id, name) VALUES(33, 'Raciborz');
+INSERT INTO railwaystation(id, name) VALUES(34, 'Kedzierzyn Kozle');
+INSERT INTO railwaystation(id, name) VALUES(35, 'Opole Glowne');
+INSERT INTO railwaystation(id, name) VALUES(36, 'Wroclaw Glowny');
+INSERT INTO railwaystation(id, name) VALUES(37, 'Glogow');
+INSERT INTO railwaystation(id, name) VALUES(38, 'Zielona Gora');
+INSERT INTO railwaystation(id, name) VALUES(39, 'Rzepin');
+INSERT INTO railwaystation(id, name) VALUES(40, 'Frankfurt(Oder)');
+INSERT INTO railwaystation(id, name) VALUES(41, 'Berlin Ostbahnhof');
+INSERT INTO railwaystation(id, name) VALUES(42, 'Berlin Hauptbahnhof');
+INSERT INTO railwaystation(id, name) VALUES(43, 'Berlin-Charlottenburg');
+
+INSERT INTO trainconnection(id, code) VALUES(0, 'NJ 466');
+INSERT INTO trainconnection(id, code) VALUES(1, 'NJ 467');
+
+INSERT INTO trainconnection(id, code) VALUES(2, 'NJ 40233');
+INSERT INTO trainconnection(id, code) VALUES(3, 'NJ 40294');
+
+INSERT INTO trainconnection(id, code) VALUES(4, 'NJ 456');
+INSERT INTO trainconnection(id, code) VALUES(5, 'NJ 457');
+
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(0, 20, 'SLEEPER', 16, 0);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(1, 21, 'SLEEPER', 24, 0);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(2, 22, 'COUCHETTE', 42, 0);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(3, 23, 'COUCHETTE', 42, 0);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(4, 24, 'COUCHETTE', 42, 0);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(5, 25, 'SEAT', 96, 0);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(6, 26, 'SEAT', 96, 0);
+
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(10, 20, 'SLEEPER', 16, 1);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(11, 21, 'SLEEPER', 24, 1);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(12, 22, 'COUCHETTE', 42, 1);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(13, 23, 'COUCHETTE', 42, 1);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(14, 24, 'COUCHETTE', 42, 1);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(15, 25, 'SEAT', 96, 1);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(16, 26, 'SEAT', 96, 1);
+
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(20, 10, 'SLEEPER', 16, 2);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(21, 11, 'SLEEPER', 24, 2);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(22, 11, 'SLEEPER', 24, 2);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(23, 12, 'COUCHETTE', 42, 2);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(24, 13, 'COUCHETTE', 42, 2);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(25, 14, 'COUCHETTE', 42, 2);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(26, 14, 'COUCHETTE', 42, 2);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(27, 15, 'SEAT', 96, 2);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(28, 16, 'SEAT', 96, 2);
+
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(30, 10, 'SLEEPER', 16, 3);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(31, 11, 'SLEEPER', 24, 3);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(32, 11, 'SLEEPER', 24, 3);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(33, 12, 'COUCHETTE', 42, 3);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(34, 13, 'COUCHETTE', 42, 3);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(35, 14, 'COUCHETTE', 42, 3);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(36, 14, 'COUCHETTE', 42, 3);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(37, 15, 'SEAT', 96, 3);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(38, 16, 'SEAT', 96, 3);
+
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(40, 20, 'SLEEPER', 16, 4);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(41, 21, 'SLEEPER', 24, 4);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(42, 22, 'COUCHETTE', 42, 4);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(43, 23, 'COUCHETTE', 42, 4);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(44, 24, 'COUCHETTE', 42, 4);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(45, 25, 'SEAT', 96, 4);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(46, 26, 'SEAT', 96, 4);
+
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(50, 20, 'SLEEPER', 16, 5);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(51, 21, 'SLEEPER', 24, 5);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(52, 22, 'COUCHETTE', 42, 5);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(53, 23, 'COUCHETTE', 42, 5);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(54, 24, 'COUCHETTE', 42, 5);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(55, 25, 'SEAT', 96, 5);
+INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(56, 26, 'SEAT', 96, 5);
