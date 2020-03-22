@@ -1,4 +1,4 @@
-INSERT INTO railwaystation(id, name) VALUES(0, 'Wien Hauptbanhof');
+INSERT INTO railwaystation(id, name) VALUES(0, 'Wien Hauptbahnhof');
 INSERT INTO railwaystation(id, name) VALUES(1, 'Wien Meidling');
 INSERT INTO railwaystation(id, name) VALUES(2, 'St. Pölten');
 INSERT INTO railwaystation(id, name) VALUES(3, 'Amstetten');
@@ -103,3 +103,33 @@ INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(53, 
 INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(54, 24, 'COUCHETTE', 42, 5);
 INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(55, 25, 'SEAT', 96, 5);
 INSERT INTO traincar(id, number, type, capacity, trainconnection_id) VALUES(56, 26, 'SEAT', 96, 5);
+
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(0, 1, 0, '21:27:00', '21:32:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(1, 2, 0, '21:35:00', '22:00:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(2, 3, 0, '22:02:00', '22:27:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(3, 4, 0, '22:29:00', '22:55:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(4, 5, 0, '22:58:00', '23:14:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(5, 6, 0, '23:16:00', '23:32:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(6, 7, 0, '23:34:00', '00:24:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(7, 8, 0, '02:30:00', '04:23:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(8, 9, 0, '04:31:00', '05:18:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(9, 10, 0, '05:20:00', '06:20:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(10, 11, 0, '06:25:00', '06:37:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(11, 12, 0, '06:40:00', '06:56:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(12, 13, 0, '07:11:00', '07:23:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(13, 14, 0, '07:25:00', '08:20:00');
+
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(14, 13, 1, '21:40:00', '22:35:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(13, 12, 1, '22:37:00', '22:49:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(12, 11, 1, '23:05:00', '23:21:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(11, 10, 1, '23:24:00', '23:37:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(10, 9, 1, '23:40:00', '00:34:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(9, 8, 1, '00:36:00', '01:20:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(8, 7, 1, '01:28:00', '03:22:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(7, 6, 1, '04:36:00', '05:22:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(6, 5, 1, '05:25:00', '05:40:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(5, 4, 1, '05:43:00', '05:58:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(4, 3, 1, '06:15:00', '06:41:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(3, 2, 1, '06:43:00', '07:10:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(2, 1, 1, '07:12:00', '07:44:00');
+INSERT INTO railwaystationconnection(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime) VALUES(1, 0, 1, '07:49:00', '08:55:00');

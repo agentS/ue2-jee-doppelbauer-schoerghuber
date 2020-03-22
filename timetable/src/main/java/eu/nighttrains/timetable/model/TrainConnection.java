@@ -11,7 +11,7 @@ public class TrainConnection {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String code;
 
     @OneToMany(mappedBy = "trainConnection")
@@ -29,6 +29,14 @@ public class TrainConnection {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Set<TrainCar> getTrainCars() {
+        return this.trainCars;
+    }
+
+    public void setTrainCars(Set<TrainCar> trainCars) {
+        this.trainCars = trainCars;
     }
 
     @Override
