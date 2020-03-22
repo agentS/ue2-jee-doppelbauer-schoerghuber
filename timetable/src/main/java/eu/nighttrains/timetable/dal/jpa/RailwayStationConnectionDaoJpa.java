@@ -1,6 +1,7 @@
 package eu.nighttrains.timetable.dal.jpa;
 
 import eu.nighttrains.timetable.dal.RailwayStationConnectionDao;
+import eu.nighttrains.timetable.model.RailwayStation;
 import eu.nighttrains.timetable.model.RailwayStationConnection;
 
 import javax.enterprise.context.RequestScoped;
@@ -42,6 +43,32 @@ public class RailwayStationConnectionDaoJpa implements RailwayStationConnectionD
                 RailwayStationConnection.class
         );
         query.setParameter("departureStationId", originId);
-        return query.getResultList();
+        return ((List<RailwayStationConnection>) query.getResultList());
+    }
+
+    private static final String QUERY_ALL_DESTINATIONS_FROM =
+            "WITH RECURSIVE connections_to(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime, depth, search_path, cycle) AS "
+            + "("
+            + "SELECT departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime, 1, ARRAY[departurestation_id], false "
+            + "FROM railwaystationconnection "
+            + "WHERE departurestation_id = :departureStationId "
+            + "UNION ALL "
+            + "SELECT R.departurestation_id, R.arrivalstation_id, R.trainconnection_id, R.departuretime, R.arrivaltime, C.depth + 1, search_path || R.departurestation_id, R.arrivalstation_id = ANY(search_path) "
+            + "FROM connections_to AS C INNER JOIN railwaystationconnection AS R ON C.arrivalstation_id = R.departurestation_id "
+            + "WHERE NOT cycle"
+            + ") "
+            + "SELECT R.id, R.name FROM connections_to AS C "
+            + "INNER JOIN railwaystation AS R ON C.arrivalstation_id = R.id "
+            + "WHERE NOT cycle "
+            + "GROUP BY R.id, R.name;";
+
+    @Override
+    public List<RailwayStation> findAllDestinationsFrom(Long originId) {
+        Query query = this.entityManager.createNativeQuery(
+                QUERY_ALL_DESTINATIONS_FROM,
+                RailwayStation.class
+        );
+        query.setParameter("departureStationId", originId);
+        return ((List<RailwayStation>) query.getResultList());
     }
 }

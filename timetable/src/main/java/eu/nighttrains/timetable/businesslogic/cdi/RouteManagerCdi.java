@@ -1,10 +1,14 @@
 package eu.nighttrains.timetable.businesslogic.cdi;
 
+import eu.nighttrains.timetable.businesslogic.IdNotFoundException;
 import eu.nighttrains.timetable.businesslogic.RouteManager;
 import eu.nighttrains.timetable.dal.RailwayStationConnectionDao;
+import eu.nighttrains.timetable.dal.RailwayStationDao;
 import eu.nighttrains.timetable.dto.RailwayStationConnectionDto;
+import eu.nighttrains.timetable.dto.RailwayStationDestinationsDto;
 import eu.nighttrains.timetable.dto.RailwayStationDto;
 import eu.nighttrains.timetable.dto.TrainConnectionDto;
+import eu.nighttrains.timetable.model.RailwayStation;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -17,9 +21,14 @@ import java.util.stream.Collectors;
 @Transactional
 public class RouteManagerCdi implements RouteManager {
     private final RailwayStationConnectionDao railwayStationConnectionDao;
+    private final RailwayStationDao railwayStationDao;
 
     @Inject
-    public RouteManagerCdi(RailwayStationConnectionDao railwayStationConnectionDao) {
+    public RouteManagerCdi(
+            RailwayStationDao railwayStationDao,
+            RailwayStationConnectionDao railwayStationConnectionDao
+    ) {
+        this.railwayStationDao = railwayStationDao;
         this.railwayStationConnectionDao = railwayStationConnectionDao;
     }
 
@@ -47,12 +56,27 @@ public class RouteManagerCdi implements RouteManager {
     }
 
     @Override
-    public List<RailwayStationConnectionDto> findAllConnectionsBetween(Long originId, Long destinationId) {
-        return null;
+    public RailwayStationDestinationsDto findAllDestinationsFrom(Long originId) throws IdNotFoundException {
+        RailwayStation originStation = this.railwayStationDao.findById(originId);
+        if (originStation == null) {
+            throw new IdNotFoundException("Railway station with id " + originId + " does not exist.");
+        }
+        return new RailwayStationDestinationsDto(
+                new RailwayStationDto(
+                        originStation.getId(),
+                        originStation.getName()
+                ),
+                this.railwayStationConnectionDao.findAllDestinationsFrom(originId).stream()
+                        .map(station -> new RailwayStationDto(
+                                station.getId(),
+                                station.getName()
+                        ))
+                        .collect(Collectors.toList())
+        );
     }
 
     @Override
-    public List<RailwayStationConnectionDto> findAllStopsBetween(Long originId, Long destinationId, Long trainConnectionId) {
+    public List<RailwayStationConnectionDto> findAllStopsBetween(Long originId, Long destinationId) {
         return null;
     }
 }
