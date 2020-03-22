@@ -35,6 +35,6 @@ public class RailwayStationManagerCdi implements RailwayStationManager {
     public List<RailwayStationDto> findAllRailwayStations() {
         return this.railwayStationDao.findAll().stream()
                 .map(railwayStation -> new RailwayStationDto(railwayStation.getId(), railwayStation.getName()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
     }
 }

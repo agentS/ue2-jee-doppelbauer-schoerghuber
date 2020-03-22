@@ -36,7 +36,7 @@ public class TrainConnectionManagerCdi implements TrainConnectionManager {
                                 trainCar.getNumber(),
                                 trainCar.getType(),
                                 trainCar.getCapacity()
-                        )).collect(Collectors.toList())
+                        )).collect(Collectors.toUnmodifiableList())
         );
     }
 
@@ -52,7 +52,7 @@ public class TrainConnectionManagerCdi implements TrainConnectionManager {
                                 trainCar.getNumber(),
                                 trainCar.getType(),
                                 trainCar.getCapacity()
-                        )).collect(Collectors.toList())
+                        )).collect(Collectors.toUnmodifiableList())
         );
     }
 
@@ -88,7 +88,7 @@ public class TrainConnectionManagerCdi implements TrainConnectionManager {
                         trainCar.getNumber(),
                         trainCar.getType(),
                         trainCar.getCapacity()
-                )).collect(Collectors.toList());
+                )).collect(Collectors.toUnmodifiableList());
     }
 
     @Override
@@ -99,7 +99,7 @@ public class TrainConnectionManagerCdi implements TrainConnectionManager {
                         trainCar.getNumber(),
                         trainCar.getType(),
                         trainCar.getCapacity()
-                )).collect(Collectors.toList());
+                )).collect(Collectors.toUnmodifiableList());
     }
 
     @Override
@@ -114,7 +114,7 @@ public class TrainConnectionManagerCdi implements TrainConnectionManager {
                                         trainCar.getNumber(),
                                         trainCar.getType(),
                                         trainCar.getCapacity()
-                                )).collect(Collectors.toList())
-                )).collect(Collectors.toList());
+                                )).collect(Collectors.toUnmodifiableList())
+                )).collect(Collectors.toUnmodifiableList());
     }
 }
