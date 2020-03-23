@@ -14,6 +14,7 @@ import eu.nighttrains.timetable.model.RailwayStationConnection;
 import eu.nighttrains.timetable.model.RailwayStationConnectionSearchGraph;
 import eu.nighttrains.timetable.route.SearchGraphAlgorithms;
 import eu.nighttrains.timetable.route.SearchGraphNode;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 @RequestScoped
 @Transactional
+@Traced
 public class RouteManagerCdi implements RouteManager {
     private final RailwayStationConnectionDao railwayStationConnectionDao;
     private final RailwayStationDao railwayStationDao;
