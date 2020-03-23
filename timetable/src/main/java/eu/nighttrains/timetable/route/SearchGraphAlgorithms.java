@@ -1,5 +1,7 @@
 package eu.nighttrains.timetable.route;
 
+import org.eclipse.microprofile.opentracing.Traced;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +27,7 @@ public final class SearchGraphAlgorithms {
         }
     }
 
+    @Traced
     public static <T> List<SearchGraphNode<T>> findPathIterativeDeepeningSearch(SearchGraph<T> searchGraph, long targetId) {
         State state = new State();
         int depth = 1;

@@ -139,7 +139,6 @@
     <orderEntry type="library" name="Maven: org.eclipse.microprofile.rest.client:microprofile-rest-client-api:1.4.1" level="project" />
     <orderEntry type="library" name="Maven: io.opentracing:opentracing-api:0.31.0" level="project" />
     <orderEntry type="library" name="Maven: io.opentracing.contrib:opentracing-jaxrs2:0.4.1" level="project" />
-    <orderEntry type="library" name="Maven: io.opentracing:opentracing-noop:0.31.0" level="project" />
     <orderEntry type="library" name="Maven: io.opentracing.contrib:opentracing-web-servlet-filter:0.2.3" level="project" />
     <orderEntry type="library" name="Maven: io.opentracing.contrib:opentracing-concurrent:0.2.0" level="project" />
     <orderEntry type="library" name="Maven: io.opentracing.contrib:opentracing-interceptors:0.0.4" level="project" />
@@ -147,7 +146,6 @@
     <orderEntry type="library" name="Maven: jakarta.inject:jakarta.inject-api:1.0" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-jaeger:1.3.0.Final" level="project" />
     <orderEntry type="library" name="Maven: io.jaegertracing:jaeger-core:0.34.0" level="project" />
-    <orderEntry type="library" name="Maven: io.opentracing:opentracing-util:0.31.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.2" level="project" />
     <orderEntry type="library" name="Maven: io.jaegertracing:jaeger-thrift:0.34.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.thrift:libthrift:0.12.0" level="project" />
@@ -156,6 +154,9 @@
     <orderEntry type="library" name="Maven: io.smallrye:smallrye-metrics:2.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.microprofile.metrics:microprofile-metrics-api:2.3" level="project" />
     <orderEntry type="library" name="Maven: jakarta.servlet:jakarta.servlet-api:4.0.3" level="project" />
+    <orderEntry type="library" name="Maven: io.opentracing.contrib:opentracing-jdbc:0.0.12" level="project" />
+    <orderEntry type="library" name="Maven: io.opentracing:opentracing-util:0.31.0" level="project" />
+    <orderEntry type="library" name="Maven: io.opentracing:opentracing-noop:0.31.0" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-jsonp:1.3.0.Final" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish:jakarta.json:1.1.6" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-hibernate-orm:1.3.0.Final" level="project" />
@@ -202,15 +203,13 @@
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-arc:1.3.0.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus.arc:arc:1.3.0.Final" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.microprofile.context-propagation:microprofile-context-propagation-api:1.0.1" level="project" />
-    <orderEntry type="library" name="Maven: io.quarkus:quarkus-neo4j:1.3.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.neo4j.driver:neo4j-java-driver:4.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-container-image-docker:1.3.0.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-rest-client:1.3.0.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-resteasy-common:1.3.0.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.resteasy:resteasy-core:4.5.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.1_spec:2.0.1.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.resteasy:resteasy-core-spi:4.5.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.resteasy:resteasy-client-microprofile:4.5.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.resteasy:resteasy-client:4.5.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.resteasy:resteasy-client-api:4.5.2.Final" level="project" />

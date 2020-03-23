@@ -5,6 +5,7 @@ import eu.nighttrains.timetable.businesslogic.RailwayStationManager;
 import eu.nighttrains.timetable.dal.RailwayStationDao;
 import eu.nighttrains.timetable.dto.RailwayStationDto;
 import eu.nighttrains.timetable.model.RailwayStation;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RequestScoped
 @Transactional
+@Traced
 public class RailwayStationManagerCdi implements RailwayStationManager {
     private final RailwayStationDao railwayStationDao;
 

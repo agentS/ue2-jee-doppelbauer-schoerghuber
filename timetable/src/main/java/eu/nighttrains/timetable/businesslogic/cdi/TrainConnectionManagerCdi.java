@@ -7,6 +7,7 @@ import eu.nighttrains.timetable.dto.TrainCarDto;
 import eu.nighttrains.timetable.dto.TrainConnectionDto;
 import eu.nighttrains.timetable.model.TrainCar;
 import eu.nighttrains.timetable.model.TrainConnection;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RequestScoped
 @Transactional
+@Traced
 public class TrainConnectionManagerCdi implements TrainConnectionManager {
     private final TrainConnectionDao trainConnectionDao;
 
