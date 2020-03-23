@@ -1,6 +1,7 @@
 package eu.nighttrains.timetable.businesslogic.cdi;
 
 import eu.nighttrains.timetable.businesslogic.IdNotFoundException;
+import eu.nighttrains.timetable.businesslogic.NoRouteException;
 import eu.nighttrains.timetable.businesslogic.RouteManager;
 import eu.nighttrains.timetable.dal.RailwayStationConnectionDao;
 import eu.nighttrains.timetable.dal.RailwayStationDao;
@@ -9,6 +10,10 @@ import eu.nighttrains.timetable.dto.RailwayStationDestinationsDto;
 import eu.nighttrains.timetable.dto.RailwayStationDto;
 import eu.nighttrains.timetable.dto.TrainConnectionDto;
 import eu.nighttrains.timetable.model.RailwayStation;
+import eu.nighttrains.timetable.model.RailwayStationConnection;
+import eu.nighttrains.timetable.model.RailwayStationConnectionSearchGraph;
+import eu.nighttrains.timetable.route.SearchGraphAlgorithms;
+import eu.nighttrains.timetable.route.SearchGraphNode;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -33,29 +38,6 @@ public class RouteManagerCdi implements RouteManager {
     }
 
     @Override
-    public List<RailwayStationConnectionDto> findAllConnectionsFrom(Long originId) {
-        return this.railwayStationConnectionDao.findAllConnectionsFrom(originId).stream()
-                .map(connection -> new RailwayStationConnectionDto(
-                        new RailwayStationDto(
-                                connection.getDepartureStation().getId(),
-                                connection.getDepartureStation().getName()
-                        ),
-                        new RailwayStationDto(
-                                connection.getArrivalStation().getId(),
-                                connection.getArrivalStation().getName()
-                        ),
-                        new TrainConnectionDto(
-                                connection.getTrainConnection().getId(),
-                                connection.getTrainConnection().getCode(),
-                                new ArrayList<>()
-                        ),
-                        connection.getDepartureTime(),
-                        connection.getArrivalTime()
-                ))
-                .collect(Collectors.toUnmodifiableList());
-    }
-
-    @Override
     public RailwayStationDestinationsDto findAllDestinationsFrom(Long originId) throws IdNotFoundException {
         RailwayStation originStation = this.railwayStationDao.findById(originId);
         if (originStation == null) {
@@ -76,7 +58,35 @@ public class RouteManagerCdi implements RouteManager {
     }
 
     @Override
-    public List<RailwayStationConnectionDto> findAllStopsBetween(Long originId, Long destinationId) {
-        return null;
+    public List<RailwayStationConnectionDto> findAllStopsBetween(Long originId, Long destinationId) throws NoRouteException {
+        List<RailwayStationConnection> allConnections =
+                this.railwayStationConnectionDao.findAllConnectionsFrom(originId);
+        var searchPath = SearchGraphAlgorithms.findPathIterativeDeepeningSearch(
+                RailwayStationConnectionSearchGraph.createFromConnections(allConnections), destinationId
+        );
+        if (searchPath != null) {
+            return searchPath.stream()
+                    .skip(1)
+                    .map(SearchGraphNode::getValue)
+                    .map(connection -> new RailwayStationConnectionDto(
+                            new RailwayStationDto(
+                                    connection.getDepartureStation().getId(),
+                                    connection.getDepartureStation().getName()
+                            ),
+                            new RailwayStationDto(
+                                    connection.getArrivalStation().getId(),
+                                    connection.getArrivalStation().getName()
+                            ),
+                            new TrainConnectionDto(
+                                    connection.getTrainConnection().getId(),
+                                    connection.getTrainConnection().getCode(),
+                                    new ArrayList<>()
+                            ),
+                            connection.getDepartureTime(),
+                            connection.getArrivalTime()
+                    ))
+                    .collect(Collectors.toUnmodifiableList());
+        }
+        throw new NoRouteException("No route exists between train stations with IDs " + originId + " and " + destinationId + '.');
     }
 }

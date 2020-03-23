@@ -1,10 +1,47 @@
 package eu.nighttrains.timetable.model;
 
+import com.vladmihalcea.hibernate.type.array.LongArrayType;
+import eu.nighttrains.timetable.route.SearchGraph;
+import eu.nighttrains.timetable.route.SearchGraphNode;
+
 import javax.persistence.*;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@SqlResultSetMapping(
+        name = "RailwayStationConnectionWithSearchPath",
+        entities = {
+                @EntityResult(
+                        entityClass = RailwayStation.class,
+                        fields = {
+                                @FieldResult(name = "id", column = "departurestation_id"),
+                                @FieldResult(name = "name", column = "departurestation_name"),
+                        }
+                ),
+                @EntityResult(
+                        entityClass = RailwayStation.class,
+                        fields = {
+                                @FieldResult(name = "id", column = "arrivalstation_id"),
+                                @FieldResult(name = "name", column = "arrivalstation_name"),
+                        }
+                ),
+                @EntityResult(
+                        entityClass = TrainConnection.class,
+                        fields = {
+                                @FieldResult(name = "id", column = "trainconnection_id"),
+                                @FieldResult(name = "code", column = "trainconnection_code"),
+                        }
+                )
+        },
+        columns = {
+                @ColumnResult(name = "departuretime", type = LocalTime.class),
+                @ColumnResult(name = "arrivaltime", type = LocalTime.class),
+                @ColumnResult(name = "searchpath", type = LongArrayType.class)
+        }
+)
 public class RailwayStationConnection {
     @EmbeddedId
     private RailwayStationConnectionKey id;
@@ -26,6 +63,9 @@ public class RailwayStationConnection {
     @ManyToOne(optional = false, cascade = { CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
     @MapsId("trainConnectionId")
     private TrainConnection trainConnection;
+
+    @Transient
+    private long[] searchPath;
 
     public RailwayStationConnection() {}
 
@@ -71,5 +111,13 @@ public class RailwayStationConnection {
 
     public void setTrainConnection(TrainConnection trainConnection) {
         this.trainConnection = trainConnection;
+    }
+
+    public long[] getSearchPath() {
+        return this.searchPath;
+    }
+
+    public void setSearchPath(long[] searchPath) {
+        this.searchPath = searchPath;
     }
 }
