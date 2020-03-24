@@ -6,6 +6,12 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import javax.annotation.PreDestroy;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -13,10 +19,7 @@ import java.util.Set;
 public class RedisConfigurationSource implements ConfigSource {
     private static final int DEFAULT_CONFIGURATION_ORDINAL = 600;
 
-    private static final String REDIS_HOSTNAME = "127.0.0.1";
-    private static final int REDIS_PORT = 6379;
-    private static final int REDIS_POOL_OPENING_TIMEOUT = 3000;
-    private static final int REDIS_POOL_MAXIMUM_SIZE = 5;
+    private static final String CONFIGURATION_FILE_NAME = "/redisConfiguration.json";
 
     private static final String PREFIX = "timetable";
     private static final String KEY_SEPARATOR = ":";
@@ -24,15 +27,20 @@ public class RedisConfigurationSource implements ConfigSource {
 
     private JedisPool redisPool;
 
-    public RedisConfigurationSource() {
-        JedisPoolConfig configuration = new JedisPoolConfig();
-        configuration.setTestOnBorrow(true);
-        configuration.setMaxTotal(REDIS_POOL_MAXIMUM_SIZE);
-        this.redisPool = new JedisPool(
-                configuration,
-                REDIS_HOSTNAME, REDIS_PORT,
-                REDIS_POOL_OPENING_TIMEOUT
-        );
+    public RedisConfigurationSource() throws IOException {
+        try (FileReader configurationFileReader = new FileReader(this.getClass().getResource(CONFIGURATION_FILE_NAME).getFile())) {
+            try (JsonReader jsonReader = Json.createReader(configurationFileReader)) {
+                JsonObject jsonConfiguration = jsonReader.readObject();
+                JedisPoolConfig configuration = new JedisPoolConfig();
+                configuration.setTestOnBorrow(true);
+                configuration.setMaxTotal(jsonConfiguration.getInt("maximumPoolSize"));
+                this.redisPool = new JedisPool(
+                        configuration,
+                        jsonConfiguration.getString("hostname"), jsonConfiguration.getInt("port"),
+                        jsonConfiguration.getInt("timeout")
+                );
+            }
+        }
     }
 
     @Override
