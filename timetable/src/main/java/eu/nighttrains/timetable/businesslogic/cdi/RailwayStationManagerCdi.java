@@ -6,7 +6,6 @@ import eu.nighttrains.timetable.dal.RailwayStationDao;
 import eu.nighttrains.timetable.dto.RailwayStationDto;
 import eu.nighttrains.timetable.model.RailwayStation;
 import org.eclipse.microprofile.opentracing.Traced;
-import redis.clients.jedis.Jedis;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -21,7 +20,7 @@ public class RailwayStationManagerCdi implements RailwayStationManager {
     private final RailwayStationDao railwayStationDao;
 
     @Inject
-    public RailwayStationManagerCdi(RailwayStationDao railwayStationDao, Jedis redisClient) {
+    public RailwayStationManagerCdi(RailwayStationDao railwayStationDao) {
         this.railwayStationDao = railwayStationDao;
     }
 
