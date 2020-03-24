@@ -21,11 +21,11 @@ public class RedisConfigurationSource implements ConfigSource {
 
     private static final String CONFIGURATION_FILE_NAME = "/redisConfiguration.json";
 
-    private static final String PREFIX = "timetable";
     private static final String KEY_SEPARATOR = ":";
     private static final String ORDINAL_KEY = "ordinal";
 
     private JedisPool redisPool;
+    private final String prefix;
 
     public RedisConfigurationSource() throws IOException {
         try (FileReader configurationFileReader = new FileReader(this.getClass().getResource(CONFIGURATION_FILE_NAME).getFile())) {
@@ -39,6 +39,7 @@ public class RedisConfigurationSource implements ConfigSource {
                         jsonConfiguration.getString("hostname"), jsonConfiguration.getInt("port"),
                         jsonConfiguration.getInt("timeout")
                 );
+                this.prefix = jsonConfiguration.getString("prefix");
             }
         }
     }
@@ -47,9 +48,9 @@ public class RedisConfigurationSource implements ConfigSource {
     public Map<String, String> getProperties() {
         try (Jedis redisClient = this.redisPool.getResource()) {
             Map<String, String> properties = new HashMap<>();
-            Set<String> keys = redisClient.hkeys(PREFIX);
+            Set<String> keys = redisClient.hkeys(this.prefix);
             for (var key : keys) {
-                properties.put(key, redisClient.hget(PREFIX, key));
+                properties.put(key, redisClient.hget(this.prefix, key));
             }
             return properties;
         }
@@ -58,14 +59,14 @@ public class RedisConfigurationSource implements ConfigSource {
     @Override
     public Set<String> getPropertyNames() {
         try (Jedis redisClient = this.redisPool.getResource()) {
-            return redisClient.hkeys(PREFIX);
+            return redisClient.hkeys(this.prefix);
         }
     }
 
     @Override
     public String getValue(String path) {
         try (Jedis redisClient = this.redisPool.getResource()) {
-            return redisClient.hget(PREFIX, path);
+            return redisClient.hget(this.prefix, path);
         }
     }
 
@@ -77,7 +78,7 @@ public class RedisConfigurationSource implements ConfigSource {
     @Override
     public int getOrdinal() {
         try (Jedis redisClient = this.redisPool.getResource()) {
-            return Integer.parseInt(redisClient.get(PREFIX + KEY_SEPARATOR + ORDINAL_KEY));
+            return Integer.parseInt(redisClient.get(this.prefix + KEY_SEPARATOR + ORDINAL_KEY));
         }
     }
 

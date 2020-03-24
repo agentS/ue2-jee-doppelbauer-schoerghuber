@@ -19,6 +19,8 @@ The following example outlines the file's structure:
   "hostname": "127.0.0.1",
   "port": 6379,
   "timeout": 3000,
-  "maximumPoolSize": 5
+  "maximumPoolSize": 5,
+
+  "prefix": "timetable"
 }
 ```
