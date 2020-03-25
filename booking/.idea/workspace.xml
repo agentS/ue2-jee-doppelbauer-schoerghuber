@@ -6,7 +6,35 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="20d6ebcb-6a45-4382-8a5f-f9661d1816ba" name="Default Changelist" comment="" />
+    <list default="true" id="20d6ebcb-6a45-4382-8a5f-f9661d1816ba" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/RailwayStationConnectionDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/RailwayStationDestinationsDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/RailwayStationDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/TrainCarDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/TrainCarType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/TrainConnectionDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/client/DestinationsClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/client/UnknownUriException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/client/UnknownUriExceptionMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/rest/ConfigCustom.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/logging/Logger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/logging/LoggerQualifier.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/logging/LoggerType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/logging/Slf4jLogger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/model/Ticket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/BookingApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/rest/BookingApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/ConfigCustom.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/HelloResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/HelloResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../timetable/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../timetable/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../timetable/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../timetable/timetable.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/timetable.iml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +48,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
       <MavenImportingSettings>
@@ -28,17 +59,24 @@
     </option>
   </component>
   <component name="ProjectId" id="1Za1Fx8t5BOhd7HCCcijMcuA9qe" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/META-INF" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15429688" />
     <property name="project.structure.side.proportion" value="0.17321016" />
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="eu.nighttrains.booking.dto" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\dto" />
+      <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\logging" />
       <recent name="C:\Users\alex\Documents\documents\github.com\booking\src\main\resources\META-INF" />
     </key>
   </component>
@@ -210,10 +248,22 @@
       <workItem from="1585062295060" duration="7045000" />
       <workItem from="1585070265490" duration="2943000" />
       <workItem from="1585073250519" duration="683000" />
+      <workItem from="1585146536005" duration="5935000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
