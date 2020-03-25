@@ -41,7 +41,7 @@ public class HelloResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public String sayHello(){
-        entityManager.persist(new Ticket("hallo wildfly"));
+        entityManager.persist(new Ticket(1,2,"NIGHTJET",1));
         return "Hello from Wildfly";
     }
 
