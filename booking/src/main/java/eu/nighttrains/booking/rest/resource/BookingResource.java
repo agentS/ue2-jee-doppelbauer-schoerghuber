@@ -2,14 +2,13 @@ package eu.nighttrains.booking.rest.resource;
 
 import eu.nighttrains.booking.businesslogic.BookingManager;
 import eu.nighttrains.booking.businesslogic.exception.BookingNotPossible;
+import eu.nighttrains.booking.dto.BookingDto;
 import eu.nighttrains.booking.dto.BookingRequestDto;
 import eu.nighttrains.booking.dto.ErrorInfoDto;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -50,5 +49,12 @@ public class BookingResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .build();
         }
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public BookingDto findById(@PathParam("id") Long id){
+        return bookingManager.findBookingById(id);
     }
 }

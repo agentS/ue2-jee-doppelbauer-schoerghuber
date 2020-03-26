@@ -2,6 +2,7 @@ package eu.nighttrains.booking.businesslogic.cdi;
 
 import eu.nighttrains.booking.businesslogic.BookingManager;
 import eu.nighttrains.booking.businesslogic.DestinationManager;
+import eu.nighttrains.booking.businesslogic.RailwayStationManager;
 import eu.nighttrains.booking.businesslogic.TrainConnectionManager;
 import eu.nighttrains.booking.businesslogic.exception.BookingNotPossible;
 import eu.nighttrains.booking.businesslogic.exception.NoConnectionsAvailable;
@@ -9,8 +10,7 @@ import eu.nighttrains.booking.businesslogic.exception.NoTrainCarAvailable;
 import eu.nighttrains.booking.dal.BookingDao;
 import eu.nighttrains.booking.dal.TicketDao;
 import eu.nighttrains.booking.domain.*;
-import eu.nighttrains.booking.dto.BookingConnectionDto;
-import eu.nighttrains.booking.dto.BookingRequestDto;
+import eu.nighttrains.booking.dto.*;
 import eu.nighttrains.booking.logging.Logger;
 import eu.nighttrains.booking.logging.LoggerQualifier;
 import eu.nighttrains.booking.logging.LoggerType;
@@ -25,6 +25,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestScoped
@@ -34,6 +35,7 @@ public class BookingManagerCdi implements BookingManager {
     private TicketDao ticketDao;
     private DestinationManager destinationManager;
     private TrainConnectionManager trainConnectionManager;
+    private RailwayStationManager railwayStationManager;
     private Logger logger;
 
     @Inject
@@ -41,11 +43,13 @@ public class BookingManagerCdi implements BookingManager {
                              TicketDao ticketDao,
                              DestinationManager destinationManager,
                              TrainConnectionManager trainConnectionManager,
+                             RailwayStationManager railwayStationManager,
                              @LoggerQualifier(type = LoggerType.CONSOLE) Logger logger) {
         this.bookingDao = bookingDao;
         this.ticketDao = ticketDao;
         this.destinationManager = destinationManager;
         this.trainConnectionManager = trainConnectionManager;
+        this.railwayStationManager = railwayStationManager;
         this.logger = logger;
     }
 
@@ -184,5 +188,79 @@ public class BookingManagerCdi implements BookingManager {
         public int compare(TrainCar o1, TrainCar o2) {
             return o1.getNumber() - o2.getNumber();
         }
+    }
+
+    @Override
+    public BookingDto findBookingById(Long id) {
+        Booking booking = bookingDao.findById(id);
+        if(booking == null){
+            throw new IllegalArgumentException();
+        }
+        BookingDto bookingDto = createBookingDto(booking);
+        return bookingDto;
+    }
+
+    private BookingDto createBookingDto(Booking booking) {
+        RailwayStation fromStation = railwayStationManager
+                .findRailwayStationById(booking.getOriginId());
+        RailwayStation toStation = railwayStationManager
+                .findRailwayStationById(booking.getDestinationId());
+
+        BookingDto bookingDto = new BookingDto();
+        bookingDto.setId(booking.getId());
+        bookingDto.setFrom(fromStation.getName());
+        bookingDto.setTo(toStation.getName());
+        bookingDto.setTickets(createTicketDtos(booking.getTickets()));
+        return bookingDto;
+    }
+
+    private List<TicketDto> createTicketDtos(List<Ticket> tickets) {
+        List<TicketDto> ticketDtos = new ArrayList<>();
+        for(Ticket ticket : tickets){
+            List<RailwayStationConnection> connections = destinationManager
+                    .getConnections(ticket.getOriginId(), ticket.getDestinationId());
+
+            TicketDto ticketDto = new TicketDto();
+            ticketDto.setDate(ticket.getBookingDate());
+            ticketDto.setId(ticket.getId());
+            if(connections.size() > 0) {
+                RailwayStationConnection connection = connections.get(0);
+                ticketDto.setRailwayStationConnection(createRailwayStationConnectionDto(connection));
+
+                TrainConnection trainConnection = connection.getTrainConnection();
+                Optional<TrainCar> trainCar = trainConnectionManager
+                        .findAllTrainCarsByCode(trainConnection.getCode())
+                        .stream()
+                        .filter(c -> c.getId() == ticket.getTrainCarId())
+                        .findFirst();
+
+                TrainCarDto trainCarDto = new TrainCarDto();
+                trainCarDto.setId(trainCar.get().getId());
+                trainCarDto.setNumber(trainCar.get().getNumber());
+                trainCarDto.setType(trainCar.get().getType());
+
+                TrainConnectionDto trainConnectionDto = createTrainConnectionDto(trainConnection);
+                trainConnectionDto.setTrainCar(trainCarDto);
+                ticketDto.setTrainConnection(trainConnectionDto);
+            }
+            ticketDtos.add(ticketDto);
+        }
+        return ticketDtos;
+    }
+
+    private TrainConnectionDto createTrainConnectionDto(TrainConnection trainConnection) {
+        TrainConnectionDto trainConnectionDto = new TrainConnectionDto();
+        trainConnectionDto.setCode(trainConnection.getCode());
+        trainConnectionDto.setId(trainConnection.getId());
+        return trainConnectionDto;
+    }
+
+    private RailwayStationConnectionDto createRailwayStationConnectionDto(RailwayStationConnection connection) {
+        RailwayStationConnectionDto railwayStationConnectionDto = new RailwayStationConnectionDto();
+        railwayStationConnectionDto.setArrivalStation(connection.getArrivalStation());
+        railwayStationConnectionDto.setDepartureStation(connection.getDepartureStation());
+        railwayStationConnectionDto.setArrivalTime(connection.getArrivalTime());
+        railwayStationConnectionDto.setDepartureTime(connection.getDepartureTime());
+        return railwayStationConnectionDto;
     }
 }
