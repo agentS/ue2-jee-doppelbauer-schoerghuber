@@ -22,22 +22,22 @@ public class TicketDaoJpa extends AbstractDaoBean<Ticket, Long> implements Ticke
     }
 
     @Override
-    public int getCntTickets(long fromId, long toId, LocalDate date, String trainCode, long trainCarId) {
+    public long getCntTickets(long fromId, long toId, LocalDate date, String trainCode, long trainCarId) {
         EntityManager entityManager = getEntityManager();
-        TypedQuery<Integer> query = entityManager
+        TypedQuery<Long> query = entityManager
                 .createQuery("SELECT COUNT(T) FROM Ticket AS T " +
                         "WHERE T.originId = :originId " +
                         "AND T.destinationId = :destinationId " +
-                        "AND T.date = :date " +
+                        "AND T.bookingDate = :date " +
                         "AND T.trainCode = :trainCode " +
-                        "AND T.trainCarId = :trainCarId", Integer.class);
+                        "AND T.trainCarId = :trainCarId", Long.class);
         query.setParameter("originId", fromId);
         query.setParameter("destinationId", toId);
         query.setParameter("date", date);
         query.setParameter("trainCode", trainCode);
         query.setParameter("trainCarId", trainCarId);
 
-        Integer cnt = query.getSingleResult();
+        Long cnt = query.getSingleResult();
         return cnt;
     }
 }

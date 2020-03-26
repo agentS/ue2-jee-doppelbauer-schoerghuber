@@ -7,27 +7,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20d6ebcb-6a45-4382-8a5f-f9661d1816ba" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/BookingManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/DestinationManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/RailwayStationManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/TrainConnectionManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingNotPossible.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/DestinationManagerCdi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/RailwayStationManagerCdi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/TrainConnectionManagerCdi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/BookingRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/NoConnectionsAvailable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/NoTrainCarAvailable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/BookingConnectionDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/DestinationsClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/DestinationsClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/TrainConnectionClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/TrainConnectionClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/TicketDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/TicketDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/jpa/BookingDaoJpa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/jpa/BookingDaoJpa.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/jpa/TicketDaoJpa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/jpa/TicketDaoJpa.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Booking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Ticket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/ConfigCustom.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/HelloResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/HelloResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/BookingRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/BookingRequestDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/pom.xml" afterDir="false" />
@@ -253,7 +241,7 @@
       <workItem from="1585073250519" duration="683000" />
       <workItem from="1585146536005" duration="8664000" />
       <workItem from="1585166888402" duration="8709000" />
-      <workItem from="1585222483746" duration="6194000" />
+      <workItem from="1585222483746" duration="11143000" />
     </task>
     <task id="LOCAL-00001" summary="add destionations rest client">
       <created>1585152744324</created>
@@ -269,7 +257,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585168082205</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add managers">
+      <created>1585230471551</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1585230471551</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -291,6 +286,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add destionations rest client" />
     <MESSAGE value="add booking daos and remaining rest clients" />
-    <option name="LAST_COMMIT_MESSAGE" value="add booking daos and remaining rest clients" />
+    <MESSAGE value="add managers" />
+    <option name="LAST_COMMIT_MESSAGE" value="add managers" />
   </component>
 </project>

@@ -1,13 +1,36 @@
 package eu.nighttrains.booking.dto;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 public class BookingRequestDto {
     private long originId;
     private long destinationId;
     private LocalDate journeyStartDate;
-    private TrainCarType trainCarType;
+    private List<BookingConnectionDto> bookingConnections;
+
+    public BookingRequestDto(){
+    }
+
+    public BookingRequestDto(LocalDate journeyStartDate) {
+        this.journeyStartDate = journeyStartDate;
+    }
+
+    public LocalDate getJourneyStartDate() {
+        return journeyStartDate;
+    }
+
+    public void setJourneyStartDate(LocalDate journeyStartDate) {
+        this.journeyStartDate = journeyStartDate;
+    }
+
+    public List<BookingConnectionDto> getBookingConnections() {
+        return bookingConnections;
+    }
+
+    public void setBookingConnections(List<BookingConnectionDto> bookingConnections) {
+        this.bookingConnections = bookingConnections;
+    }
 
     public long getOriginId() {
         return originId;
@@ -23,21 +46,5 @@ public class BookingRequestDto {
 
     public void setDestinationId(long destinationId) {
         this.destinationId = destinationId;
-    }
-
-    public LocalDate getJourneyStartDate() {
-        return journeyStartDate;
-    }
-
-    public void setJourneyStartDate(LocalDate journeyStartDate) {
-        this.journeyStartDate = journeyStartDate;
-    }
-
-    public TrainCarType getTrainCarType() {
-        return trainCarType;
-    }
-
-    public void setTrainCarType(TrainCarType trainCarType) {
-        this.trainCarType = trainCarType;
     }
 }

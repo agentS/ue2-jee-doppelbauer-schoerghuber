@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface TicketDao extends Dao<Ticket, Long> {
     List<Ticket> bulkMerge(List<Ticket> tickets);
-    int getCntTickets(long fromId, long toId, LocalDate date, String trainCode, long trainCarId);
+    long getCntTickets(long fromId, long toId, LocalDate date, String trainCode, long trainCarId);
 }
