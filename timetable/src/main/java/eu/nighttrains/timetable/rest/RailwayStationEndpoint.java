@@ -63,4 +63,13 @@ public class RailwayStationEndpoint {
             throw new NotFoundException(exception);
         }
     }
+
+    @Path("/search/{searchTerm}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Parameter(name = "searchTerm", description = "Search term entered by the user", example = "Amst")
+    @APIResponse(responseCode = "200", name = "List of railway stations", description = "A list of railway stations whose name starts with the specified search term")
+    public List<RailwayStationDto> searchByName(@PathParam("searchTerm") String searchTerm) {
+        return this.railwayStationManager.searchByName(searchTerm);
+    }
 }

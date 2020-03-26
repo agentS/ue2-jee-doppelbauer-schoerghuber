@@ -39,4 +39,11 @@ public class RailwayStationManagerCdi implements RailwayStationManager {
                 .map(railwayStation -> new RailwayStationDto(railwayStation.getId(), railwayStation.getName()))
                 .collect(Collectors.toUnmodifiableList());
     }
+
+    @Override
+    public List<RailwayStationDto> searchByName(String searchTerm) {
+        return this.railwayStationDao.findByNameLike(searchTerm).stream()
+                .map(railwayStation -> new RailwayStationDto(railwayStation.getId(), railwayStation.getName()))
+                .collect(Collectors.toUnmodifiableList());
+    }
 }
