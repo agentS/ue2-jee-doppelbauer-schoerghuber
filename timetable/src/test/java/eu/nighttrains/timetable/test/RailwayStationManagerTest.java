@@ -27,4 +27,11 @@ public class RailwayStationManagerTest {
         assertEquals(0, railwayStation.getId());
         assertEquals("Wien Hauptbahnhof", railwayStation.getName());
     }
+
+    @Test
+    public void testSearchRailwayStations() {
+        var railwayStations = this.railwayStationManager.searchByName("Amst");
+        assertNotNull(railwayStations);
+        assertTrue(railwayStations.size() > 0);
+    }
 }
