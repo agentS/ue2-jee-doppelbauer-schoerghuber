@@ -7,10 +7,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20d6ebcb-6a45-4382-8a5f-f9661d1816ba" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/domain/BookingConnection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/domain/BookingRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/BookingManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/BookingManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/logging/LoggerQualifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/logging/LoggerQualifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingNotPossible.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/BookingNotPossible.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/ConnectionNotFound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/ConnectionNotFound.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/MultipleConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/MultipleConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/NoConnectionsAvailable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/NoConnectionsAvailable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/NoTrainCarAvailable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/NoTrainCarAvailable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/pom.xml" afterDir="false" />
@@ -47,7 +54,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/util" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/domain" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15429688" />
@@ -59,11 +66,11 @@
       <recent name="eu.nighttrains.booking.dto" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\domain" />
       <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\util" />
       <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\dal" />
       <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\dto" />
       <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\logging" />
-      <recent name="C:\Users\alex\Documents\documents\github.com\booking\src\main\resources\META-INF" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -236,7 +243,7 @@
       <workItem from="1585073250519" duration="683000" />
       <workItem from="1585146536005" duration="8664000" />
       <workItem from="1585166888402" duration="8709000" />
-      <workItem from="1585222483746" duration="14673000" />
+      <workItem from="1585222483746" duration="15116000" />
     </task>
     <task id="LOCAL-00001" summary="add destionations rest client">
       <created>1585152744324</created>
@@ -273,7 +280,21 @@
       <option name="project" value="LOCAL" />
       <updated>1585237554267</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add booking logic for multiple connections">
+      <created>1585238932611</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1585238932611</updated>
+    </task>
+    <task id="LOCAL-00007" summary="refactor class names">
+      <created>1585239092130</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1585239092130</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -297,6 +318,8 @@
     <MESSAGE value="add booking daos and remaining rest clients" />
     <MESSAGE value="add managers" />
     <MESSAGE value="rewrite booking" />
-    <option name="LAST_COMMIT_MESSAGE" value="rewrite booking" />
+    <MESSAGE value="add booking logic for multiple connections" />
+    <MESSAGE value="refactor class names" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor class names" />
   </component>
 </project>

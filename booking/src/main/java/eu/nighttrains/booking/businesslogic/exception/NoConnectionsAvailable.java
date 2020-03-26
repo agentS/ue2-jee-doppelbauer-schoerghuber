@@ -1,4 +1,4 @@
-package eu.nighttrains.booking.businesslogic.cdi;
+package eu.nighttrains.booking.businesslogic.exception;
 
 public class NoConnectionsAvailable extends RuntimeException {
     public NoConnectionsAvailable() {

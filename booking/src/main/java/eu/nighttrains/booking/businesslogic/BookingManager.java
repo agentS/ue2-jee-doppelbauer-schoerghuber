@@ -1,7 +1,7 @@
 package eu.nighttrains.booking.businesslogic;
 
-import eu.nighttrains.booking.dto.BookingRequestDto;
+import eu.nighttrains.booking.domain.BookingRequest;
 
 public interface BookingManager {
-    Long addBooking(BookingRequestDto bookingRequest);
+    Long addBooking(BookingRequest bookingRequest);
 }
