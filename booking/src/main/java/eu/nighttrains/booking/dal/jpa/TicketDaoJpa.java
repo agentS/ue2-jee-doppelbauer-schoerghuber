@@ -3,10 +3,41 @@ package eu.nighttrains.booking.dal.jpa;
 import eu.nighttrains.booking.dal.TicketDao;
 import eu.nighttrains.booking.model.Ticket;
 
-import javax.enterprise.context.RequestScoped;
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-@RequestScoped
-@Transactional
 public class TicketDaoJpa extends AbstractDaoBean<Ticket, Long> implements TicketDao {
+    @Override
+    public List<Ticket> bulkMerge(List<Ticket> tickets) {
+        EntityManager entityManager = getEntityManager();
+        List<Ticket> mergedTickets = new ArrayList<>();
+        for(Ticket ticket : tickets){
+            Ticket mergedTicket = entityManager.merge(ticket);
+            mergedTickets.add(mergedTicket);
+        }
+        return mergedTickets;
+    }
+
+    @Override
+    public int getCntTickets(long fromId, long toId, LocalDate date, String trainCode, long trainCarId) {
+        EntityManager entityManager = getEntityManager();
+        TypedQuery<Integer> query = entityManager
+                .createQuery("SELECT COUNT(T) FROM Ticket AS T " +
+                        "WHERE T.originId = :originId " +
+                        "AND T.destinationId = :destinationId " +
+                        "AND T.date = :date " +
+                        "AND T.trainCode = :trainCode " +
+                        "AND T.trainCarId = :trainCarId", Integer.class);
+        query.setParameter("originId", fromId);
+        query.setParameter("destinationId", toId);
+        query.setParameter("date", date);
+        query.setParameter("trainCode", trainCode);
+        query.setParameter("trainCarId", trainCarId);
+
+        Integer cnt = query.getSingleResult();
+        return cnt;
+    }
 }

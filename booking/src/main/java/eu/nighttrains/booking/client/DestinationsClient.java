@@ -16,7 +16,7 @@ import java.util.List;
 public interface DestinationsClient extends AutoCloseable {
     @GET
     @Path("/from/{originId}/to/{destinationId}")
-    List<RailwayStationConnectionDto> getConnections(@PathParam("originId") int originId,
-                                                     @PathParam("destinationId") int destinationId )
+    List<RailwayStationConnectionDto> getConnections(@PathParam("originId") long originId,
+                                                     @PathParam("destinationId") long destinationId )
             throws UnknownUriException, ProcessingException;
 }

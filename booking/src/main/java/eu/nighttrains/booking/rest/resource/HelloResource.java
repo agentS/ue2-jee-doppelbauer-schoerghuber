@@ -1,6 +1,9 @@
 package eu.nighttrains.booking.rest.resource;
 
+import eu.nighttrains.booking.businesslogic.BookingManager;
+import eu.nighttrains.booking.dto.BookingRequestDto;
 import eu.nighttrains.booking.dto.RailwayStationConnectionDto;
+import eu.nighttrains.booking.dto.TrainCarType;
 import eu.nighttrains.booking.logging.Logger;
 import eu.nighttrains.booking.logging.LoggerQualifier;
 import eu.nighttrains.booking.logging.LoggerType;
@@ -21,6 +24,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
+import java.time.LocalDate;
 import java.util.List;
 
 @ApplicationScoped
@@ -30,8 +34,11 @@ public class HelloResource {
     @RestClient
     private DestinationsClient destinationsClient;
 
+    @Inject
+    private BookingManager bookingManager;
+
     @Inject @LoggerQualifier(type = LoggerType.CONSOLE)
-    Logger logger;
+    private Logger logger;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -42,6 +49,22 @@ public class HelloResource {
     @Transactional
     public String sayHello(){
         entityManager.persist(new Ticket(1,2,"NIGHTJET",1));
+        return "Hello from Wildfly";
+    }
+
+    @GET
+    @Path("/book")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public String book(){
+        BookingRequestDto bookingRequest = new BookingRequestDto();
+        bookingRequest.setDestinationId(4);
+        bookingRequest.setOriginId(0);
+        bookingRequest.setJourneyStartDate(LocalDate.now()); // TODO: check if start is at possible time
+        bookingRequest.setTrainCarType(TrainCarType.SLEEPER);
+
+        bookingManager.addBooking(bookingRequest);
+
         return "Hello from Wildfly";
     }
 

@@ -1,7 +1,9 @@
 package eu.nighttrains.booking.model;
 
-import javax.persistence.*;
-import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.time.LocalDate;
 
 @Entity
 public class Ticket {
@@ -13,9 +15,7 @@ public class Ticket {
     private long destinationId;
     private String trainCode;
     private long trainCarId;
-
-    @Temporal(TemporalType.DATE)
-    private Date bookingDate = new Date();
+    private LocalDate bookingDate;
 
     public Ticket() {
     }
@@ -63,11 +63,11 @@ public class Ticket {
         this.trainCarId = trainCarId;
     }
 
-    public Date getBookingDate() {
+    public LocalDate getBookingDate() {
         return bookingDate;
     }
 
-    public void setBookingDate(Date bookingDate) {
+    public void setBookingDate(LocalDate bookingDate) {
         this.bookingDate = bookingDate;
     }
 }
