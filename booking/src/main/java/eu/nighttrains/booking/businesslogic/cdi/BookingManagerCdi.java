@@ -15,7 +15,6 @@ import eu.nighttrains.booking.model.Ticket;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.transaction.NotSupportedException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -48,34 +47,34 @@ public class BookingManagerCdi implements BookingManager {
         long originId = bookingRequest.getOriginId();
         long destinationId = bookingRequest.getDestinationId();
         LocalDate ticketDate = bookingRequest.getJourneyStartDate();
+        List<Ticket> tickets = new ArrayList<>();
 
-        /*for(BookingConnectionDto connection : bookingRequest.getBookingConnections()){
+        RailwayStationConnectionDto prevConnection = null;
+        for(BookingConnectionDto connection : bookingRequest.getBookingConnections()){
             long connectionOriginId = connection.getOriginId();
             long connectionDestinationId = connection.getDestinationId();
-            List<RailwayStationConnectionDto> connections =
+            List<RailwayStationConnectionDto> rsConnections =
                     destinationManager.getConnections(connectionOriginId, connectionDestinationId);
-            if(connections.isEmpty()){
-                throw new NoConnectionsAvailable();
-            } else if(connections.size() > 1) {
-                // only single connections are allowed
+            if(rsConnections.isEmpty()){
                 throw new NoConnectionsAvailable();
             }
-            if(isTicketForToday(ticketDate) && isTimeOk(connections.get(0))){
+            if(isTicketForToday(ticketDate) && isTimeOk(rsConnections.get(0))){
                 throw new NoConnectionsAvailable();
             }
 
-            RailwayStationConnectionDto rsConnection = connections.get(0);
-        }*/
-
-        List<RailwayStationConnectionDto> connections =
-                destinationManager.getConnections(originId, destinationId);
-        if(connections.isEmpty()){
-            throw new NoConnectionsAvailable();
+            TrainCarType trainCarType = connection.getTrainCarType();
+            for(RailwayStationConnectionDto rsConnection : rsConnections){
+                ticketDate = calcTicketDate(prevConnection, rsConnection, ticketDate);
+                TrainCarDto trainCar = findAvailableTrainCarForBooking(trainCarType, rsConnection, ticketDate);
+                if(trainCar != null){
+                    Ticket ticket = createTicket(rsConnection, trainCar, ticketDate);
+                    tickets.add(ticket);
+                } else {
+                    throw new NoTrainCarAvailable(rsConnection);
+                }
+                prevConnection = rsConnection;
+            }
         }
-        if(isTicketForToday(ticketDate) && isTimeOk(connections.get(0))){
-            throw new NoConnectionsAvailable();
-        }
-        List<Ticket> tickets = bookAllConnections(bookingRequest, connections);
         Booking booking = createBooking(bookingRequest, tickets);
         return booking.getId();
     }
@@ -86,27 +85,6 @@ public class BookingManagerCdi implements BookingManager {
 
     private boolean isTimeOk(RailwayStationConnectionDto connection) {
         return connection.getDepartureTime().isBefore(LocalTime.now());
-    }
-
-    public List<Ticket> bookAllConnections(BookingRequestDto bookingRequest,
-                                            List<RailwayStationConnectionDto> connections) {
-        LocalDate ticketDate = bookingRequest.getJourneyStartDate();
-        TrainCarType trainCarType = bookingRequest.getTrainCarType();
-        List<Ticket> tickets = new ArrayList<>();
-        RailwayStationConnectionDto prevConnection = null;
-
-        for(RailwayStationConnectionDto connection : connections){
-            ticketDate = calcTicketDate(prevConnection, connection, ticketDate);
-            TrainCarDto trainCar = findAvailableTrainCarForBooking(trainCarType, connection, ticketDate);
-            if(trainCar != null){
-                Ticket ticket = createTicket(connection, trainCar, ticketDate);
-                tickets.add(ticket);
-            } else {
-                throw new NoTrainCarAvailable(connection);
-            }
-            prevConnection = connection;
-        }
-        return tickets;
     }
 
     private LocalDate calcTicketDate(RailwayStationConnectionDto prevConnection,

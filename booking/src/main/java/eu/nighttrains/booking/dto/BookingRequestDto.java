@@ -1,13 +1,14 @@
 package eu.nighttrains.booking.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookingRequestDto {
     private long originId;
     private long destinationId;
     private LocalDate journeyStartDate;
-    private List<BookingConnectionDto> bookingConnections;
+    private List<BookingConnectionDto> bookingConnections = new ArrayList<>();
 
     public BookingRequestDto(){
     }

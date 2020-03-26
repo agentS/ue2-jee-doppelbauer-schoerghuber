@@ -1,6 +1,7 @@
 package eu.nighttrains.booking.rest.resource;
 
 import eu.nighttrains.booking.businesslogic.BookingManager;
+import eu.nighttrains.booking.dto.BookingConnectionDto;
 import eu.nighttrains.booking.dto.BookingRequestDto;
 import eu.nighttrains.booking.dto.RailwayStationConnectionDto;
 import eu.nighttrains.booking.dto.TrainCarType;
@@ -61,7 +62,7 @@ public class HelloResource {
         bookingRequest.setDestinationId(4);
         bookingRequest.setOriginId(0);
         bookingRequest.setJourneyStartDate(LocalDate.now()); // TODO: check if start is at possible time
-        bookingRequest.setTrainCarType(TrainCarType.SLEEPER);
+        bookingRequest.getBookingConnections().add(new BookingConnectionDto(0,4,TrainCarType.SLEEPER));
 
         bookingManager.addBooking(bookingRequest);
 
