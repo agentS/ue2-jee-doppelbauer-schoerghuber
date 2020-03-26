@@ -6,7 +6,7 @@ import java.lang.annotation.*;
 
 @InterceptorBinding
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD , ElementType.TYPE, ElementType.FIELD})
+@Target({ElementType.METHOD , ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER})
 @Documented
 @Qualifier
 public @interface LoggerQualifier {

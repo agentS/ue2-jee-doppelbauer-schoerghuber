@@ -2,7 +2,6 @@ package eu.nighttrains.booking.businesslogic.cdi;
 
 import eu.nighttrains.booking.businesslogic.BookingManager;
 import eu.nighttrains.booking.businesslogic.DestinationManager;
-import eu.nighttrains.booking.businesslogic.RailwayStationManager;
 import eu.nighttrains.booking.businesslogic.TrainConnectionManager;
 import eu.nighttrains.booking.dal.BookingDao;
 import eu.nighttrains.booking.dal.TicketDao;
@@ -26,20 +25,23 @@ import java.util.stream.Collectors;
 @RequestScoped
 @Transactional
 public class BookingManagerCdi implements BookingManager {
-    @Inject
     private BookingDao bookingDao;
-    @Inject
     private TicketDao ticketDao;
-    @Inject
     private DestinationManager destinationManager;
-    @Inject
-    private RailwayStationManager railwayStationManager;
-    @Inject
     private TrainConnectionManager trainConnectionManager;
-    @Inject @LoggerQualifier(type = LoggerType.CONSOLE)
-    Logger logger;
+    private Logger logger;
 
-    public BookingManagerCdi(){
+    @Inject
+    public BookingManagerCdi(BookingDao bookingDao,
+                             TicketDao ticketDao,
+                             DestinationManager destinationManager,
+                             TrainConnectionManager trainConnectionManager,
+                             @LoggerQualifier(type = LoggerType.CONSOLE) Logger logger) {
+        this.bookingDao = bookingDao;
+        this.ticketDao = ticketDao;
+        this.destinationManager = destinationManager;
+        this.trainConnectionManager = trainConnectionManager;
+        this.logger = logger;
     }
 
     @Override
@@ -50,9 +52,9 @@ public class BookingManagerCdi implements BookingManager {
         List<Ticket> tickets = new ArrayList<>();
 
         RailwayStationConnectionDto prevConnection = null;
-        for(BookingConnectionDto connection : bookingRequest.getBookingConnections()){
-            long connectionOriginId = connection.getOriginId();
-            long connectionDestinationId = connection.getDestinationId();
+        for(BookingConnectionDto bookingConnection : bookingRequest.getBookingConnections()){
+            long connectionOriginId = bookingConnection.getOriginId();
+            long connectionDestinationId = bookingConnection.getDestinationId();
             List<RailwayStationConnectionDto> rsConnections =
                     destinationManager.getConnections(connectionOriginId, connectionDestinationId);
             if(rsConnections.isEmpty()){
@@ -62,10 +64,11 @@ public class BookingManagerCdi implements BookingManager {
                 throw new NoConnectionsAvailable();
             }
 
-            TrainCarType trainCarType = connection.getTrainCarType();
+            TrainCarType trainCarType = bookingConnection.getTrainCarType();
             for(RailwayStationConnectionDto rsConnection : rsConnections){
                 ticketDate = calcTicketDate(prevConnection, rsConnection, ticketDate);
-                TrainCarDto trainCar = findAvailableTrainCarForBooking(trainCarType, rsConnection, ticketDate);
+                TrainCarDto trainCar = findAvailableTrainCarForBooking(
+                        trainCarType, rsConnection, ticketDate);
                 if(trainCar != null){
                     Ticket ticket = createTicket(rsConnection, trainCar, ticketDate);
                     tickets.add(ticket);
@@ -75,7 +78,7 @@ public class BookingManagerCdi implements BookingManager {
                 prevConnection = rsConnection;
             }
         }
-        Booking booking = createBooking(bookingRequest, tickets);
+        Booking booking = createBooking(originId, destinationId, tickets);
         return booking.getId();
     }
 
@@ -149,11 +152,11 @@ public class BookingManagerCdi implements BookingManager {
         return ticket;
     }
 
-    private Booking createBooking(BookingRequestDto bookingRequest, List<Ticket> tickets) {
+    private Booking createBooking(long originId, long destinationId, List<Ticket> tickets) {
         List<Ticket> mergedTickets = ticketDao.bulkMerge(tickets);
         Booking booking = new Booking();
-        booking.setOriginId(bookingRequest.getOriginId());
-        booking.setDestinationId(bookingRequest.getDestinationId());
+        booking.setOriginId(originId);
+        booking.setDestinationId(destinationId);
         booking.setTickets(mergedTickets);
         booking = bookingDao.merge(booking);
         return booking;
