@@ -3,11 +3,14 @@ package eu.nighttrains.booking.businesslogic.cdi;
 import eu.nighttrains.booking.businesslogic.BookingManager;
 import eu.nighttrains.booking.businesslogic.DestinationManager;
 import eu.nighttrains.booking.businesslogic.TrainConnectionManager;
+import eu.nighttrains.booking.businesslogic.exception.BookingNotPossible;
 import eu.nighttrains.booking.businesslogic.exception.NoConnectionsAvailable;
 import eu.nighttrains.booking.businesslogic.exception.NoTrainCarAvailable;
 import eu.nighttrains.booking.dal.BookingDao;
 import eu.nighttrains.booking.dal.TicketDao;
 import eu.nighttrains.booking.domain.*;
+import eu.nighttrains.booking.dto.BookingConnectionDto;
+import eu.nighttrains.booking.dto.BookingRequestDto;
 import eu.nighttrains.booking.logging.Logger;
 import eu.nighttrains.booking.logging.LoggerQualifier;
 import eu.nighttrains.booking.logging.LoggerType;
@@ -47,14 +50,26 @@ public class BookingManagerCdi implements BookingManager {
     }
 
     @Override
-    public Long addBooking(BookingRequest bookingRequest) {
+    public Long book(BookingRequestDto bookingRequest){
+        try{
+            return addBooking(bookingRequest);
+        } catch(NoConnectionsAvailable ex) {
+            throw new BookingNotPossible("NoConnectionsAvailable");
+        } catch(NoTrainCarAvailable ex) {
+            throw new BookingNotPossible("NoTrainCarAvailable",
+                    ex.getConnection());
+        }
+    }
+
+
+    public Long addBooking(BookingRequestDto bookingRequest) {
         long originId = bookingRequest.getOriginId();
         long destinationId = bookingRequest.getDestinationId();
         LocalDate ticketDate = bookingRequest.getJourneyStartDate();
         List<Ticket> tickets = new ArrayList<>();
 
         RailwayStationConnection prevConnection = null;
-        for(BookingConnection bookingConnection : bookingRequest.getBookingConnections()){
+        for(BookingConnectionDto bookingConnection : bookingRequest.getBookingConnections()){
             long connectionOriginId = bookingConnection.getOriginId();
             long connectionDestinationId = bookingConnection.getDestinationId();
             List<RailwayStationConnection> rsConnections =

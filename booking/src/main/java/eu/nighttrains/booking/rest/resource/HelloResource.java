@@ -1,10 +1,10 @@
 package eu.nighttrains.booking.rest.resource;
 
 import eu.nighttrains.booking.businesslogic.BookingManager;
-import eu.nighttrains.booking.dto.BookingConnectionDto;
-import eu.nighttrains.booking.dto.BookingRequestDto;
 import eu.nighttrains.booking.domain.RailwayStationConnection;
 import eu.nighttrains.booking.domain.TrainCarType;
+import eu.nighttrains.booking.dto.BookingConnectionDto;
+import eu.nighttrains.booking.dto.BookingRequestDto;
 import eu.nighttrains.booking.logging.Logger;
 import eu.nighttrains.booking.logging.LoggerQualifier;
 import eu.nighttrains.booking.logging.LoggerType;
@@ -64,7 +64,7 @@ public class HelloResource {
         bookingRequest.setJourneyStartDate(LocalDate.now()); // TODO: check if start is at possible time
         bookingRequest.getBookingConnections().add(new BookingConnectionDto(0,4,TrainCarType.SLEEPER));
 
-        bookingManager.addBooking(bookingRequest);
+        bookingManager.book(bookingRequest);
 
         return "Hello from Wildfly";
     }

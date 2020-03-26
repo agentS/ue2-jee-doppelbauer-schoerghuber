@@ -7,17 +7,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20d6ebcb-6a45-4382-8a5f-f9661d1816ba" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/domain/BookingConnection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/domain/BookingRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/ErrorInfoDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/BookingManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/BookingManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingNotPossible.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/BookingNotPossible.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/ConnectionNotFound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/ConnectionNotFound.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/MultipleConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/MultipleConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/NoConnectionsAvailable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/NoConnectionsAvailable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/NoTrainCarAvailable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/NoTrainCarAvailable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/BookingNotPossible.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/BookingNotPossible.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/ConnectionNotFound.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/MultipleConnection.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/domain/BookingConnection.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/domain/BookingRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/BookingResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/BookingResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/HelloResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/HelloResource.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/pom.xml" afterDir="false" />
@@ -243,7 +244,7 @@
       <workItem from="1585073250519" duration="683000" />
       <workItem from="1585146536005" duration="8664000" />
       <workItem from="1585166888402" duration="8709000" />
-      <workItem from="1585222483746" duration="15116000" />
+      <workItem from="1585222483746" duration="18080000" />
     </task>
     <task id="LOCAL-00001" summary="add destionations rest client">
       <created>1585152744324</created>
@@ -294,7 +295,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585239092130</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="refactor class names">
+      <created>1585239365479</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1585239365479</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
