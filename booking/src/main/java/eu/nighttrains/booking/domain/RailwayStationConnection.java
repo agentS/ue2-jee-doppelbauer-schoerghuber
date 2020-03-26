@@ -1,8 +1,10 @@
 package eu.nighttrains.booking.domain;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class RailwayStationConnection {
+    private LocalDate date;
     private RailwayStation departureStation;
     private RailwayStation arrivalStation;
     private TrainConnection trainConnection;
@@ -57,5 +59,13 @@ public class RailwayStationConnection {
 
     public void setArrivalTime(LocalTime arrivalTime) {
         this.arrivalTime = arrivalTime;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }

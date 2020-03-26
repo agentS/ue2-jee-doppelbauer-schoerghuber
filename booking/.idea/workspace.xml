@@ -7,16 +7,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20d6ebcb-6a45-4382-8a5f-f9661d1816ba" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/BookingDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/RailwayStationConnectionDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/TicketDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/TrainCarDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/TrainConnectionDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/ReservationDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/jpa/ReservationDaoJpa.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/BookingRequestDto2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Reservation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/util/ConnectionDateCalculator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/util/TicketConnectionSeparator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/eu/nighttrains/booking/unittests/ConnectionDateCalculatorTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/eu/nighttrains/booking/unittests/TicketSeparatorTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/BookingManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/BookingManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/TicketDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/TicketDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/jpa/TicketDaoJpa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/jpa/TicketDaoJpa.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/domain/RailwayStationConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/domain/RailwayStationConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Ticket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/BookingResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/BookingResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/HelloResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/HelloResource.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/pom.xml" afterDir="false" />
@@ -87,7 +97,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.ConnectionDateCalculatorTests.testCalculateDates">
     <configuration name="JBoss 19.0.0.Final" type="JBossConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="JBoss 19.0.0.Final" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="COMMON_VM_ARGUMENTS" value="-Djboss.server.default.config=standalone-microprofile.xml" />
       <deployment>
@@ -229,6 +239,44 @@
         </option>
       </method>
     </configuration>
+    <configuration name="ConnectionDateCalculatorTests.testCalculateDates" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="booking" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="eu.nighttrains.booking.unittests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="eu.nighttrains.booking.unittests" />
+      <option name="MAIN_CLASS_NAME" value="eu.nighttrains.booking.unittests.ConnectionDateCalculatorTests" />
+      <option name="METHOD_NAME" value="testCalculateDates" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TicketSeparatorTests.testTicketSeparator" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="booking" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="eu.nighttrains.booking.unittests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="eu.nighttrains.booking.unittests" />
+      <option name="MAIN_CLASS_NAME" value="eu.nighttrains.booking.unittests.TicketSeparatorTests" />
+      <option name="METHOD_NAME" value="testTicketSeparator" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.TicketSeparatorTests.testTicketSeparator" />
+        <item itemvalue="JUnit.ConnectionDateCalculatorTests.testCalculateDates" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -246,6 +294,8 @@
       <workItem from="1585146536005" duration="8664000" />
       <workItem from="1585166888402" duration="8709000" />
       <workItem from="1585222483746" duration="22925000" />
+      <workItem from="1585249709456" duration="513000" />
+      <workItem from="1585253641463" duration="9886000" />
     </task>
     <task id="LOCAL-00001" summary="add destionations rest client">
       <created>1585152744324</created>
@@ -310,7 +360,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585242439766</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="add booking/id endpoint">
+      <created>1585249759173</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1585249759173</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -337,6 +394,7 @@
     <MESSAGE value="add booking logic for multiple connections" />
     <MESSAGE value="refactor class names" />
     <MESSAGE value="add booking resource" />
-    <option name="LAST_COMMIT_MESSAGE" value="add booking resource" />
+    <MESSAGE value="add booking/id endpoint" />
+    <option name="LAST_COMMIT_MESSAGE" value="add booking/id endpoint" />
   </component>
 </project>

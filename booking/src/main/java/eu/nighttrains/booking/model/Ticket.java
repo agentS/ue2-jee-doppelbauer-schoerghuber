@@ -3,32 +3,35 @@ package eu.nighttrains.booking.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.time.LocalDate;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Ticket {
     @Id
     @GeneratedValue
     private Long id;
+    private long originId = -1;
+    private long destinationId = -1;
 
-    private long originId;
-    private long destinationId;
-    private String trainCode;
-    private long trainCarId;
-    private LocalDate bookingDate;
+    @OneToMany
+    private List<Reservation> reservations = new ArrayList<>();
 
-    public Ticket() {
+    public List<Reservation> getReservations() {
+        return reservations;
     }
 
-    public Ticket(long originId, long destinationId, String trainCode, long trainCarId) {
-        this.originId = originId;
-        this.destinationId = destinationId;
-        this.trainCode = trainCode;
-        this.trainCarId = trainCarId;
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public long getOriginId() {
@@ -45,29 +48,5 @@ public class Ticket {
 
     public void setDestinationId(long destinationId) {
         this.destinationId = destinationId;
-    }
-
-    public String getTrainCode() {
-        return trainCode;
-    }
-
-    public void setTrainCode(String trainCode) {
-        this.trainCode = trainCode;
-    }
-
-    public long getTrainCarId() {
-        return trainCarId;
-    }
-
-    public void setTrainCarId(long trainCarId) {
-        this.trainCarId = trainCarId;
-    }
-
-    public LocalDate getBookingDate() {
-        return bookingDate;
-    }
-
-    public void setBookingDate(LocalDate bookingDate) {
-        this.bookingDate = bookingDate;
     }
 }

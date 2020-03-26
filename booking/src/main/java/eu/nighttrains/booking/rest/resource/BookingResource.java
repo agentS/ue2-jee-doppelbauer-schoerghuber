@@ -4,7 +4,11 @@ import eu.nighttrains.booking.businesslogic.BookingManager;
 import eu.nighttrains.booking.businesslogic.exception.BookingNotPossible;
 import eu.nighttrains.booking.dto.BookingDto;
 import eu.nighttrains.booking.dto.BookingRequestDto;
+import eu.nighttrains.booking.dto.BookingRequestDto2;
 import eu.nighttrains.booking.dto.ErrorInfoDto;
+import eu.nighttrains.booking.logging.Logger;
+import eu.nighttrains.booking.logging.LoggerQualifier;
+import eu.nighttrains.booking.logging.LoggerType;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -24,13 +28,17 @@ public class BookingResource {
     @Inject
     private BookingManager bookingManager;
 
+    @Inject
+    @LoggerQualifier(type = LoggerType.CONSOLE)
+    private Logger logger;
+
     public BookingResource(){
     }
 
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postBooking(BookingRequestDto bookingRequest){
+    public Response postBooking(BookingRequestDto2 bookingRequest){
         try{
             Long bookingId = bookingManager.book(bookingRequest);
             URI bookingUri = uriInfo
@@ -39,6 +47,8 @@ public class BookingResource {
                     .build();
             return Response.created(bookingUri).build();
         } catch (BookingNotPossible ex) {
+            ex.printStackTrace();
+            logger.info(ex.getMessage());
             ErrorInfoDto errorInfoDto = new ErrorInfoDto();
             errorInfoDto.setMessage(ex.getMessage());
             errorInfoDto.setItem(ex.getItem());
@@ -46,6 +56,8 @@ public class BookingResource {
                     .entity(errorInfoDto)
                     .build();
         } catch(Exception ex){
+            logger.info(ex.getMessage());
+            ex.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .build();
         }

@@ -33,6 +33,10 @@ public class Booking {
         this.tickets = tickets;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public long getOriginId() {
         return originId;
     }

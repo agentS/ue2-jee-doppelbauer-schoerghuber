@@ -8,7 +8,7 @@ import eu.nighttrains.booking.dto.BookingRequestDto;
 import eu.nighttrains.booking.logging.Logger;
 import eu.nighttrains.booking.logging.LoggerQualifier;
 import eu.nighttrains.booking.logging.LoggerType;
-import eu.nighttrains.booking.model.Ticket;
+import eu.nighttrains.booking.model.Reservation;
 import eu.nighttrains.booking.client.DestinationsClient;
 import eu.nighttrains.booking.client.UnknownUriException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -49,7 +49,7 @@ public class HelloResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public String sayHello(){
-        entityManager.persist(new Ticket(1,2,"NIGHTJET",1));
+        entityManager.persist(new Reservation(1,2,"NIGHTJET",1));
         return "Hello from Wildfly";
     }
 
@@ -64,7 +64,7 @@ public class HelloResource {
         bookingRequest.setJourneyStartDate(LocalDate.now()); // TODO: check if start is at possible time
         bookingRequest.getBookingConnections().add(new BookingConnectionDto(0,4,TrainCarType.SLEEPER));
 
-        bookingManager.book(bookingRequest);
+        //bookingManager.book(bookingRequest);
 
         return "Hello from Wildfly";
     }
