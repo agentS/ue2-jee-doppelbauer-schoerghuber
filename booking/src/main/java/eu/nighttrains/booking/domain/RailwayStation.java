@@ -1,12 +1,12 @@
-package eu.nighttrains.booking.dto;
+package eu.nighttrains.booking.domain;
 
-public class RailwayStationDto {
+public class RailwayStation {
     private long id;
     private String name;
 
-    public RailwayStationDto() {}
+    public RailwayStation() {}
 
-    public RailwayStationDto(long id, String name) {
+    public RailwayStation(long id, String name) {
         this.id = id;
         this.name = name;
     }

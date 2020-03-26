@@ -2,8 +2,7 @@ package eu.nighttrains.booking.businesslogic.cdi;
 
 import eu.nighttrains.booking.businesslogic.DestinationManager;
 import eu.nighttrains.booking.client.DestinationsClient;
-import eu.nighttrains.booking.dto.BookingRequestDto;
-import eu.nighttrains.booking.dto.RailwayStationConnectionDto;
+import eu.nighttrains.booking.domain.RailwayStationConnection;
 import eu.nighttrains.booking.logging.Logger;
 import eu.nighttrains.booking.logging.LoggerQualifier;
 import eu.nighttrains.booking.logging.LoggerType;
@@ -23,7 +22,7 @@ public class DestinationManagerCdi implements DestinationManager {
     private Logger logger;
 
     @Override
-    public List<RailwayStationConnectionDto> getConnections(long fromId, long toId) {
+    public List<RailwayStationConnection> getConnections(long fromId, long toId) {
         try {
             return destinationsClient.getConnections(fromId, toId);
         } catch(Exception ex) {

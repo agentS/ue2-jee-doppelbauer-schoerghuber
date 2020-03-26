@@ -1,17 +1,17 @@
-package eu.nighttrains.booking.dto;
+package eu.nighttrains.booking.domain;
 
 import java.time.LocalTime;
 
-public class RailwayStationConnectionDto {
-    private RailwayStationDto departureStation;
-    private RailwayStationDto arrivalStation;
-    private TrainConnectionDto trainConnection;
+public class RailwayStationConnection {
+    private RailwayStation departureStation;
+    private RailwayStation arrivalStation;
+    private TrainConnection trainConnection;
     private LocalTime departureTime;
     private LocalTime arrivalTime;
 
-    public RailwayStationConnectionDto() {}
+    public RailwayStationConnection() {}
 
-    public RailwayStationConnectionDto(RailwayStationDto departureStation, RailwayStationDto arrivalStation, TrainConnectionDto trainConnection, LocalTime departureTime, LocalTime arrivalTime) {
+    public RailwayStationConnection(RailwayStation departureStation, RailwayStation arrivalStation, TrainConnection trainConnection, LocalTime departureTime, LocalTime arrivalTime) {
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
         this.trainConnection = trainConnection;
@@ -19,27 +19,27 @@ public class RailwayStationConnectionDto {
         this.arrivalTime = arrivalTime;
     }
 
-    public RailwayStationDto getDepartureStation() {
+    public RailwayStation getDepartureStation() {
         return this.departureStation;
     }
 
-    public void setDepartureStation(RailwayStationDto departureStation) {
+    public void setDepartureStation(RailwayStation departureStation) {
         this.departureStation = departureStation;
     }
 
-    public RailwayStationDto getArrivalStation() {
+    public RailwayStation getArrivalStation() {
         return this.arrivalStation;
     }
 
-    public void setArrivalStation(RailwayStationDto arrivalStation) {
+    public void setArrivalStation(RailwayStation arrivalStation) {
         this.arrivalStation = arrivalStation;
     }
 
-    public TrainConnectionDto getTrainConnection() {
+    public TrainConnection getTrainConnection() {
         return this.trainConnection;
     }
 
-    public void setTrainConnection(TrainConnectionDto trainConnection) {
+    public void setTrainConnection(TrainConnection trainConnection) {
         this.trainConnection = trainConnection;
     }
 

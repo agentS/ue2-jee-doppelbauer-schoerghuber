@@ -2,8 +2,8 @@ package eu.nighttrains.booking.businesslogic.cdi;
 
 import eu.nighttrains.booking.businesslogic.TrainConnectionManager;
 import eu.nighttrains.booking.client.TrainConnectionClient;
-import eu.nighttrains.booking.dto.TrainCarDto;
-import eu.nighttrains.booking.dto.TrainConnectionDto;
+import eu.nighttrains.booking.domain.TrainCar;
+import eu.nighttrains.booking.domain.TrainConnection;
 import eu.nighttrains.booking.logging.Logger;
 import eu.nighttrains.booking.logging.LoggerQualifier;
 import eu.nighttrains.booking.logging.LoggerType;
@@ -23,7 +23,7 @@ public class TrainConnectionManagerCdi implements TrainConnectionManager {
     private Logger logger;
 
     @Override
-    public List<TrainConnectionDto> findAllTrainConnections(){
+    public List<TrainConnection> findAllTrainConnections(){
         try {
             return trainConnectionClient.findAllTrainConnections();
         } catch(Exception ex) {
@@ -33,7 +33,7 @@ public class TrainConnectionManagerCdi implements TrainConnectionManager {
     }
 
     @Override
-    public TrainConnectionDto findTrainConnectionById(long id){
+    public TrainConnection findTrainConnectionById(long id){
         try {
             return trainConnectionClient.findTrainConnectionById(id);
         } catch(Exception ex) {
@@ -43,7 +43,7 @@ public class TrainConnectionManagerCdi implements TrainConnectionManager {
     }
 
     @Override
-    public TrainConnectionDto findTrainConnectionByCode(String code){
+    public TrainConnection findTrainConnectionByCode(String code){
         try {
             return trainConnectionClient.findTrainConnectionByCode(code);
         } catch(Exception ex) {
@@ -53,7 +53,7 @@ public class TrainConnectionManagerCdi implements TrainConnectionManager {
     }
 
     @Override
-    public List<TrainCarDto> findAllTrainCarsById(long id){
+    public List<TrainCar> findAllTrainCarsById(long id){
         try {
             return trainConnectionClient.findAllTrainCarsById(id);
         } catch(Exception ex) {
@@ -63,7 +63,7 @@ public class TrainConnectionManagerCdi implements TrainConnectionManager {
     }
 
     @Override
-    public List<TrainCarDto> findAllTrainCarsByCode(String code){
+    public List<TrainCar> findAllTrainCarsByCode(String code){
         try {
             return trainConnectionClient.findAllTrainCarsByCode(code);
         } catch(Exception ex) {

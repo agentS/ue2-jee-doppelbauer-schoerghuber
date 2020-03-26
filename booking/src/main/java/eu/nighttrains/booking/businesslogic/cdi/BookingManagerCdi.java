@@ -5,6 +5,9 @@ import eu.nighttrains.booking.businesslogic.DestinationManager;
 import eu.nighttrains.booking.businesslogic.TrainConnectionManager;
 import eu.nighttrains.booking.dal.BookingDao;
 import eu.nighttrains.booking.dal.TicketDao;
+import eu.nighttrains.booking.domain.RailwayStationConnection;
+import eu.nighttrains.booking.domain.TrainCar;
+import eu.nighttrains.booking.domain.TrainCarType;
 import eu.nighttrains.booking.dto.*;
 import eu.nighttrains.booking.logging.Logger;
 import eu.nighttrains.booking.logging.LoggerQualifier;
@@ -51,11 +54,11 @@ public class BookingManagerCdi implements BookingManager {
         LocalDate ticketDate = bookingRequest.getJourneyStartDate();
         List<Ticket> tickets = new ArrayList<>();
 
-        RailwayStationConnectionDto prevConnection = null;
+        RailwayStationConnection prevConnection = null;
         for(BookingConnectionDto bookingConnection : bookingRequest.getBookingConnections()){
             long connectionOriginId = bookingConnection.getOriginId();
             long connectionDestinationId = bookingConnection.getDestinationId();
-            List<RailwayStationConnectionDto> rsConnections =
+            List<RailwayStationConnection> rsConnections =
                     destinationManager.getConnections(connectionOriginId, connectionDestinationId);
             if(rsConnections.isEmpty()){
                 throw new NoConnectionsAvailable();
@@ -65,9 +68,9 @@ public class BookingManagerCdi implements BookingManager {
             }
 
             TrainCarType trainCarType = bookingConnection.getTrainCarType();
-            for(RailwayStationConnectionDto rsConnection : rsConnections){
+            for(RailwayStationConnection rsConnection : rsConnections){
                 ticketDate = calcTicketDate(prevConnection, rsConnection, ticketDate);
-                TrainCarDto trainCar = findAvailableTrainCarForBooking(
+                TrainCar trainCar = findAvailableTrainCarForBooking(
                         trainCarType, rsConnection, ticketDate);
                 if(trainCar != null){
                     Ticket ticket = createTicket(rsConnection, trainCar, ticketDate);
@@ -86,12 +89,12 @@ public class BookingManagerCdi implements BookingManager {
         return ticketDate.equals(LocalDate.now());
     }
 
-    private boolean isTimeOk(RailwayStationConnectionDto connection) {
+    private boolean isTimeOk(RailwayStationConnection connection) {
         return connection.getDepartureTime().isBefore(LocalTime.now());
     }
 
-    private LocalDate calcTicketDate(RailwayStationConnectionDto prevConnection,
-                                     RailwayStationConnectionDto connection,
+    private LocalDate calcTicketDate(RailwayStationConnection prevConnection,
+                                     RailwayStationConnection connection,
                                      LocalDate ticketDate) {
         if(prevConnection != null && prevConnection.getDepartureTime().isAfter(connection.getDepartureTime())){
             ticketDate = ticketDate.plusDays(1);
@@ -99,23 +102,23 @@ public class BookingManagerCdi implements BookingManager {
         return ticketDate;
     }
 
-    private TrainCarDto findAvailableTrainCarForBooking(TrainCarType trainCarType,
-                                                       RailwayStationConnectionDto connection,
-                                                       LocalDate ticketDate) {
+    private TrainCar findAvailableTrainCarForBooking(TrainCarType trainCarType,
+                                                     RailwayStationConnection connection,
+                                                     LocalDate ticketDate) {
         String trainCode = connection.getTrainConnection().getCode();
-        List<TrainCarDto> requestedTrainCars = getTrainCarsByCodeAndType(trainCode, trainCarType);
+        List<TrainCar> requestedTrainCars = getTrainCarsByCodeAndType(trainCode, trainCarType);
         if(requestedTrainCars.isEmpty()){
             throw new NoTrainCarAvailable(connection);
         }
 
-        TrainCarDto trainCar = findTrainCarWithEnoughCapacity(connection, requestedTrainCars, ticketDate);
+        TrainCar trainCar = findTrainCarWithEnoughCapacity(connection, requestedTrainCars, ticketDate);
         return trainCar;
     }
 
-    private TrainCarDto findTrainCarWithEnoughCapacity(RailwayStationConnectionDto connection,
-                                                       List<TrainCarDto> requestedTrainCars,
-                                                       LocalDate ticketDate) {
-        for(TrainCarDto trainCar : requestedTrainCars){
+    private TrainCar findTrainCarWithEnoughCapacity(RailwayStationConnection connection,
+                                                    List<TrainCar> requestedTrainCars,
+                                                    LocalDate ticketDate) {
+        for(TrainCar trainCar : requestedTrainCars){
             long usedCapacity = ticketDao.getCntTickets(
                     connection.getDepartureStation().getId(),
                     connection.getArrivalStation().getId(),
@@ -130,8 +133,8 @@ public class BookingManagerCdi implements BookingManager {
         return null;
     }
 
-    private List<TrainCarDto> getTrainCarsByCodeAndType(String trainCode, TrainCarType type){
-        List<TrainCarDto> requestedTrainCars = trainConnectionManager
+    private List<TrainCar> getTrainCarsByCodeAndType(String trainCode, TrainCarType type){
+        List<TrainCar> requestedTrainCars = trainConnectionManager
                 .findAllTrainCarsByCode(trainCode)
                 .stream()
                 .filter(trainCar -> trainCar.getType() == type)
@@ -140,8 +143,8 @@ public class BookingManagerCdi implements BookingManager {
         return requestedTrainCars;
     }
 
-    private Ticket createTicket(RailwayStationConnectionDto connection,
-                                TrainCarDto trainCar,
+    private Ticket createTicket(RailwayStationConnection connection,
+                                TrainCar trainCar,
                                 LocalDate ticketDate) {
         Ticket ticket = new Ticket();
         ticket.setOriginId(connection.getDepartureStation().getId());
@@ -162,9 +165,9 @@ public class BookingManagerCdi implements BookingManager {
         return booking;
     }
 
-    private class TrainCarComparator implements Comparator<TrainCarDto> {
+    private class TrainCarComparator implements Comparator<TrainCar> {
         @Override
-        public int compare(TrainCarDto o1, TrainCarDto o2) {
+        public int compare(TrainCar o1, TrainCar o2) {
             return o1.getNumber() - o2.getNumber();
         }
     }

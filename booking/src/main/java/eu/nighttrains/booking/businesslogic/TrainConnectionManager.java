@@ -1,14 +1,14 @@
 package eu.nighttrains.booking.businesslogic;
 
-import eu.nighttrains.booking.dto.TrainCarDto;
-import eu.nighttrains.booking.dto.TrainConnectionDto;
+import eu.nighttrains.booking.domain.TrainCar;
+import eu.nighttrains.booking.domain.TrainConnection;
 
 import java.util.List;
 
 public interface TrainConnectionManager {
-    List<TrainConnectionDto> findAllTrainConnections();
-    TrainConnectionDto findTrainConnectionById(long id);
-    TrainConnectionDto findTrainConnectionByCode(String code);
-    List<TrainCarDto> findAllTrainCarsById(long id);
-    List<TrainCarDto> findAllTrainCarsByCode(String code);
+    List<TrainConnection> findAllTrainConnections();
+    TrainConnection findTrainConnectionById(long id);
+    TrainConnection findTrainConnectionByCode(String code);
+    List<TrainCar> findAllTrainCarsById(long id);
+    List<TrainCar> findAllTrainCarsByCode(String code);
 }

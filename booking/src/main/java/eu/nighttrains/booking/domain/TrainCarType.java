@@ -1,4 +1,4 @@
-package eu.nighttrains.booking.dto;
+package eu.nighttrains.booking.domain;
 
 public enum TrainCarType {
     SEAT, COUCHETTE, SLEEPER

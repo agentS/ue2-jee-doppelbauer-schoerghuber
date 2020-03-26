@@ -1,18 +1,18 @@
-package eu.nighttrains.booking.dto;
+package eu.nighttrains.booking.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrainConnectionDto {
+public class TrainConnection {
     private long id;
     private String code;
-    private List<TrainCarDto> trainCars;
+    private List<TrainCar> trainCars;
 
-    public TrainConnectionDto() {
+    public TrainConnection() {
         this.trainCars = new ArrayList<>();
     }
 
-    public TrainConnectionDto(long id, String code, List<TrainCarDto> trainCars) {
+    public TrainConnection(long id, String code, List<TrainCar> trainCars) {
         this.id = id;
         this.code = code;
         this.trainCars = trainCars;
@@ -34,11 +34,11 @@ public class TrainConnectionDto {
         this.code = code;
     }
 
-    public List<TrainCarDto> getTrainCars() {
+    public List<TrainCar> getTrainCars() {
         return this.trainCars;
     }
 
-    public void setTrainCars(List<TrainCarDto> trainCars) {
+    public void setTrainCars(List<TrainCar> trainCars) {
         this.trainCars = trainCars;
     }
 }

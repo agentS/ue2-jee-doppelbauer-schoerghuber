@@ -1,14 +1,14 @@
-package eu.nighttrains.booking.dto;
+package eu.nighttrains.booking.domain;
 
-public class TrainCarDto {
+public class TrainCar {
     private long id;
     private int number;
     private TrainCarType type;
     private int capacity;
 
-    public TrainCarDto() {}
+    public TrainCar() {}
 
-    public TrainCarDto(long id, int number, TrainCarType type, int capacity) {
+    public TrainCar(long id, int number, TrainCarType type, int capacity) {
         this.id = id;
         this.number = number;
         this.type = type;

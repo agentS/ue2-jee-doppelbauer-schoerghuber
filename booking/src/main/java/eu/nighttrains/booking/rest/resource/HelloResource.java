@@ -3,8 +3,8 @@ package eu.nighttrains.booking.rest.resource;
 import eu.nighttrains.booking.businesslogic.BookingManager;
 import eu.nighttrains.booking.dto.BookingConnectionDto;
 import eu.nighttrains.booking.dto.BookingRequestDto;
-import eu.nighttrains.booking.dto.RailwayStationConnectionDto;
-import eu.nighttrains.booking.dto.TrainCarType;
+import eu.nighttrains.booking.domain.RailwayStationConnection;
+import eu.nighttrains.booking.domain.TrainCarType;
 import eu.nighttrains.booking.logging.Logger;
 import eu.nighttrains.booking.logging.LoggerQualifier;
 import eu.nighttrains.booking.logging.LoggerType;
@@ -72,7 +72,7 @@ public class HelloResource {
     @GET
     @Path("/destinations")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<RailwayStationConnectionDto> getConnections(){
+    public List<RailwayStationConnection> getConnections(){
         try {
             if(destinationsClient != null){
                 logger.info("client is not null.");

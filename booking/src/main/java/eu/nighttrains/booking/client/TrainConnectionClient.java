@@ -1,7 +1,7 @@
 package eu.nighttrains.booking.client;
 
-import eu.nighttrains.booking.dto.TrainCarDto;
-import eu.nighttrains.booking.dto.TrainConnectionDto;
+import eu.nighttrains.booking.domain.TrainCar;
+import eu.nighttrains.booking.domain.TrainConnection;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.ws.rs.GET;
@@ -15,26 +15,26 @@ import java.util.List;
 public interface TrainConnectionClient extends AutoCloseable {
     @GET
     @Path("/")
-    List<TrainConnectionDto> findAllTrainConnections()
+    List<TrainConnection> findAllTrainConnections()
             throws UnknownUriException, ProcessingException;
 
     @GET
     @Path("/{id}")
-    TrainConnectionDto findTrainConnectionById(@PathParam("id") long id)
+    TrainConnection findTrainConnectionById(@PathParam("id") long id)
             throws UnknownUriException, ProcessingException;
 
     @GET
     @Path("/code/{code}")
-    TrainConnectionDto findTrainConnectionByCode(@PathParam("code") String code)
+    TrainConnection findTrainConnectionByCode(@PathParam("code") String code)
             throws UnknownUriException, ProcessingException;
 
     @GET
     @Path("/{id}/cars")
-    List<TrainCarDto> findAllTrainCarsById(@PathParam("id") long id)
+    List<TrainCar> findAllTrainCarsById(@PathParam("id") long id)
             throws UnknownUriException, ProcessingException;
 
     @GET
     @Path("/code/{code}/cars")
-    List<TrainCarDto> findAllTrainCarsByCode(@PathParam("code") String code)
+    List<TrainCar> findAllTrainCarsByCode(@PathParam("code") String code)
             throws UnknownUriException, ProcessingException;
 }

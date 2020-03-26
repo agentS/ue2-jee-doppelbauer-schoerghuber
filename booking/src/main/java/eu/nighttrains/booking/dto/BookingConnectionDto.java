@@ -1,5 +1,7 @@
 package eu.nighttrains.booking.dto;
 
+import eu.nighttrains.booking.domain.TrainCarType;
+
 public class BookingConnectionDto {
     private long originId;
     private long destinationId;

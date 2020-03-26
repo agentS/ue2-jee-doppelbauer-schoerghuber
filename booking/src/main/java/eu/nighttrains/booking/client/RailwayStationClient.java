@@ -1,6 +1,6 @@
 package eu.nighttrains.booking.client;
 
-import eu.nighttrains.booking.dto.RailwayStationDto;
+import eu.nighttrains.booking.domain.RailwayStation;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.ws.rs.GET;
@@ -14,11 +14,11 @@ import java.util.List;
 public interface RailwayStationClient extends AutoCloseable {
     @GET
     @Path("/")
-    List<RailwayStationDto> getAllRailwayStations()
+    List<RailwayStation> getAllRailwayStations()
             throws UnknownUriException, ProcessingException;
 
     @GET
     @Path("/{id}")
-    RailwayStationDto getRailwayStationById(@PathParam("id") long id)
+    RailwayStation getRailwayStationById(@PathParam("id") long id)
         throws UnknownUriException, ProcessingException;
 }

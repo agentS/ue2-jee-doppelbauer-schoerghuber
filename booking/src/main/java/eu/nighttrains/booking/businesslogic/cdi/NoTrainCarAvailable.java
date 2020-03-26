@@ -1,15 +1,15 @@
 package eu.nighttrains.booking.businesslogic.cdi;
 
-import eu.nighttrains.booking.dto.RailwayStationConnectionDto;
+import eu.nighttrains.booking.domain.RailwayStationConnection;
 
 public class NoTrainCarAvailable extends RuntimeException {
-    private RailwayStationConnectionDto connection;
+    private RailwayStationConnection connection;
 
     public NoTrainCarAvailable() {
         super();
     }
 
-    public NoTrainCarAvailable(RailwayStationConnectionDto connection){
+    public NoTrainCarAvailable(RailwayStationConnection connection){
         super();
         this.connection = connection;
     }
@@ -22,7 +22,7 @@ public class NoTrainCarAvailable extends RuntimeException {
         super(message, cause);
     }
 
-    public RailwayStationConnectionDto getConnection() {
+    public RailwayStationConnection getConnection() {
         return connection;
     }
 }
