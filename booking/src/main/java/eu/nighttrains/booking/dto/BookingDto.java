@@ -1,11 +1,14 @@
 package eu.nighttrains.booking.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class BookingDto {
     private Long id;
-    private String from;
-    private String to;
+    private long originId;
+    private String originStationName;
+    private long destinationId;
+    private String destinationStationName;
     private List<TicketDto> tickets;
 
     public BookingDto() {
@@ -24,27 +27,43 @@ public class BookingDto {
         this.id = id;
     }
 
+    public long getOriginId() {
+        return originId;
+    }
+
+    public void setOriginId(long originId) {
+        this.originId = originId;
+    }
+
+    public String getOriginStationName() {
+        return originStationName;
+    }
+
+    public void setOriginStationName(String originStationName) {
+        this.originStationName = originStationName;
+    }
+
+    public long getDestinationId() {
+        return destinationId;
+    }
+
+    public void setDestinationId(long destinationId) {
+        this.destinationId = destinationId;
+    }
+
+    public String getDestinationStationName() {
+        return destinationStationName;
+    }
+
+    public void setDestinationStationName(String destinationStationName) {
+        this.destinationStationName = destinationStationName;
+    }
+
     public List<TicketDto> getTickets() {
         return tickets;
     }
 
     public void setTickets(List<TicketDto> tickets) {
         this.tickets = tickets;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
     }
 }

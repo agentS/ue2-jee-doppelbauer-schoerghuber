@@ -1,24 +1,14 @@
 package eu.nighttrains.booking.dto;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TicketDto {
     private Long id;
-    private LocalDate date;
-    private RailwayStationConnectionDto railwayStationConnection;
-    private TrainConnectionDto trainConnection;
-
-    public TicketDto(){
-    }
-
-    public TicketDto(Long id, LocalDate date,
-                     RailwayStationConnectionDto railwayStationConnection,
-                     TrainConnectionDto trainConnection) {
-        this.id = id;
-        this.date = date;
-        this.railwayStationConnection = railwayStationConnection;
-        this.trainConnection = trainConnection;
-    }
+    private long originId;
+    private long destinationId;
+    private String trainCode;
+    private List<StopDto> stops = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -28,27 +18,35 @@ public class TicketDto {
         this.id = id;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public long getOriginId() {
+        return originId;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setOriginId(long originId) {
+        this.originId = originId;
     }
 
-    public RailwayStationConnectionDto getRailwayStationConnection() {
-        return railwayStationConnection;
+    public long getDestinationId() {
+        return destinationId;
     }
 
-    public void setRailwayStationConnection(RailwayStationConnectionDto railwayStationConnection) {
-        this.railwayStationConnection = railwayStationConnection;
+    public void setDestinationId(long destinationId) {
+        this.destinationId = destinationId;
     }
 
-    public TrainConnectionDto getTrainConnection() {
-        return trainConnection;
+    public String getTrainCode() {
+        return trainCode;
     }
 
-    public void setTrainConnection(TrainConnectionDto trainConnection) {
-        this.trainConnection = trainConnection;
+    public void setTrainCode(String trainCode) {
+        this.trainCode = trainCode;
+    }
+
+    public List<StopDto> getStops() {
+        return stops;
+    }
+
+    public void setStops(List<StopDto> stops) {
+        this.stops = stops;
     }
 }

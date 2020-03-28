@@ -3,7 +3,6 @@ package eu.nighttrains.booking.rest.resource;
 import eu.nighttrains.booking.businesslogic.BookingManager;
 import eu.nighttrains.booking.businesslogic.exception.BookingNotPossible;
 import eu.nighttrains.booking.dto.BookingDto;
-import eu.nighttrains.booking.dto.BookingRequestDto;
 import eu.nighttrains.booking.dto.BookingRequestDto2;
 import eu.nighttrains.booking.dto.ErrorInfoDto;
 import eu.nighttrains.booking.logging.Logger;

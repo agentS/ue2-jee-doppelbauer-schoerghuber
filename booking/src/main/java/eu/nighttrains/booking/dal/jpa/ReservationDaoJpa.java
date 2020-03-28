@@ -28,7 +28,7 @@ public class ReservationDaoJpa extends AbstractDaoBean<Reservation, Long> implem
                 .createQuery("SELECT COUNT(T) FROM Reservation AS T " +
                         "WHERE T.originId = :originId " +
                         "AND T.destinationId = :destinationId " +
-                        "AND T.bookingDate = :date " +
+                        "AND T.date = :date " +
                         "AND T.trainCode = :trainCode " +
                         "AND T.trainCarId = :trainCarId", Long.class);
         query.setParameter("originId", fromId);

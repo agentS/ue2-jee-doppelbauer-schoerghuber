@@ -4,13 +4,17 @@ import eu.nighttrains.booking.businesslogic.BookingManager;
 import eu.nighttrains.booking.businesslogic.DestinationManager;
 import eu.nighttrains.booking.businesslogic.RailwayStationManager;
 import eu.nighttrains.booking.businesslogic.TrainConnectionManager;
+import eu.nighttrains.booking.businesslogic.exception.BookingNotFound;
 import eu.nighttrains.booking.businesslogic.exception.BookingNotPossible;
 import eu.nighttrains.booking.businesslogic.exception.NoConnectionsAvailable;
 import eu.nighttrains.booking.businesslogic.exception.NoTrainCarAvailable;
 import eu.nighttrains.booking.dal.BookingDao;
 import eu.nighttrains.booking.dal.ReservationDao;
 import eu.nighttrains.booking.dal.TicketDao;
-import eu.nighttrains.booking.domain.*;
+import eu.nighttrains.booking.domain.RailwayStation;
+import eu.nighttrains.booking.domain.RailwayStationConnection;
+import eu.nighttrains.booking.domain.TrainCar;
+import eu.nighttrains.booking.domain.TrainCarType;
 import eu.nighttrains.booking.dto.*;
 import eu.nighttrains.booking.logging.Logger;
 import eu.nighttrains.booking.logging.LoggerQualifier;
@@ -202,7 +206,9 @@ public class BookingManagerCdi implements BookingManager {
         reservation.setDestinationId(connection.getArrivalStation().getId());
         reservation.setTrainCode(connection.getTrainConnection().getCode());
         reservation.setTrainCarId(trainCar.getId());
-        reservation.setBookingDate(ticketDate);
+        reservation.setDate(ticketDate);
+        reservation.setDepartureTime(connection.getDepartureTime());
+        reservation.setArrivalTime(connection.getArrivalTime());
         return reservation;
     }
 
@@ -213,79 +219,90 @@ public class BookingManagerCdi implements BookingManager {
         }
     }
 
-    // ---------------------------------------------------------------------------------
-
     @Override
     public BookingDto findBookingById(Long id) {
         Booking booking = bookingDao.findById(id);
         if(booking == null){
-            throw new IllegalArgumentException();
+            throw new BookingNotFound();
         }
         BookingDto bookingDto = createBookingDto(booking);
         return bookingDto;
     }
 
     private BookingDto createBookingDto(Booking booking) {
-        RailwayStation fromStation = railwayStationManager
-                .findRailwayStationById(booking.getOriginId());
-        RailwayStation toStation = railwayStationManager
-                .findRailwayStationById(booking.getDestinationId());
-
         BookingDto bookingDto = new BookingDto();
+        RailwayStation originStation = railwayStationManager
+                .findRailwayStationById(booking.getOriginId());
+        RailwayStation destinationStation = railwayStationManager
+                .findRailwayStationById(booking.getDestinationId());
+        bookingDto.setOriginId(originStation.getId());
+        bookingDto.setOriginStationName(originStation.getName());
+        bookingDto.setDestinationId(destinationStation.getId());
+        bookingDto.setDestinationStationName(destinationStation.getName());
         bookingDto.setId(booking.getId());
-        bookingDto.setFrom(fromStation.getName());
-        bookingDto.setTo(toStation.getName());
-        //bookingDto.setTickets(createTicketDtos(booking.getReservations()));
+
+        List<TicketDto> ticketDtos = createTicketDtos(booking);
+        bookingDto.setTickets(ticketDtos);
+
         return bookingDto;
     }
 
-    private List<TicketDto> createTicketDtos(List<Reservation> reservations) {
+    private List<TicketDto> createTicketDtos(Booking booking) {
         List<TicketDto> ticketDtos = new ArrayList<>();
-        for(Reservation reservation : reservations){
-            List<RailwayStationConnection> connections = destinationManager
-                    .getConnections(reservation.getOriginId(), reservation.getDestinationId());
-
+        for(Ticket ticket : booking.getTickets()){
             TicketDto ticketDto = new TicketDto();
-            ticketDto.setDate(reservation.getBookingDate());
-            ticketDto.setId(reservation.getId());
-            if(connections.size() > 0) {
-                RailwayStationConnection connection = connections.get(0);
-                ticketDto.setRailwayStationConnection(createRailwayStationConnectionDto(connection));
+            ticketDto.setId(ticket.getId());
+            ticketDto.setOriginId(ticket.getOriginId());
+            ticketDto.setDestinationId(ticket.getDestinationId());
+            ticketDto.setTrainCode(ticket.getReservations().get(0).getTrainCode());
 
-                TrainConnection trainConnection = connection.getTrainConnection();
-                Optional<TrainCar> trainCar = trainConnectionManager
-                        .findAllTrainCarsByCode(trainConnection.getCode())
-                        .stream()
-                        .filter(c -> c.getId() == reservation.getTrainCarId())
-                        .findFirst();
-
-                TrainCarDto trainCarDto = new TrainCarDto();
-                trainCarDto.setId(trainCar.get().getId());
-                trainCarDto.setNumber(trainCar.get().getNumber());
-                trainCarDto.setType(trainCar.get().getType());
-
-                TrainConnectionDto trainConnectionDto = createTrainConnectionDto(trainConnection);
-                trainConnectionDto.setTrainCar(trainCarDto);
-                ticketDto.setTrainConnection(trainConnectionDto);
-            }
+            List<StopDto> stopDtos = createStopDtos(ticket);
+            ticketDto.setStops(stopDtos);
             ticketDtos.add(ticketDto);
         }
         return ticketDtos;
     }
 
-    private TrainConnectionDto createTrainConnectionDto(TrainConnection trainConnection) {
-        TrainConnectionDto trainConnectionDto = new TrainConnectionDto();
-        trainConnectionDto.setCode(trainConnection.getCode());
-        trainConnectionDto.setId(trainConnection.getId());
-        return trainConnectionDto;
-    }
+    private List<StopDto> createStopDtos(Ticket ticket) {
+        List<StopDto> stopDtos = new ArrayList<>();
+        for(Reservation reservation : ticket.getReservations()){
+            StopDto stopDto = new StopDto();
 
-    private RailwayStationConnectionDto createRailwayStationConnectionDto(RailwayStationConnection connection) {
-        RailwayStationConnectionDto railwayStationConnectionDto = new RailwayStationConnectionDto();
-        railwayStationConnectionDto.setArrivalStation(connection.getArrivalStation());
-        railwayStationConnectionDto.setDepartureStation(connection.getDepartureStation());
-        railwayStationConnectionDto.setArrivalTime(connection.getArrivalTime());
-        railwayStationConnectionDto.setDepartureTime(connection.getDepartureTime());
-        return railwayStationConnectionDto;
+            RailwayStationConnectionDto connectionDto = new RailwayStationConnectionDto();
+            connectionDto.setDepartureTime(reservation.getDepartureTime());
+            connectionDto.setArrivalTime(reservation.getArrivalTime());
+            connectionDto.setDate(reservation.getDate());
+
+            RailwayStation departureStation = railwayStationManager
+                    .findRailwayStationById(reservation.getOriginId());
+            RailwayStation arrivalStation = railwayStationManager
+                    .findRailwayStationById(reservation.getDestinationId());
+
+            connectionDto.setArrivalStation(arrivalStation);
+            connectionDto.setDepartureStation(departureStation);
+
+            stopDto.setConnection(connectionDto);
+
+            ReservationDto reservationDto = new ReservationDto();
+            reservationDto.setId(reservation.getId());
+
+            TrainCarDto trainCarDto = new TrainCarDto();
+            Optional<TrainCar> trainCar = trainConnectionManager
+                    .findAllTrainCarsByCode(reservation.getTrainCode())
+                    .stream()
+                    .filter(c -> c.getId() == reservation.getTrainCarId())
+                    .findFirst();
+
+            if(trainCar.isPresent()){
+                trainCarDto.setType(trainCar.get().getType());
+                trainCarDto.setNumber(trainCar.get().getNumber());
+                trainCarDto.setId(trainCar.get().getId());
+                reservationDto.setTrainCar(trainCarDto);
+            }
+
+            stopDto.setReservation(reservationDto);
+            stopDtos.add(stopDto);
+        }
+        return stopDtos;
     }
 }

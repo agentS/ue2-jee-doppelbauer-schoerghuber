@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 public class Reservation {
@@ -15,7 +16,9 @@ public class Reservation {
     private long destinationId;
     private String trainCode;
     private long trainCarId;
-    private LocalDate bookingDate;
+    private LocalDate date;
+    private LocalTime departureTime;
+    private LocalTime arrivalTime;
 
     public Reservation() {
     }
@@ -63,11 +66,27 @@ public class Reservation {
         this.trainCarId = trainCarId;
     }
 
-    public LocalDate getBookingDate() {
-        return bookingDate;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setBookingDate(LocalDate bookingDate) {
-        this.bookingDate = bookingDate;
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(LocalTime departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public LocalTime getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(LocalTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 }

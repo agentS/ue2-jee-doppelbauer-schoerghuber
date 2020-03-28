@@ -1,9 +1,6 @@
 package eu.nighttrains.booking.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +13,7 @@ public class Ticket {
     private long destinationId = -1;
 
     @OneToMany
+    @OrderBy("date, departureTime ASC")
     private List<Reservation> reservations = new ArrayList<>();
 
     public List<Reservation> getReservations() {
