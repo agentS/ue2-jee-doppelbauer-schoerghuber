@@ -6,9 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="20d6ebcb-6a45-4382-8a5f-f9661d1816ba" name="Default Changelist" comment="">
+    <list default="true" id="20d6ebcb-6a45-4382-8a5f-f9661d1816ba" name="Default Changelist" comment="add openapi descriptions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/BookingResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/BookingResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/src/main/resources/application.properties" afterDir="false" />
@@ -280,7 +280,7 @@
       <workItem from="1585253641463" duration="10194000" />
       <workItem from="1585326182546" duration="852000" />
       <workItem from="1585394572040" duration="7418000" />
-      <workItem from="1585418667419" duration="3277000" />
+      <workItem from="1585418667419" duration="3531000" />
     </task>
     <task id="LOCAL-00001" summary="add destionations rest client">
       <created>1585152744324</created>
@@ -373,7 +373,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585421223379</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="add openapi descriptions">
+      <created>1585421996011</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1585421996012</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -404,6 +411,7 @@
     <MESSAGE value="rework booking logic - separation of tickets and reservations" />
     <MESSAGE value="add redis client configuration" />
     <MESSAGE value="remove unused classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove unused classes" />
+    <MESSAGE value="add openapi descriptions" />
+    <option name="LAST_COMMIT_MESSAGE" value="add openapi descriptions" />
   </component>
 </project>
