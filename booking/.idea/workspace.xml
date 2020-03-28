@@ -7,22 +7,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20d6ebcb-6a45-4382-8a5f-f9661d1816ba" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/BookingNotFound.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/ReservationDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/StopDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/configuration/redis/RedisConfigurationSource.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/microprofile-config.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/services/org.eclipse.microprofile.config.spi.ConfigSource" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/redisConfiguration.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/jpa/ReservationDaoJpa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/jpa/ReservationDaoJpa.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/BookingDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/BookingDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/RailwayStationConnectionDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/RailwayStationConnectionDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/TicketDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/TicketDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Reservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Reservation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Ticket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/BookingResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/BookingResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/DestinationsClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/DestinationsClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/RailwayStationClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/RailwayStationClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/TrainConnectionClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/TrainConnectionClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../timetable/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/timetable.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/timetable.iml" afterDir="false" />
     </list>
@@ -56,7 +51,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15429688" />
@@ -64,18 +59,19 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="eu.nighttrains.booking.dto" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="eu.nighttrains.booking.dto" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\resources" />
+      <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\resources\META-INF\services" />
       <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\dto" />
       <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\domain" />
       <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\util" />
-      <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\dal" />
-      <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\logging" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="eu.nighttrains.configuration.redis" />
+      <recent name="eu.nighttrains.booking.dto" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="eu.nighttrains.booking.dto" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -291,6 +287,7 @@
       <workItem from="1585253641463" duration="10194000" />
       <workItem from="1585326182546" duration="852000" />
       <workItem from="1585394572040" duration="7418000" />
+      <workItem from="1585418667419" duration="2251000" />
     </task>
     <task id="LOCAL-00001" summary="add destionations rest client">
       <created>1585152744324</created>
