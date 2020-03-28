@@ -7,15 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20d6ebcb-6a45-4382-8a5f-f9661d1816ba" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/configuration/redis/RedisConfigurationSource.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/microprofile-config.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/services/org.eclipse.microprofile.config.spi.ConfigSource" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/redisConfiguration.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/DestinationsClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/DestinationsClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/RailwayStationClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/RailwayStationClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/TrainConnectionClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/client/TrainConnectionClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/BookingManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/BookingManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/src/main/resources/application.properties" afterDir="false" />
@@ -287,7 +279,7 @@
       <workItem from="1585253641463" duration="10194000" />
       <workItem from="1585326182546" duration="852000" />
       <workItem from="1585394572040" duration="7418000" />
-      <workItem from="1585418667419" duration="2251000" />
+      <workItem from="1585418667419" duration="2419000" />
     </task>
     <task id="LOCAL-00001" summary="add destionations rest client">
       <created>1585152744324</created>
@@ -366,7 +358,14 @@
       <option name="project" value="LOCAL" />
       <updated>1585263885803</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="add redis client configuration">
+      <created>1585421028917</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1585421028917</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -395,6 +394,7 @@
     <MESSAGE value="add booking resource" />
     <MESSAGE value="add booking/id endpoint" />
     <MESSAGE value="rework booking logic - separation of tickets and reservations" />
-    <option name="LAST_COMMIT_MESSAGE" value="rework booking logic - separation of tickets and reservations" />
+    <MESSAGE value="add redis client configuration" />
+    <option name="LAST_COMMIT_MESSAGE" value="add redis client configuration" />
   </component>
 </project>
