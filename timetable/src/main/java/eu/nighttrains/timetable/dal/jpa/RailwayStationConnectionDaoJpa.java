@@ -38,7 +38,8 @@ public class RailwayStationConnectionDaoJpa implements RailwayStationConnectionD
             + "INNER JOIN railwaystation AS D ON D.id = C.departurestation_id "
             + "INNER JOIN railwaystation AS A ON A.id = C.arrivalstation_id "
             + "INNER JOIN trainconnection AS T ON T.id = C.trainconnection_id "
-            + "WHERE NOT cycle;";
+            + "WHERE NOT cycle "
+            + "ORDER BY C.searchpath ASC;";
 
     @Override
     public List<RailwayStationConnection> findAllConnectionsFrom(Long originId) {
