@@ -5,7 +5,6 @@ import eu.nighttrains.timetable.route.SearchGraphNode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class RailwayStationConnectionSearchGraph implements SearchGraph<RailwayStationConnection> {
     public static final class RailwayStationConnectionSearchGraphNode implements SearchGraphNode<RailwayStationConnection> {

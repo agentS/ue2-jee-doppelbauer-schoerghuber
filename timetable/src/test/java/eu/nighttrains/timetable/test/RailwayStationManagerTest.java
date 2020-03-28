@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
@@ -26,5 +28,13 @@ public class RailwayStationManagerTest {
         var railwayStation = this.railwayStationManager.findRailwayStationById(0L);
         assertEquals(0, railwayStation.getId());
         assertEquals("Wien Hauptbahnhof", railwayStation.getName());
+    }
+
+    @Test
+    public void testSearchRailwayStations() {
+        var railwayStations = this.railwayStationManager.searchByName("Amst");
+        assertNotNull(railwayStations);
+        assertTrue(railwayStations.size() > 0);
+        assertTrue(railwayStations.stream().anyMatch(station -> Objects.equals("Amstetten", station.getName())));
     }
 }
