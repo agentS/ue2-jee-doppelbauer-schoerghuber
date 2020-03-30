@@ -10,6 +10,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -44,6 +45,7 @@ public class DestinationsEndpoint {
                     content = @Content(mediaType = MediaType.TEXT_PLAIN)
             )
     })
+    @Tag(ref = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE)
     public RailwayStationDestinationsDto findAllDestinationsFrom(@PathParam("id") Long id) {
         try {
             return this.routeManager.findAllDestinationsFrom(id);
@@ -72,6 +74,7 @@ public class DestinationsEndpoint {
                     content = @Content(mediaType = MediaType.TEXT_PLAIN)
             )
     })
+    @Tag(ref = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE)
     public List<RailwayStationConnectionDto> findAllStopsBetween(
             @PathParam("originId") Long originId,
             @PathParam("destinationId") Long destinationId

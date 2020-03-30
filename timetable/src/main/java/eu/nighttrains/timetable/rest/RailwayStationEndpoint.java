@@ -8,6 +8,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -33,6 +34,7 @@ public class RailwayStationEndpoint {
             name = "All railway stations",
             description = "A list containing all railway stations"
     )
+    @Tag(ref = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE)
     public List<RailwayStationDto> findAllRailwayStations() {
         return this.railwayStationManager.findAllRailwayStations();
     }
@@ -56,6 +58,7 @@ public class RailwayStationEndpoint {
                     content = @Content(mediaType = MediaType.TEXT_PLAIN)
             )
     })
+    @Tag(ref = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE)
     public RailwayStationDto findById(@PathParam("id") Long id) {
         try {
             return this.railwayStationManager.findRailwayStationById(id);
@@ -69,6 +72,7 @@ public class RailwayStationEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Parameter(name = "searchTerm", description = "Search term entered by the user", example = "Amst")
     @APIResponse(responseCode = "200", name = "List of railway stations", description = "A list of railway stations whose name starts with the specified search term")
+    @Tag(ref = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE)
     public List<RailwayStationDto> searchByName(@PathParam("searchTerm") String searchTerm) {
         return this.railwayStationManager.searchByName(searchTerm);
     }

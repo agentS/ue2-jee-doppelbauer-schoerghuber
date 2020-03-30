@@ -4,6 +4,8 @@ In order to initialize the configuration database you need to run the following 
 
 ```
 SET timetable:ordinal 600
+HMSET timetable quarkus.http.port 8082
+HMSET timetable openapi.server.url "http://127.0.0.1:8082"
 HMSET timetable quarkus.datasource.db-kind "postgresql" quarkus.datasource.username "lukas" quarkus.datasource.password "Cisco0" quarkus.datasource.jdbc.url "jdbc:tracing:postgresql://127.0.0.1:5432/timetable" quarkus.datasource.jdbc.driver "io.opentracing.contrib.jdbc.TracingDriver" quarkus.hibernate-orm.dialect "org.hibernate.dialect.PostgreSQLDialect" quarkus.hibernate-orm.database.generation "drop-and-create"
 HMSET timetable quarkus.jaeger.service-name "timetable" quarkus.jaeger.sampler-type "const" quarkus.jaeger.sampler-param 1 quarkus.jaeger.propagation "b3" quarkus.log.console.format "%d{HH:mm:ss} %-5p traceId=%X{traceId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n"
 ```

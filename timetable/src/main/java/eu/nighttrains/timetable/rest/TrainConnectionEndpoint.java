@@ -10,6 +10,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -36,6 +37,7 @@ public class TrainConnectionEndpoint {
             name = "All train connections",
             description = "A list of all train connections including their respective train cars, but not including stops"
     )
+    @Tag(ref = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE)
     public List<TrainConnectionDto> findAllTrainConnections() {
         return this.trainConnectionManager.findAll();
     }
@@ -59,6 +61,7 @@ public class TrainConnectionEndpoint {
                     content = @Content(mediaType = MediaType.TEXT_PLAIN)
             )
     })
+    @Tag(ref = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE)
     public TrainConnectionDto findById(@PathParam("id") Long id) {
         try {
             return this.trainConnectionManager.findById(id);
@@ -86,6 +89,7 @@ public class TrainConnectionEndpoint {
                     content = @Content(mediaType = MediaType.TEXT_PLAIN)
             )
     })
+    @Tag(ref = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE)
     public TrainConnectionDto findByCode(@PathParam("code") String code) {
         try {
             return this.trainConnectionManager.findByCode(code);
@@ -113,6 +117,7 @@ public class TrainConnectionEndpoint {
                     content = @Content(mediaType = MediaType.TEXT_PLAIN)
             )
     })
+    @Tag(ref = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE)
     public List<TrainCarDto> findAllCarsById(@PathParam("id") Long id) {
         try {
             return this.trainConnectionManager.findAllCarsFor(id);
@@ -140,6 +145,7 @@ public class TrainConnectionEndpoint {
                     content = @Content(mediaType = MediaType.TEXT_PLAIN)
             )
     })
+    @Tag(ref = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE)
     public List<TrainCarDto> findAllCarsByCode(@PathParam("code") String code) {
         try {
             return this.trainConnectionManager.findAllCarsFor(code);
