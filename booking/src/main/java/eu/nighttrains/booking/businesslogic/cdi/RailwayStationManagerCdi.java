@@ -12,6 +12,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequestScoped
 public class RailwayStationManagerCdi implements RailwayStationManager {
@@ -20,11 +21,15 @@ public class RailwayStationManagerCdi implements RailwayStationManager {
     private RailwayStationClient railwayStationClient;
     @Inject @LoggerQualifier(type = LoggerType.CONSOLE)
     private Logger logger;
+    private List<RailwayStation> cachedStations;
 
     @Override
     public List<RailwayStation> findAllRailwayStations() {
         try {
-            return railwayStationClient.getAllRailwayStations();
+            if(cachedStations == null){
+                cachedStations = railwayStationClient.getAllRailwayStations();
+            }
+            return cachedStations;
         } catch(Exception ex) {
             logger.info(ex.getMessage());
             return new ArrayList<>();
@@ -34,10 +39,29 @@ public class RailwayStationManagerCdi implements RailwayStationManager {
     @Override
     public RailwayStation findRailwayStationById(long id) {
         try {
-            return railwayStationClient.getRailwayStationById(id);
+            RailwayStation foundStation = null;
+            if(cachedStations != null){
+                foundStation = findRailwayStationByIdInCache(id);
+            }
+            if(foundStation == null){
+                foundStation = railwayStationClient.getRailwayStationById(id);
+            }
+            return foundStation;
         } catch(Exception ex) {
             logger.info(ex.getMessage());
             return null;
         }
+    }
+
+    private RailwayStation findRailwayStationByIdInCache(long id) {
+        Optional<RailwayStation> foundStation = cachedStations
+                .stream()
+                .filter(station -> station.getId() == id)
+                .findFirst();
+
+        if(foundStation.isPresent()){
+            return foundStation.get();
+        }
+        return null;
     }
 }
