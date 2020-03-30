@@ -1,11 +1,12 @@
 import React from "react";
 import { Form, FormGroup, Button } from "react-bootstrap";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import { TimetableApi, RailwayStationDto } from "../api/timetable";
 
 import RailwayStationSuggestionList from "./RailwayStationSuggestionList";
 
-interface ConnectionSearchProperties {
+interface ConnectionSearchProperties extends RouteComponentProps {
 	timetableApi: TimetableApi
 }
 
@@ -50,6 +51,17 @@ class ConnectionSearch extends React.Component<ConnectionSearchProperties, Conne
 		}
 	}
 
+	switchToConnectionDisplay() {
+		if (
+			(this.state.departureStation !== undefined)
+			&& (this.state.arrivalStation !== undefined)
+			&& (this.state.departureStation !== null)
+			&& (this.state.arrivalStation !== null)
+		) {
+			this.props.history.push(`/connection/from/${this.state.departureStation.id}/to/${this.state.arrivalStation.id}`);
+		}
+	}
+
 	render() {
 		return (
 			<Form>
@@ -82,7 +94,9 @@ class ConnectionSearch extends React.Component<ConnectionSearchProperties, Conne
 						|| (this.state.arrivalStation === undefined)
 						|| (this.state.departureStation === null)
 						|| (this.state.arrivalStation === null)
-					}>
+					}
+					onClick={() => this.switchToConnectionDisplay()}
+				>
 					Search for connections
 				</Button>
 			</Form>
@@ -90,4 +104,4 @@ class ConnectionSearch extends React.Component<ConnectionSearchProperties, Conne
 	}
 };
 
-export default ConnectionSearch;
+export default withRouter(ConnectionSearch);

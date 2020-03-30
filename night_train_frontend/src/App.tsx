@@ -8,6 +8,8 @@ import { TimetableApi } from "./api/timetable";
 
 import ConnectionSearch from "./timetable/ConnectionSearch";
 import DiscoverySearch from "./timetable/DiscoverySearch";
+import Discovery from "./timetable/Discovery";
+import ConnectionDisplay from "./timetable/ConnectionDisplay";
 
 class App extends React.Component {
 	render() {
@@ -15,9 +17,15 @@ class App extends React.Component {
 
 		const connectionSearch = () => (<ConnectionSearch timetableApi={timetableApi}/>);
 		const discoverySearch = () => (<DiscoverySearch timetableApi={timetableApi}/>);
-		const discovery = ({match}: any) => {
-			return (<h1>{match.params.departureStationId}</h1>)
-		};
+		const discovery = ({match}: any) => (<Discovery
+			departureStationId={match.params.departureStationId}
+			timetableApi={timetableApi}/>
+		);
+		const connectionDisplay = ({match}: any) => (<ConnectionDisplay
+			departureStationId={match.params.departureStationId}
+			arrivalStationId={match.params.arrivalStationId}
+			timetableApi={timetableApi}/>
+		);
 
 		return (
 			<div className="container">
@@ -36,6 +44,7 @@ class App extends React.Component {
 				<Route exact path="/connectionSearch" component={connectionSearch}/>
 				<Route exact path="/discoverySearch" component={discoverySearch}/>
 				<Route exact path="/discovery/:departureStationId" component={discovery}/>
+				<Route exact path="/connection/from/:departureStationId/to/:arrivalStationId" component={connectionDisplay}/>
 			</div>
 		);
 	}
