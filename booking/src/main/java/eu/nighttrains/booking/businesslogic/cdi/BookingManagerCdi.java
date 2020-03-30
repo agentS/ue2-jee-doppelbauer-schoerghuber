@@ -24,6 +24,7 @@ import eu.nighttrains.booking.model.Reservation;
 import eu.nighttrains.booking.model.Ticket;
 import eu.nighttrains.booking.util.ConnectionDateCalculator;
 import eu.nighttrains.booking.util.TicketConnectionSeparator;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
 
 @RequestScoped
 @Transactional
+@Traced
 public class BookingManagerCdi implements BookingManager {
     private BookingDao bookingDao;
     private ReservationDao reservationDao;
@@ -222,6 +224,7 @@ public class BookingManagerCdi implements BookingManager {
 
     @Override
     public BookingDto findBookingById(Long id) {
+        railwayStationManager.findAllRailwayStations(); // cache
         Booking booking = bookingDao.findById(id);
         if(booking == null){
             throw new BookingNotFound();
