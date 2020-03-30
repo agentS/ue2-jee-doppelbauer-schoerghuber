@@ -10,7 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.ProcessingException;
 import java.util.List;
 
-@RegisterRestClient(configKey = "trainConnectionClient", baseUri = "http://localhost:8000")
+@RegisterRestClient(configKey = "timetableService")
 @Path("/trainConnection")
 public interface TrainConnectionClient extends AutoCloseable {
     @GET

@@ -6,24 +6,10 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="20d6ebcb-6a45-4382-8a5f-f9661d1816ba" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/exception/BookingNotFound.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/ReservationDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/StopDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/businesslogic/cdi/BookingManagerCdi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/jpa/ReservationDaoJpa.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dal/jpa/ReservationDaoJpa.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/BookingDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/BookingDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/RailwayStationConnectionDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/RailwayStationConnectionDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/TicketDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto/TicketDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Reservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Reservation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/model/Ticket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/BookingResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/rest/resource/BookingResource.java" afterDir="false" />
+    <list default="true" id="20d6ebcb-6a45-4382-8a5f-f9661d1816ba" name="Default Changelist" comment="add openapi descriptions">
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../timetable/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../timetable/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../timetable/configuration.md" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/configuration.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../timetable/timetable.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../timetable/timetable.iml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -56,7 +42,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/eu/nighttrains/booking/dto" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15429688" />
@@ -64,18 +50,19 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="eu.nighttrains.booking.dto" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="eu.nighttrains.booking.dto" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\resources" />
+      <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\resources\META-INF\services" />
       <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\dto" />
       <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\domain" />
       <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\util" />
-      <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\dal" />
-      <recent name="C:\Users\alex\Documents\documents\github.com\ue2-jee-doppelbauer-schoerghuber\booking\src\main\java\eu\nighttrains\booking\logging" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="eu.nighttrains.configuration.redis" />
+      <recent name="eu.nighttrains.booking.dto" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="eu.nighttrains.booking.dto" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -291,6 +278,8 @@
       <workItem from="1585253641463" duration="10194000" />
       <workItem from="1585326182546" duration="852000" />
       <workItem from="1585394572040" duration="7418000" />
+      <workItem from="1585418667419" duration="4286000" />
+      <workItem from="1585576538691" duration="3652000" />
     </task>
     <task id="LOCAL-00001" summary="add destionations rest client">
       <created>1585152744324</created>
@@ -369,7 +358,42 @@
       <option name="project" value="LOCAL" />
       <updated>1585263885803</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="add redis client configuration">
+      <created>1585421028917</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1585421028917</updated>
+    </task>
+    <task id="LOCAL-00013" summary="remove unused classes">
+      <created>1585421223379</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1585421223379</updated>
+    </task>
+    <task id="LOCAL-00014" summary="add openapi descriptions">
+      <created>1585421996011</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1585421996012</updated>
+    </task>
+    <task id="LOCAL-00015" summary="fix booking support for different traincar types">
+      <created>1585422318614</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1585422318614</updated>
+    </task>
+    <task id="LOCAL-00016" summary="add railwaystation caching strategy">
+      <created>1585581434346</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1585581434347</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -398,6 +422,11 @@
     <MESSAGE value="add booking resource" />
     <MESSAGE value="add booking/id endpoint" />
     <MESSAGE value="rework booking logic - separation of tickets and reservations" />
-    <option name="LAST_COMMIT_MESSAGE" value="rework booking logic - separation of tickets and reservations" />
+    <MESSAGE value="add redis client configuration" />
+    <MESSAGE value="remove unused classes" />
+    <MESSAGE value="add openapi descriptions" />
+    <MESSAGE value="fix booking support for different traincar types" />
+    <MESSAGE value="add railwaystation caching strategy" />
+    <option name="LAST_COMMIT_MESSAGE" value="add railwaystation caching strategy" />
   </component>
 </project>
