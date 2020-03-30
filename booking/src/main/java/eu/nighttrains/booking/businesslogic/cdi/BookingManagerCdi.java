@@ -24,6 +24,7 @@ import eu.nighttrains.booking.model.Reservation;
 import eu.nighttrains.booking.model.Ticket;
 import eu.nighttrains.booking.util.ConnectionDateCalculator;
 import eu.nighttrains.booking.util.TicketConnectionSeparator;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
 
 @RequestScoped
 @Transactional
+@Traced
 public class BookingManagerCdi implements BookingManager {
     private BookingDao bookingDao;
     private ReservationDao reservationDao;
@@ -96,7 +98,7 @@ public class BookingManagerCdi implements BookingManager {
         List<List<RailwayStationConnection>> ticketConnections = separator
                 .separateConnections(connections);
 
-        Booking booking = book(ticketConnections);
+        Booking booking = book(bookingRequest, ticketConnections);
         booking.setOriginId(originId);
         booking.setDestinationId(destinationId);
         Booking savedBooking = saveBooking(booking);
@@ -115,25 +117,25 @@ public class BookingManagerCdi implements BookingManager {
         return mergedBooking;
     }
 
-    public Booking book(List<List<RailwayStationConnection>> ticketConnections){
+    public Booking book(BookingRequestDto2 bookingRequest, List<List<RailwayStationConnection>> ticketConnections){
         Booking booking = new Booking();
         List<Ticket> ticketList = new ArrayList<>();
         for(List<RailwayStationConnection> connections : ticketConnections){
-            Ticket ticket = createTicket(connections);
+            Ticket ticket = createTicket(bookingRequest, connections);
             ticketList.add(ticket);
         }
         booking.setTickets(ticketList);
         return booking;
     }
 
-    private Ticket createTicket(List<RailwayStationConnection> connections) {
+    private Ticket createTicket(BookingRequestDto2 bookingRequest, List<RailwayStationConnection> connections) {
         Ticket ticket = new Ticket();
         List<Reservation> reservationList = new ArrayList<>();
         for(RailwayStationConnection connection : connections){
             if(ticket.getOriginId() == -1){
                 ticket.setOriginId(connection.getDepartureStation().getId());
             }
-            Reservation reservation = makeReservation(connection);
+            Reservation reservation = makeReservation(bookingRequest, connection);
             reservationList.add(reservation);
             ticket.setDestinationId(connection.getArrivalStation().getId());
         }
@@ -141,8 +143,9 @@ public class BookingManagerCdi implements BookingManager {
         return ticket;
     }
 
-    private Reservation makeReservation(RailwayStationConnection connection) {
-        TrainCar trainCar = findAvailableTrainCar(TrainCarType.SLEEPER, connection);
+    private Reservation makeReservation(BookingRequestDto2 bookingRequest, RailwayStationConnection connection) {
+        TrainCarType trainCarType = bookingRequest.getTrainCarType();
+        TrainCar trainCar = findAvailableTrainCar(trainCarType, connection);
         if(trainCar != null){
             Reservation reservation = createReservation(connection, trainCar, connection.getDate());
             return reservation;
@@ -221,6 +224,7 @@ public class BookingManagerCdi implements BookingManager {
 
     @Override
     public BookingDto findBookingById(Long id) {
+        railwayStationManager.findAllRailwayStations(); // cache
         Booking booking = bookingDao.findById(id);
         if(booking == null){
             throw new BookingNotFound();
