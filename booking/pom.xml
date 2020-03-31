@@ -20,6 +20,7 @@
         <war.plugin.version>3.2.2</war.plugin.version>
 
         <jedis.version>3.2.0</jedis.version>
+        <openapi.generator.version>4.3.0</openapi.generator.version>
     </properties>
 
     <dependencyManagement>
@@ -85,6 +86,11 @@
             <artifactId>jedis</artifactId>
             <version>${jedis.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator-maven-plugin</artifactId>
+            <version>${openapi.generator.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -103,7 +109,25 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${wildfly.maven.plugin.version}</version>
             </plugin>
+
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi.generator.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <verbose>true</verbose>
+                            <inputSpec>http://127.0.0.1:8080/openapi</inputSpec>
+                            <generatorName>typescript-fetch</generatorName>
+                            <output>${project.build.directory}/generated-sources/openapi/typescriptFetch</output>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
 </project>

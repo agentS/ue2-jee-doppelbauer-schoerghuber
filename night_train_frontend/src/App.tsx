@@ -5,6 +5,7 @@ import { Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { TimetableApi } from "./api/timetable";
+import { BookingApi } from "./api/booking";
 
 import ConnectionSearch from "./timetable/ConnectionSearch";
 import DiscoverySearch from "./timetable/DiscoverySearch";
@@ -14,6 +15,7 @@ import ConnectionDisplay from "./timetable/ConnectionDisplay";
 class App extends React.Component {
 	render() {
 		const timetableApi = new TimetableApi();
+		const bookingApi = new BookingApi();
 
 		const connectionSearch = () => (<ConnectionSearch timetableApi={timetableApi}/>);
 		const discoverySearch = () => (<DiscoverySearch timetableApi={timetableApi}/>);
@@ -24,7 +26,8 @@ class App extends React.Component {
 		const connectionDisplay = ({match}: any) => (<ConnectionDisplay
 			departureStationId={match.params.departureStationId}
 			arrivalStationId={match.params.arrivalStationId}
-			timetableApi={timetableApi}/>
+			timetableApi={timetableApi}
+			bookingApi={bookingApi}/>
 		);
 
 		return (

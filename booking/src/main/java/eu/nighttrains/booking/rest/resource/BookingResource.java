@@ -9,11 +9,15 @@ import eu.nighttrains.booking.dto.ErrorInfoDto;
 import eu.nighttrains.booking.logging.Logger;
 import eu.nighttrains.booking.logging.LoggerQualifier;
 import eu.nighttrains.booking.logging.LoggerType;
+import eu.nighttrains.booking.rest.BookingApplication;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -43,6 +47,14 @@ public class BookingResource {
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
+    @RequestBody(
+            name = "Booking request object",
+            description = "Contains all details about the booking request",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = BookingRequestDto2.class)
+            )
+    )
     @APIResponses({
             @APIResponse(
                     responseCode = "201",
@@ -56,6 +68,7 @@ public class BookingResource {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON)
             )
     })
+    @Tag(ref = BookingApplication.OPEN_API_TAG_NAME_BOOKING)
     public Response postBooking(BookingRequestDto2 bookingRequest){
         try{
             Long bookingId = bookingManager.book(bookingRequest);
@@ -100,6 +113,7 @@ public class BookingResource {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON)
             )
     })
+    @Tag(ref = BookingApplication.OPEN_API_TAG_NAME_BOOKING)
     public Response findById(@PathParam("id") Long id){
         try{
             BookingDto bookingDto = bookingManager.findBookingById(id);

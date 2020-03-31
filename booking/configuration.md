@@ -4,7 +4,7 @@ In order to initialize the configuration database you need to run the following 
 
 ```
 SET booking:ordinal 600
-HMSET booking timetableService/mp-rest/uri "http://localhost:8000"
+HMSET booking timetableService/mp-rest/uri "http://localhost:8082"
 ```
 
 # Initializing the Configuration File for Accessing the Configuration Database

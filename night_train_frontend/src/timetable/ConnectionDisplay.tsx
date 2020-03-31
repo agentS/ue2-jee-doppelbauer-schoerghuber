@@ -1,27 +1,34 @@
 import React from "react";
-import { Card, Accordion, Button, Table } from "react-bootstrap";
+import { Card, Accordion, Button, Table, Form } from "react-bootstrap";
 
 import moment from "moment";
 
 import { TimetableApi, RailwayStationConnectionDto } from "../api/timetable";
+import { BookingApi, TrainCarType } from "../api/booking";
 
 interface ConnectionDisplayProperties {
 	timetableApi: TimetableApi;
+	bookingApi: BookingApi;
 	departureStationId: number;
 	arrivalStationId: number;
 };
 
 interface ConnectionDisplayState {
 	connection: Array<RailwayStationConnectionDto>;
+	trainCarType: TrainCarType;
+	departureDay: Date;
 };
 
+const MOMENT_ISO_DATE_FORMAT = "YYYY-MM-DD";
 const MOMENT_TIME_PARSING_FORMAT = "HH:mm:ss";
 
 class ConnectionDisplay extends React.Component<ConnectionDisplayProperties, ConnectionDisplayState> {
 	constructor(properties: ConnectionDisplayProperties) {
 		super(properties);
 		this.state = {
-			connection: []
+			connection: [],
+			trainCarType: TrainCarType.SLEEPER,
+			departureDay: moment().startOf("day").toDate()
 		};
 	}
 
@@ -56,6 +63,24 @@ class ConnectionDisplay extends React.Component<ConnectionDisplayProperties, Con
 			}
 		}
 		return totalTravelDays;
+	}
+
+	updateDepartureDate(event: React.ChangeEvent<HTMLInputElement>) {
+		const departureDay = moment(event.target.value, MOMENT_ISO_DATE_FORMAT);
+		if (departureDay.diff(moment().startOf("day"), "days") >= 0) {
+			this.setState({ departureDay: departureDay.toDate() });
+		}
+	}
+
+	async bookTicket() {
+		await this.props.bookingApi.apiBookingsPost({
+			bookingRequestDto2: {
+				originId: this.props.departureStationId,
+				destinationId: this.props.arrivalStationId,
+				trainCarType: this.state.trainCarType,
+				journeyStartDate: this.state.departureDay
+			}
+		});
 	}
 
 	render() {
@@ -122,7 +147,28 @@ class ConnectionDisplay extends React.Component<ConnectionDisplayProperties, Con
 							</Accordion.Collapse>
 						</Card>
 					</Accordion>
-					<Button variant="primary" className="btn-block mt-2">Book ticket</Button>
+					<Form className="mt-2" onSubmit={(event: React.FormEvent) => { event.preventDefault(); this.bookTicket(); }}>
+						<Form.Group controlId="fgCarType">
+							<Form.Check inline label="Sleeper car" type="radio" id="cbSleeper" name="cbCarType"
+								checked={this.state.trainCarType === TrainCarType.SLEEPER}
+								onChange={() => this.setState({ trainCarType: TrainCarType.SLEEPER })}/>
+							<Form.Check inline label="Couchette car" type="radio" id="cbCouchette" name="cbCarType"
+								checked={this.state.trainCarType === TrainCarType.COUCHETTE}
+								onChange={() => this.setState({ trainCarType: TrainCarType.COUCHETTE })}/>
+							<Form.Check inline label="Seat car" type="radio" id="cbSeat" name="cbCarType"
+								checked={this.state.trainCarType === TrainCarType.SEAT}
+								onChange={() => this.setState({ trainCarType: TrainCarType.SEAT })}/>
+						</Form.Group>
+						<Form.Group controlId="fgDepartureDate">
+							<Form.Label>Departure date</Form.Label>
+							<Form.Control type="date"
+								value={moment(this.state.departureDay).format(MOMENT_ISO_DATE_FORMAT)}
+								onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.updateDepartureDate(event)}/>
+						</Form.Group>
+						<Button variant="primary" type="submit" className="btn-block mt-2">
+							Book ticket
+						</Button>
+					</Form>
 				</div>
 			);
 		} else {
