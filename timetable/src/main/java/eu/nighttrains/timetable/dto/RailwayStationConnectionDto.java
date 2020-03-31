@@ -1,12 +1,33 @@
 package eu.nighttrains.timetable.dto;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 
 public class RailwayStationConnectionDto {
+    @Valid
+    //@NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
+    @Schema(required = true)
     private RailwayStationDto departureStation;
+
+    @Valid
+    //@NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
+    @Schema(required = true)
     private RailwayStationDto arrivalStation;
+
+    @Valid
+    //@NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
+    @Schema(required = true)
     private TrainConnectionDto trainConnection;
+
+    //@NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
+    @Schema(required = true)
     private LocalTime departureTime;
+
+    //@NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
+    @Schema(required = true)
     private LocalTime arrivalTime;
 
     public RailwayStationConnectionDto() {}

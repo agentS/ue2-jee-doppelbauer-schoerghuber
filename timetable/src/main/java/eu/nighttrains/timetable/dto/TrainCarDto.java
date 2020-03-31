@@ -1,11 +1,26 @@
 package eu.nighttrains.timetable.dto;
 
 import eu.nighttrains.timetable.model.TrainCarType;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 public class TrainCarDto {
+    @Min(0)
+    @Schema(required = true)
     private long id;
+
+    @Min(0)
+    @Schema(required = true)
     private int number;
+
+    //@NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
+    @Schema(required = true)
     private TrainCarType type;
+
+    @Min(1)
+    @Schema(required = true)
     private int capacity;
 
     public TrainCarDto() {}

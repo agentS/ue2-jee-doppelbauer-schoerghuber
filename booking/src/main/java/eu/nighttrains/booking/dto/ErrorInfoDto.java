@@ -1,7 +1,12 @@
 package eu.nighttrains.booking.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
 public class ErrorInfoDto {
+    @NotBlank
     private String message;
+
     private Object item;
 
     public ErrorInfoDto() {

@@ -2,14 +2,27 @@ package eu.nighttrains.booking.dto;
 
 import eu.nighttrains.booking.domain.RailwayStation;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class RailwayStationConnectionDto {
+    // @NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
     private LocalDate date;
+
+    // @NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
+    @Valid
     private RailwayStation departureStation;
+
+    // @NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
+    @Valid
     private RailwayStation arrivalStation;
+
+    // @NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
     private LocalTime departureTime;
+
+    // @NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
     private LocalTime arrivalTime;
 
     public RailwayStationConnectionDto() {}
