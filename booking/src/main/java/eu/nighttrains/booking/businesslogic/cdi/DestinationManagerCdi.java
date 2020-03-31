@@ -27,6 +27,7 @@ public class DestinationManagerCdi implements DestinationManager {
             return destinationsClient.getConnections(fromId, toId);
         } catch(Exception ex) {
             logger.info(ex.getMessage());
+            ex.printStackTrace();
             return new ArrayList<>();
         }
     }

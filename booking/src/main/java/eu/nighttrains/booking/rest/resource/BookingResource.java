@@ -84,7 +84,7 @@ public class BookingResource {
                     .build();
             return Response
                     .created(bookingUri)
-                    .entity(new BookingResponseDto(bookingId, "It works!"))
+                    .entity(new BookingResponseDto(bookingId))
                     .build();
         } catch (BookingNotPossible ex) {
             ex.printStackTrace();
@@ -113,7 +113,11 @@ public class BookingResource {
             @APIResponse(
                     responseCode = "200",
                     name = "Booking details.",
-                    description = "Details of the requested Booking"
+                    description = "Details of the requested Booking",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON,
+                            schema = @Schema(implementation = BookingDto.class)
+                    )
             ),
             @APIResponse(
                     responseCode = "404",

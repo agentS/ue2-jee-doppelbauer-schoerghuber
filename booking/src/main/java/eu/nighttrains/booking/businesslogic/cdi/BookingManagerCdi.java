@@ -101,6 +101,7 @@ public class BookingManagerCdi implements BookingManager {
         Booking booking = book(bookingRequest, ticketConnections);
         booking.setOriginId(originId);
         booking.setDestinationId(destinationId);
+        booking.setDepartureDate(bookingRequest.getJourneyStartDate());
         Booking savedBooking = saveBooking(booking);
         return savedBooking.getId();
     }
@@ -244,6 +245,7 @@ public class BookingManagerCdi implements BookingManager {
         bookingDto.setDestinationId(destinationStation.getId());
         bookingDto.setDestinationStationName(destinationStation.getName());
         bookingDto.setId(booking.getId());
+        bookingDto.setDepartureDate(booking.getDepartureDate());
 
         List<TicketDto> ticketDtos = createTicketDtos(booking);
         bookingDto.setTickets(ticketDtos);

@@ -21,6 +21,8 @@ public class BookingDto {
     @NotBlank
     private String destinationStationName;
 
+    private LocalDate departureDate;
+
     // @NotEmpty // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
     @Size(min = 1)
     private List<@Valid TicketDto> tickets;
@@ -71,6 +73,14 @@ public class BookingDto {
 
     public void setDestinationStationName(String destinationStationName) {
         this.destinationStationName = destinationStationName;
+    }
+
+    public LocalDate getDepartureDate() {
+        return this.departureDate;
+    }
+
+    public void setDepartureDate(LocalDate departureDate) {
+        this.departureDate = departureDate;
     }
 
     public List<TicketDto> getTickets() {

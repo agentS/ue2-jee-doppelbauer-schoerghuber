@@ -16,32 +16,39 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface BookingResponseDto
+ * @interface RailwayStation
  */
-export interface BookingResponseDto {
+export interface RailwayStation {
     /**
      * 
      * @type {number}
-     * @memberof BookingResponseDto
+     * @memberof RailwayStation
      */
-    bookingId?: number;
+    id?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof RailwayStation
+     */
+    name?: string;
 }
 
-export function BookingResponseDtoFromJSON(json: any): BookingResponseDto {
-    return BookingResponseDtoFromJSONTyped(json, false);
+export function RailwayStationFromJSON(json: any): RailwayStation {
+    return RailwayStationFromJSONTyped(json, false);
 }
 
-export function BookingResponseDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean): BookingResponseDto {
+export function RailwayStationFromJSONTyped(json: any, ignoreDiscriminator: boolean): RailwayStation {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'bookingId': !exists(json, 'bookingId') ? undefined : json['bookingId'],
+        'id': !exists(json, 'id') ? undefined : json['id'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
     };
 }
 
-export function BookingResponseDtoToJSON(value?: BookingResponseDto | null): any {
+export function RailwayStationToJSON(value?: RailwayStation | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -50,7 +57,8 @@ export function BookingResponseDtoToJSON(value?: BookingResponseDto | null): any
     }
     return {
         
-        'bookingId': value.bookingId,
+        'id': value.id,
+        'name': value.name,
     };
 }
 

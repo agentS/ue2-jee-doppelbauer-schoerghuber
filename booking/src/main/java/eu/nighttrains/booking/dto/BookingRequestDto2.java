@@ -1,6 +1,7 @@
 package eu.nighttrains.booking.dto;
 
 import eu.nighttrains.booking.domain.TrainCarType;
+import eu.nighttrains.booking.util.LocalDateAdapter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.FutureOrPresent;

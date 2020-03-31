@@ -7,14 +7,10 @@ public class BookingResponseDto {
     @PositiveOrZero
     private Long bookingId;
 
-    @NotBlank
-    private String tracingId;
-
     public BookingResponseDto() {}
 
-    public BookingResponseDto(Long bookingId, String tracingId) {
+    public BookingResponseDto(Long bookingId) {
         this.bookingId = bookingId;
-        this.tracingId = tracingId;
     }
 
     public Long getBookingId() {
@@ -23,13 +19,5 @@ public class BookingResponseDto {
 
     public void setBookingId(Long bookingId) {
         this.bookingId = bookingId;
-    }
-
-    public String getTracingId() {
-        return this.tracingId;
-    }
-
-    public void setTracingId(String tracingId) {
-        this.tracingId = tracingId;
     }
 }

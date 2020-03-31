@@ -1,0 +1,3 @@
+export const MOMENT_ISO_DATE_FORMAT = "YYYY-MM-DD";
+export const MOMENT_DISPLAY_DATE_FORMAT = "DD.MM.YYYY";
+export const MOMENT_TIME_PARSING_FORMAT = "HH:mm:ss";

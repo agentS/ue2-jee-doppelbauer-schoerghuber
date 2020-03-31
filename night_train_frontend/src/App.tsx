@@ -11,6 +11,7 @@ import ConnectionSearch from "./timetable/ConnectionSearch";
 import DiscoverySearch from "./timetable/DiscoverySearch";
 import Discovery from "./timetable/Discovery";
 import ConnectionDisplay from "./timetable/ConnectionDisplay";
+import BookingDisplay from "./booking/BookingDisplay";
 
 class App extends React.Component {
 	render() {
@@ -27,6 +28,10 @@ class App extends React.Component {
 			departureStationId={match.params.departureStationId}
 			arrivalStationId={match.params.arrivalStationId}
 			timetableApi={timetableApi}
+			bookingApi={bookingApi}/>
+		);
+		const bookingDisplay = ({match}: any) => (<BookingDisplay
+			bookingId={match.params.bookingId}
 			bookingApi={bookingApi}/>
 		);
 
@@ -48,6 +53,7 @@ class App extends React.Component {
 				<Route exact path="/discoverySearch" component={discoverySearch}/>
 				<Route exact path="/discovery/:departureStationId" component={discovery}/>
 				<Route exact path="/connection/from/:departureStationId/to/:arrivalStationId" component={connectionDisplay}/>
+				<Route exact path="/booking/:bookingId" component={bookingDisplay}/>
 			</div>
 		);
 	}

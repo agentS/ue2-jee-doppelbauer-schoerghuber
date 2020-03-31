@@ -1,12 +1,15 @@
 import React from "react";
 import { Card, Accordion, Button, Table, Form } from "react-bootstrap";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import moment from "moment";
+
+import { MOMENT_ISO_DATE_FORMAT, MOMENT_TIME_PARSING_FORMAT } from "../Constants";
 
 import { TimetableApi, RailwayStationConnectionDto } from "../api/timetable";
 import { BookingApi, TrainCarType } from "../api/booking";
 
-interface ConnectionDisplayProperties {
+interface ConnectionDisplayProperties extends RouteComponentProps {
 	timetableApi: TimetableApi;
 	bookingApi: BookingApi;
 	departureStationId: number;
@@ -18,9 +21,6 @@ interface ConnectionDisplayState {
 	trainCarType: TrainCarType;
 	departureDay: Date;
 };
-
-const MOMENT_ISO_DATE_FORMAT = "YYYY-MM-DD";
-const MOMENT_TIME_PARSING_FORMAT = "HH:mm:ss";
 
 class ConnectionDisplay extends React.Component<ConnectionDisplayProperties, ConnectionDisplayState> {
 	constructor(properties: ConnectionDisplayProperties) {
@@ -81,7 +81,7 @@ class ConnectionDisplay extends React.Component<ConnectionDisplayProperties, Con
 				journeyStartDate: this.state.departureDay
 			}
 		});
-		console.log(bookingResponse);
+		this.props.history.push(`/booking/${bookingResponse.bookingId}`);
 	}
 
 	render() {
@@ -178,4 +178,4 @@ class ConnectionDisplay extends React.Component<ConnectionDisplayProperties, Con
 	}
 }
 
-export default ConnectionDisplay;
+export default withRouter(ConnectionDisplay);

@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class Booking {
     private Long id;
     private long originId;
     private long destinationId;
+    private LocalDate departureDate;
 
     @OneToMany
     private List<Ticket> tickets = new ArrayList<>();
@@ -51,5 +53,13 @@ public class Booking {
 
     public void setDestinationId(long destinationId) {
         this.destinationId = destinationId;
+    }
+
+    public LocalDate getDepartureDate() {
+        return this.departureDate;
+    }
+
+    public void setDepartureDate(LocalDate departureDate) {
+        this.departureDate = departureDate;
     }
 }

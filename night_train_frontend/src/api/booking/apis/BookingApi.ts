@@ -15,6 +15,9 @@
 
 import * as runtime from '../runtime';
 import {
+    BookingDto,
+    BookingDtoFromJSON,
+    BookingDtoToJSON,
     BookingRequestDto2,
     BookingRequestDto2FromJSON,
     BookingRequestDto2ToJSON,
@@ -38,7 +41,7 @@ export class BookingApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiBookingsIdGetRaw(requestParameters: ApiBookingsIdGetRequest): Promise<runtime.ApiResponse<void>> {
+    async apiBookingsIdGetRaw(requestParameters: ApiBookingsIdGetRequest): Promise<runtime.ApiResponse<BookingDto>> {
         if (requestParameters.id === null || requestParameters.id === undefined) {
             throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiBookingsIdGet.');
         }
@@ -54,13 +57,14 @@ export class BookingApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => BookingDtoFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiBookingsIdGet(requestParameters: ApiBookingsIdGetRequest): Promise<void> {
-        await this.apiBookingsIdGetRaw(requestParameters);
+    async apiBookingsIdGet(requestParameters: ApiBookingsIdGetRequest): Promise<BookingDto> {
+        const response = await this.apiBookingsIdGetRaw(requestParameters);
+        return await response.value();
     }
 
     /**
