@@ -91,6 +91,12 @@
             <artifactId>openapi-generator-maven-plugin</artifactId>
             <version>${openapi.generator.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.10.3</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -124,6 +130,10 @@
                             <inputSpec>http://127.0.0.1:8080/openapi</inputSpec>
                             <generatorName>typescript-fetch</generatorName>
                             <output>${project.build.directory}/generated-sources/openapi/typescriptFetch</output>
+                            <configOptions>
+                                <supportsES6>true</supportsES6>
+                                <typescriptThreePlus>true</typescriptThreePlus>
+                            </configOptions>
                         </configuration>
                     </execution>
                 </executions>

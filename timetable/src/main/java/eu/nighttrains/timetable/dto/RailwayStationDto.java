@@ -1,7 +1,18 @@
 package eu.nighttrains.timetable.dto;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class RailwayStationDto {
+    @Min(0)
+    @Schema(required = true)
     private long id;
+
+    @NotBlank
+    @Schema(required = true)
     private String name;
 
     public RailwayStationDto() {}

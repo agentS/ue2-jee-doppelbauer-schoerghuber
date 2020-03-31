@@ -73,7 +73,7 @@ class ConnectionDisplay extends React.Component<ConnectionDisplayProperties, Con
 	}
 
 	async bookTicket() {
-		await this.props.bookingApi.apiBookingsPost({
+		const bookingResponse = await this.props.bookingApi.apiBookingsPost({
 			bookingRequestDto2: {
 				originId: this.props.departureStationId,
 				destinationId: this.props.arrivalStationId,
@@ -81,6 +81,7 @@ class ConnectionDisplay extends React.Component<ConnectionDisplayProperties, Con
 				journeyStartDate: this.state.departureDay
 			}
 		});
+		console.log(bookingResponse);
 	}
 
 	render() {

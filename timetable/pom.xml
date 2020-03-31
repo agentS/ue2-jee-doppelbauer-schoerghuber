@@ -153,6 +153,10 @@
                             <inputSpec>http://127.0.0.1:8082/openapi</inputSpec>
                             <generatorName>typescript-fetch</generatorName>
                             <output>${project.build.directory}/generated-sources/openapi/typescriptFetch</output>
+                            <configOptions>
+                                <supportsES6>true</supportsES6>
+                                <typescriptThreePlus>true</typescriptThreePlus>
+                            </configOptions>
                         </configuration>
                     </execution>
                 </executions>

@@ -5,6 +5,7 @@ import eu.nighttrains.booking.businesslogic.exception.BookingNotFound;
 import eu.nighttrains.booking.businesslogic.exception.BookingNotPossible;
 import eu.nighttrains.booking.dto.BookingDto;
 import eu.nighttrains.booking.dto.BookingRequestDto2;
+import eu.nighttrains.booking.dto.BookingResponseDto;
 import eu.nighttrains.booking.dto.ErrorInfoDto;
 import eu.nighttrains.booking.logging.Logger;
 import eu.nighttrains.booking.logging.LoggerQualifier;
@@ -21,6 +22,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -59,7 +61,11 @@ public class BookingResource {
             @APIResponse(
                     responseCode = "201",
                     name = "Booking created",
-                    description = "Books all stops between origin and destination station"
+                    description = "Books all stops between origin and destination station",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON,
+                            schema = @Schema(implementation = BookingResponseDto.class)
+                    )
             ),
             @APIResponse(
                     responseCode = "400",
@@ -69,14 +75,17 @@ public class BookingResource {
             )
     })
     @Tag(ref = BookingApplication.OPEN_API_TAG_NAME_BOOKING)
-    public Response postBooking(BookingRequestDto2 bookingRequest){
+    public Response postBooking(@Valid BookingRequestDto2 bookingRequest){
         try{
             Long bookingId = bookingManager.book(bookingRequest);
             URI bookingUri = uriInfo
                     .getAbsolutePathBuilder()
                     .path(String.valueOf(bookingId))
                     .build();
-            return Response.created(bookingUri).build();
+            return Response
+                    .created(bookingUri)
+                    .entity(new BookingResponseDto(bookingId, "It works!"))
+                    .build();
         } catch (BookingNotPossible ex) {
             ex.printStackTrace();
             logger.info(ex.getMessage());

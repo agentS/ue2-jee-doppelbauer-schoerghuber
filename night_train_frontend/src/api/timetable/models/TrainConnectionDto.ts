@@ -31,13 +31,13 @@ export interface TrainConnectionDto {
      * @type {string}
      * @memberof TrainConnectionDto
      */
-    code?: string;
+    code: string;
     /**
      * 
      * @type {number}
      * @memberof TrainConnectionDto
      */
-    id?: number;
+    id: number;
     /**
      * 
      * @type {Array<TrainCarDto>}
@@ -56,8 +56,8 @@ export function TrainConnectionDtoFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'code': !exists(json, 'code') ? undefined : json['code'],
-        'id': !exists(json, 'id') ? undefined : json['id'],
+        'code': json['code'],
+        'id': json['id'],
         'trainCars': !exists(json, 'trainCars') ? undefined : ((json['trainCars'] as Array<any>).map(TrainCarDtoFromJSON)),
     };
 }

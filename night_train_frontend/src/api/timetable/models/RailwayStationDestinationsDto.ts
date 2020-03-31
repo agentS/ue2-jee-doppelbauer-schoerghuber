@@ -31,13 +31,13 @@ export interface RailwayStationDestinationsDto {
      * @type {Array<RailwayStationDto>}
      * @memberof RailwayStationDestinationsDto
      */
-    destinations?: Array<RailwayStationDto>;
+    destinations: Array<RailwayStationDto>;
     /**
      * 
      * @type {RailwayStationDto}
      * @memberof RailwayStationDestinationsDto
      */
-    origin?: RailwayStationDto;
+    origin: RailwayStationDto;
 }
 
 export function RailwayStationDestinationsDtoFromJSON(json: any): RailwayStationDestinationsDto {
@@ -50,8 +50,8 @@ export function RailwayStationDestinationsDtoFromJSONTyped(json: any, ignoreDisc
     }
     return {
         
-        'destinations': !exists(json, 'destinations') ? undefined : ((json['destinations'] as Array<any>).map(RailwayStationDtoFromJSON)),
-        'origin': !exists(json, 'origin') ? undefined : RailwayStationDtoFromJSON(json['origin']),
+        'destinations': ((json['destinations'] as Array<any>).map(RailwayStationDtoFromJSON)),
+        'origin': RailwayStationDtoFromJSON(json['origin']),
     };
 }
 
@@ -64,7 +64,7 @@ export function RailwayStationDestinationsDtoToJSON(value?: RailwayStationDestin
     }
     return {
         
-        'destinations': value.destinations === undefined ? undefined : ((value.destinations as Array<any>).map(RailwayStationDtoToJSON)),
+        'destinations': ((value.destinations as Array<any>).map(RailwayStationDtoToJSON)),
         'origin': RailwayStationDtoToJSON(value.origin),
     };
 }

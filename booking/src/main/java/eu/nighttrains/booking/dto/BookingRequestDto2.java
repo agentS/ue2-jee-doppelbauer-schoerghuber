@@ -2,12 +2,25 @@ package eu.nighttrains.booking.dto;
 
 import eu.nighttrains.booking.domain.TrainCarType;
 
+import javax.validation.Valid;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 
 public class BookingRequestDto2 {
+    @PositiveOrZero
     private long originId;
+
+    @PositiveOrZero
     private long destinationId;
+
+    //@NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
+    @FutureOrPresent
     private LocalDate journeyStartDate;
+
+    //@NotNull // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
+    @Valid
     private TrainCarType trainCarType;
 
     public long getOriginId() {

@@ -35,31 +35,31 @@ export interface RailwayStationConnectionDto {
      * @type {RailwayStationDto}
      * @memberof RailwayStationConnectionDto
      */
-    arrivalStation?: RailwayStationDto;
+    arrivalStation: RailwayStationDto;
     /**
      * 
      * @type {string}
      * @memberof RailwayStationConnectionDto
      */
-    arrivalTime?: string;
+    arrivalTime: string;
     /**
      * 
      * @type {RailwayStationDto}
      * @memberof RailwayStationConnectionDto
      */
-    departureStation?: RailwayStationDto;
+    departureStation: RailwayStationDto;
     /**
      * 
      * @type {string}
      * @memberof RailwayStationConnectionDto
      */
-    departureTime?: string;
+    departureTime: string;
     /**
      * 
      * @type {TrainConnectionDto}
      * @memberof RailwayStationConnectionDto
      */
-    trainConnection?: TrainConnectionDto;
+    trainConnection: TrainConnectionDto;
 }
 
 export function RailwayStationConnectionDtoFromJSON(json: any): RailwayStationConnectionDto {
@@ -72,11 +72,11 @@ export function RailwayStationConnectionDtoFromJSONTyped(json: any, ignoreDiscri
     }
     return {
         
-        'arrivalStation': !exists(json, 'arrivalStation') ? undefined : RailwayStationDtoFromJSON(json['arrivalStation']),
-        'arrivalTime': !exists(json, 'arrivalTime') ? undefined : json['arrivalTime'],
-        'departureStation': !exists(json, 'departureStation') ? undefined : RailwayStationDtoFromJSON(json['departureStation']),
-        'departureTime': !exists(json, 'departureTime') ? undefined : json['departureTime'],
-        'trainConnection': !exists(json, 'trainConnection') ? undefined : TrainConnectionDtoFromJSON(json['trainConnection']),
+        'arrivalStation': RailwayStationDtoFromJSON(json['arrivalStation']),
+        'arrivalTime': json['arrivalTime'],
+        'departureStation': RailwayStationDtoFromJSON(json['departureStation']),
+        'departureTime': json['departureTime'],
+        'trainConnection': TrainConnectionDtoFromJSON(json['trainConnection']),
     };
 }
 

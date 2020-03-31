@@ -1,14 +1,25 @@
 package eu.nighttrains.booking.dto;
 
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TicketDto {
+    @PositiveOrZero
     private Long id;
+
+    @PositiveOrZero
     private long originId;
+
+    @PositiveOrZero
     private long destinationId;
+
+    @NotBlank
     private String trainCode;
-    private List<StopDto> stops = new ArrayList<>();
+
+    // @NotEmpty // unfortunately, the OpenAPI code generator has issues with this annotation --> due to the incompetence of the library authors, we can not use this beans validation feature
+    private List<@Valid StopDto> stops = new ArrayList<>();
 
     public Long getId() {
         return id;

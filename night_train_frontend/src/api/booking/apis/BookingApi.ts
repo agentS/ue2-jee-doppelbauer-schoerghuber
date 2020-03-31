@@ -18,6 +18,9 @@ import {
     BookingRequestDto2,
     BookingRequestDto2FromJSON,
     BookingRequestDto2ToJSON,
+    BookingResponseDto,
+    BookingResponseDtoFromJSON,
+    BookingResponseDtoToJSON,
 } from '../models';
 
 export interface ApiBookingsIdGetRequest {
@@ -62,7 +65,7 @@ export class BookingApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiBookingsPostRaw(requestParameters: ApiBookingsPostRequest): Promise<runtime.ApiResponse<void>> {
+    async apiBookingsPostRaw(requestParameters: ApiBookingsPostRequest): Promise<runtime.ApiResponse<BookingResponseDto>> {
         const queryParameters: runtime.HTTPQuery = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -77,13 +80,14 @@ export class BookingApi extends runtime.BaseAPI {
             body: BookingRequestDto2ToJSON(requestParameters.bookingRequestDto2),
         });
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => BookingResponseDtoFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiBookingsPost(requestParameters: ApiBookingsPostRequest): Promise<void> {
-        await this.apiBookingsPostRaw(requestParameters);
+    async apiBookingsPost(requestParameters: ApiBookingsPostRequest): Promise<BookingResponseDto> {
+        const response = await this.apiBookingsPostRaw(requestParameters);
+        return await response.value();
     }
 
 }

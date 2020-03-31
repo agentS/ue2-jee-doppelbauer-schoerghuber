@@ -31,25 +31,25 @@ export interface TrainCarDto {
      * @type {number}
      * @memberof TrainCarDto
      */
-    capacity?: number;
+    capacity: number;
     /**
      * 
      * @type {number}
      * @memberof TrainCarDto
      */
-    id?: number;
+    id: number;
     /**
      * 
      * @type {number}
      * @memberof TrainCarDto
      */
-    number?: number;
+    number: number;
     /**
      * 
      * @type {TrainCarType}
      * @memberof TrainCarDto
      */
-    type?: TrainCarType;
+    type: TrainCarType;
 }
 
 export function TrainCarDtoFromJSON(json: any): TrainCarDto {
@@ -62,10 +62,10 @@ export function TrainCarDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'capacity': !exists(json, 'capacity') ? undefined : json['capacity'],
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'number': !exists(json, 'number') ? undefined : json['number'],
-        'type': !exists(json, 'type') ? undefined : TrainCarTypeFromJSON(json['type']),
+        'capacity': json['capacity'],
+        'id': json['id'],
+        'number': json['number'],
+        'type': TrainCarTypeFromJSON(json['type']),
     };
 }
 
