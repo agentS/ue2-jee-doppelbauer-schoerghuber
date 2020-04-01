@@ -102,7 +102,6 @@ function convertTicketIdToString(ticket: TicketDto): string {
 		return ticket.id.toString();
 	} else {
 		throw new Error("Undefined ticket ID");
-		return "undefinedTicketId";
 	}
 }
 
