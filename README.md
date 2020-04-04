@@ -428,7 +428,7 @@ Daher müssen noch die Verbindungseinstellungen zur Datenbank überarbeitet werd
 Das Jaeger-Tracing-Backend kann zu Entwicklungszwecken einfach mittels eines Docker-Containers betrieben werden, wozu das unten zu sehende Kommando auszuführen ist.
 
 ```bash
-docker run -d --name jaeger -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268 -p 14250:14250 -p 9411:9411 --rm        jaegertracing/all-in-one:1.17
+docker run -d --name jaeger -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268 -p 14250:14250 -p 9411:9411 --rm jaegertracing/all-in-one:1.17
 ```
 
 ## Ergebnisse
@@ -449,6 +449,45 @@ Für den Timetable-Service werden ebenfalls die JAX-RS-Endpunkt-Aufrufe und die 
 # Ergebnisse
 
 Lukas & Alexander
+
+## Frontend
+
+Da das Frontend nicht Teil der Übungsaufgabe war, haben wir dies in dieser Dokumentation bisher kaum erwähnt.
+Jedoch bietet es eine sehr gute Möglichkeit die funktionalen Ergebnisse unserer Ausarbeitung darzustellen.
+Daher werden wir hier anhand des Frontend einen Überblick über die Funktionalität unserer Anwendung geben.
+
+Unsere Anwendung verwendet das Package `react-router-dom` zur Strukturierung der einzelnen Komponenten sowie um die Browser-History komplett unterstützen zu können.
+Die Startseite, welche unten zu sehen ist, bietet eine einfache Möglichkeit Verbindungen zwischen zwei Bahnhöfen zu suchen.
+Wie ebenfalls in der Abbildung zu sehen ist, unterstützt die Anwendung ein einfaches Autocomplete für die Auswahl der Bahnhöfe.
+
+![Suchen einer Verbindung zwischen zwei Bahnhöfen](doc/img/frontend/connectionSearch.png)
+
+Nach dem Klick auf den Suchen-Button wird nach einer Verbindung gesucht und sofern eine gefunden wird, wird diese dem Kunden angezeigt, wie die unten zu sehende Abbildung verdeutlicht.
+
+![Anzeige einer Verbidndung zwischen zwei Bahnhöfen](doc/img/frontend/connectionDisplayCollapsed.png)
+
+Durch Klick auf den Link-Button zum Anzeigen der Zwischenhalte, wird die Tabelle mit den Zwischenhalten expandiert, wie unten zu sehen ist.
+
+![Anzeige einer Verbidndung zwischen zwei Bahnhöfen](doc/img/frontend/connectionDisplayExpanded.png)
+
+Alle Abfragen bisher sind vom Timetable-Service beantwortet worden.
+Nach Selektion von Abfahrtsdatum und Wagenkategorie kann auf den Buchen-Button geklickt werden, was zur Folge hat, dass eine Anfrage an den Booking-Service gesendet.
+Dieser versucht nun die Wagenkategorie für die gesamte Strecke zu buchen, wobei auch Umstiege berücksichtig werden.
+Ein Umstieg wurde so modelliert, dass pro Umstieg ein zusätzliches Ticket erforderlich ist.
+Auf der Strecke von Rom über Wien nach Berlin ist also ein Ticket von Rom nach Wien und ein Ticket von Wien nach Berlin erforderlich.
+
+Nachdem die Buchung erfolgreich durchgeführt wurde, erfolgt eine Weiterleitung auf die Komponente zum Anzeigen der Buchung, wobei ein Beispiel unten zu sehen ist.
+Für jede Buchung werden Abfahrts- und Zielbahnhof, Abfahrtsdatum und die einzelnen Tickets angezeigt.
+Beim Klick auf ein Ticket werden Wagenkategorie, Wagennummer und alle Halte und Abfahrts- sowie Ankunftszeiten dargestellt.
+
+![Anzeige der Tickets für eine Buchung von Rom nach Berlin](doc/img/frontend/bookingDisplay.png)
+
+Abschließend zeigt die unten zu sehende Abbildung die Suche für den Entdeckungsmodus.
+Hierfür muss lediglich ein Abfahrtsbahnhof eingegeben werden und nach Klick auf den Suchen-Button werden, wie in der zweiten folgenden Abbildung alle von diesem Bahnhof erreichbaren Ziele angezeigt.
+Durch Klick auf den Link zum Finden einer Verbindung, wird auf die bereits bekannte Verbindungsanzeige weitergeleitet.
+
+![Suchen nach allen vom Bahnhof Amstetten erreichbaren Destinationen](doc/img/frontend/discoverySearch.png)
+![Anzeige aller vom Bahnhof Amstetten erreichbaren Ziele](doc/img/frontend/discoveryDisplay.png)
 
 # Setup
 
