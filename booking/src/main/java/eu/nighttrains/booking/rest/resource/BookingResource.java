@@ -71,7 +71,7 @@ public class BookingResource {
                     responseCode = "400",
                     name = "The booking could not be completed",
                     description = "The booking could not be completed",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON)
+                    content = @Content(mediaType = MediaType.TEXT_PLAIN)
             )
     })
     @Tag(ref = BookingApplication.OPEN_API_TAG_NAME_BOOKING)

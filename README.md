@@ -144,19 +144,231 @@ Alexander
 
 # MicroProfile OpenAPI
 
-Lukas
-
 ## Beschreibung
+
+OpenAPI ist der Nachfolgerstandard zu Swagger und ermöglicht es via standardisierten Beschreibungsdateien REST-APIs zu dokumentieren und automatisch Clients oder Server-Stubs zu generieren.
+Die MicroProfile OpenAPI-Spezifikation stellt eine Menge von Interfaces und Annotationen bereit, die es auf einfache Art und Weise ermöglichen, OpenAPI-v3-Dokumente basierend auf JAX-RS-Endpunkten zu erstellen.
+Zusätzlich kann über Filter die OpenAPI-Ausgabe noch verändert werden und es könne auch statische Dokumente im OpenAPI-Format eingebunden werden.
 
 ## Verwendung in Services
 
+Sowohl der Timetable- als auch der Booking-Service verwenden die in MicroProfile OpenAPI definierten Annotationen, um die JAX-RS-Endpunkte zu dokumentieren und somit die automatische Generierung von Clients zu ermöglichen.
+Zusätzlich wird die JAX-RS-Applikation noch mit Dokumentation über den Service (Verantwortlicher, Lizenz) erweitert.
+
 ## Implementierung
+
+### Serverseitige OpenAPI-Dokument-Generierung
+
+Nach Einbindung der MicroProfile OpenAPI-Depdendency steht automatisch der Endpunkt `/openapi` zur Verfügung, welcher ein OpenAPI-v3-Dokument im YAML-Format generiert.
+Quarkus stellt zusätzlich unter dem Pfad `/swagger-ui` eine grafische Oberfläche zum Inspizieren und Ausprobieren der REST-Endpunkte zur Verfügung.
+
+Allerdings fehlen diesen Endpunkten standardmäßig noch wichtige Eigenschaften, wie zusätzliche HTTP-Status-Codes im Fehlerfall, Tags, Beschreibungen der Parameter und Beschreibungen der Responses.
+Diese müssen nun mittels der MicroProfile OpenAPI-Annotationen zu den JAX-RS-Endpunkten hinzugefügt werden.
+
+Als Beispiel sei der Endpunkt zum Ermitteln der Verbindung zwischen zwei Bahnhöfen gegeben.
+Für diese werden im unten folgenden Beispiel für Parameter eine Beschreibung sowie eine Angabe, ob diese erforderlich sind, festgelegt.
+Zusätzlich werden die möglichen HTTP-Response-Status-Codes des Endpunktes festgelegt.
+Falls eine Route gefunden wird, wird der HTTP-Status-Code 200 zurückgeliefert und falls keine Route gefunden wird, der HTTP-Status-Code 404.
+Als Ergebnis des API-Aufrufs wird für den Erfolgsfall (HTTP-Status-Code 200) der Rückgabewert der Handler-Methode angenommen und daher muss dieser nicht mehr eingestellt werden.
+Aufgrund der Annotation `@Produces(MediaType.APPLICATION_JSON)` wird von MicroProfile OpenAPI festgelegt, dass dieser Endpunkt den Response-Body als JSON serialisiert.
+Nur für den Fall, dass keine Route gefunden wird, muss festgelegt werden, dass der Response als Plain-Text geliefert wird.
+Der große Vorteil der Verwendung einer statisch typisierten Programmiersprache im Gegensatz zu einer dynamisch typisierten Programmiersprache ist, dass die Datenstrukturen der Parameter und Rückgabewerte automatisch von MicroProfile OpenAPI ermittelt werden und diese nicht manuell mittels eines Dokumentes eingetragen werden müssen, wie es z.B. in der [OpenAPI-Implementierung für Pythons Flask-Framework](https://github.com/flasgger/flasgger) der Fall ist.
+
+```java
+	@Path("/from/{originId}/to/{destinationId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Parameters({
+            @Parameter(name = "originId", description = "Origin railway station ID", required = true, example = "0"),
+            @Parameter(name = "destinationId", description = "Destination railway station ID", required = true, example = "14")
+    })
+    @APIResponses({
+            @APIResponse(
+                    responseCode = "200",
+                    name = "Stops including train connection information between the stations",
+                    description = "A list of all stops including their train connection information between the origin station and the destination station."
+            ),
+            @APIResponse(
+                    responseCode = "404",
+                    name = "No route between the railway stations",
+                    description = "There is no route connecting the two railway stations. This might be because there is no connection between the stations or at least one of the stations does not exist.",
+                    content = @Content(mediaType = MediaType.TEXT_PLAIN)
+            )
+    })
+    @Tag(ref = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE)
+    public List<RailwayStationConnectionDto> findAllStopsBetween(
+            @PathParam("originId") Long originId,
+            @PathParam("destinationId") Long destinationId
+    ) {
+        try {
+            return this.routeManager.findAllStopsBetween(originId, destinationId);
+        } catch (NoRouteException exception) {
+            throw new NotFoundException(exception);
+        }
+    }
+```
+
+Wird für einen JAX-RS-Endpunkt-Handler anstelle des konkreten Datentyps ein Objekt der Klasse `Response` zurückgeliefert, kann der Datentyp von MicroProfile OpenAPI nicht automatisch inferiert und in das OpenAPI-Dokument eingetragen werden.
+Dies kann aber auf simple Art und Weise gelöst werden, indem für den Annotationsparameter `content` der Annotation `@APIResponse` das entsprechende Schema festgelegt wird, wie das unten zu sehende Beispiel zeigt.
+Selbiges gilt ebenfalls für den Annotationsparameter `content` der Annotation `@RequestBody`.
+
+```java
+	@POST
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RequestBody(
+            name = "Booking request object",
+            description = "Contains all details about the booking request",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = BookingRequestDto2.class)
+            )
+    )
+    @APIResponses({
+            @APIResponse(
+                    responseCode = "201",
+                    name = "Booking created",
+                    description = "Books all stops between origin and destination station",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON,
+                            schema = @Schema(implementation = BookingResponseDto.class)
+                    )
+            ),
+            @APIResponse(
+                    responseCode = "400",
+                    name = "The booking could not be completed",
+                    description = "The booking could not be completed",
+                    content = @Content(mediaType = MediaType.TEXT_PLAIN)
+            )
+    })
+    @Tag(ref = BookingApplication.OPEN_API_TAG_NAME_BOOKING)
+    public Response postBooking(@Valid BookingRequestDto2 bookingRequest) {
+    	// ...
+    }
+```
+
+Interessant ist es noch allgemeine Informationen zum REST-Service (verantwortliche Person, Lizenz, Version) hinzuzufügen.
+Hierzu ist über Klasse, welche von `javax.ws.rs.core.Application` ableitet, die Annotation `@OpenAPIDefinition` mit den entsprechenden Parametern anzugeben, wie unten zu sehen ist.
+
+Besonders interessant sind dabei die Definition des Servers und der Tags.
+Tags dienen dazu, die Funktionen des APIs zu gruppieren und führen dazu, dass der Tag-Name anstatt des Standardnamens bei der Generierung des Clients verwendet wird.
+Im unteren Beispiel wird ein Tag für den Timetable-Service festgelegt, welcher in den vorherigen Beispielen von den Handler-Methoden mittels der Annotation `@Tag(ref = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE)` referenziert wird.
+
+Die Festlegung des Servers war nur für den Quarkus-Servers erforderlich, da ansonsten der Standardwert in das OpenAPI-Dokument eingetragen wird.
+Für den Wildfly-Server wird dieser aus der Listen-Address des Servers ermittelt und muss daher nicht extra angegeben werden.
+Wir haben versucht, die Informationen für das Server-Tag zur Laufzeit mittels einer Implementierung des Interfaces `OASFilter` und des MicroProfile Config-APIs zu ermitteln, was aber nicht funktioniert hat, da das Dokument noch vor Auslesen der Werte aus der Konfiguration erstellt wird.
+Daher sahen wir uns leider gezwungen, den Wert hartkodiert zu hinterlegen.
+
+```java
+@OpenAPIDefinition(
+        info = @Info(
+                title = "Timetable API",
+                version = "0.0.0",
+                contact = @Contact(
+                        name = "Lukas Schoerghuber",
+                        email = "lukas.schoerghuber@posteo.at"
+                ),
+                license = @License(
+                        name = "GPLv3",
+                        url = "https://www.gnu.org/licenses/gpl-3.0.en.html"
+                )
+        ),
+        servers = @Server(url = "http://127.0.0.1:8082", description = "Timetable API development server"),
+        tags = @Tag(name = TimetableApiApplication.OPEN_API_TAG_NAME_TIMETABLE, description = "Timetable-related endpoints")
+)
+@ApplicationPath("/")
+public class TimetableApiApplication extends Application {
+    public static final String OPEN_API_TAG_NAME_TIMETABLE = "timetable";
+}
+```
+
+### Generierung des Clients
+
+Noch interessanter als eine gute Dokumentation einer REST-Schnittstelle ist die Möglichkeit, Clients für das API automatisch zu generieren.
+Nach einigen Experimenten mit [Swagger-Codegen](https://github.com/swagger-api/swagger-codegen) und [OpenAPI-Generator](https://github.com/OpenAPITools/openapi-generator) haben wir uns für OpenAPI-Generator entschieden, da dieser auch TypeScript-Fetch-Clients für OpenAPI-Dokumente in der Version 3 generieren kann und damit besser mit unserem React-Frontend kombinierbar ist.
+
+Da der OpenAPI-Generator in Java implementiert ist und als Maven-Paket bereitstellt, bietet sich die Möglichkeit im Zuge des Maven-Builds die Clients für das React-Frontend zu generieren.
+Um dies zu bewerkstelligen, ist zuerst ein Dependency-Eintrag zum OpenAPI-Generator in die Datei `pom.xml` hinzuzufügen, welcher unten zu sehen ist.
+
+```xml
+<dependencies>
+	<!-- ... -->
+	<dependency>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>4.2.0</version>
+    </dependency>
+</dependencies>
+```
+
+Anschließend ist das OpenAPI-Generator-Plug-In in den Buildvorgang einzuhängen, wodurch bei jeder Ausführung des Maven-Targets `compile` die OpenAPI-Spezifikation vom Server geladen und der Client generiert wird.
+Hierzu empfiehlt es sich die Clients so zu generieren, dass der Quarkus-Server im Entwicklungsmodus gestartet wird und anschließend das Kommando `mvn clean compile` ausgeführt wird.
+
+```xml
+<build>
+    <plugins>
+    	<plugin>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator-maven-plugin</artifactId>
+            <version>4.2.0</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                    <configuration>
+                        <verbose>true</verbose>
+                        <inputSpec>http://127.0.0.1:8082/openapi</inputSpec>
+                        <generatorName>typescript-fetch</generatorName>
+                        <output>${project.build.directory}/generated-sources/openapi/typescriptFetch</output>
+                        <configOptions>
+                            <supportsES6>true</supportsES6>
+                            <typescriptThreePlus>true</typescriptThreePlus>
+                        </configOptions>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+```
 
 ## Ergebnisse
 
-# MicroProfile OpenTracing
+Die unten zu sehende Abbildung zeigt eine Zusammenfassung des Swagger-UI-Frontends, welches auf dem Quarkus-basierten Timetable-Service läuft.
+Dabei haben wir die Auswirkungen einiger Annotationen im Bild festgehalten.
 
-Lukas
+![Übersicht über Swagger UI](doc/img/swaggerUIOverview.png)
+
+Als Nächstes möchten wir auf die Auswirkungen der Annotationen auf die JAX-RS-Handler eingehen.
+Zur Illustration dient dazu die unten zu sehende Abbildung.
+Wie zu sehen ist, ist für Parameter neben Beschreibung und Beispielwert angegeben, ob diese unbedingt erforderlich sind.
+Ebenso sind die möglichen Response-Codes des APIs mitsamt Beschreibung, Beispielwert und Media-Type aufgeführt.
+
+![Detaillierte Ansicht der Informationen zu einem REST-Endpunkt](doc/img/openAPIEndpointDefinition.png)
+
+Natürlich kann das API auch direkt von Swagger UI ausprobiert werden, wie die folgende Abbildung zeigt, welche das Ergebnis der Abfrage einer Zugverbindung von Rom (Bahnhofs-ID 28) nach Zürich (Bahnhofs-ID 14) zeigt.
+
+![Ergebnis des Ausprobierens eines REST-Endpunktes von Swagger UI](doc/img/openAPIEndpointTryOut.png)
+
+Ein weiteres Artefakt der Verwendung von MicroProfile OpenAPI ist der Client-Code für das React-basierte Frontend.
+Das folgende Snippet zeigt den Aufruf der automatisch generierten Client-Methode zum Buchen eines Tickets.
+Da es sich um TypeScript-Code handelt ist zur Compilezeit eine Typüberprüfung für sowohl den Body-Parameter als auch den Rückgabewert möglich, wodurch Fehler im Frontend-Code vermieden werden können.
+Einzig der automatisch generierte Name (`apiBookingsPost`) der Methode ist unglücklich vom Client-Generator gewählt.
+Hierfür bietet sich die Möglichkeit mittels der Annotation `@OperationId` oder über die Generatorkonfiguration einen besseren Namen auszuwählen.
+
+```typescript
+const bookingResponse = await this.props.bookingApi.apiBookingsPost({
+	bookingRequestDto2: {
+		originId: this.props.departureStationId,
+		destinationId: this.props.arrivalStationId,
+		trainCarType: this.state.trainCarType,
+		journeyStartDate: this.state.departureDay
+	}
+});
+```
+
+# MicroProfile OpenTracing
 
 ## Beschreibung
 
