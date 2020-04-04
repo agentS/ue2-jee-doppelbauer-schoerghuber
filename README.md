@@ -160,11 +160,79 @@ Lukas
 
 ## Beschreibung
 
+Beim Einsatz von Microservice-Architekturen stellt sich das Problem des Debuggins und Troubleshootings über mehrerer Services verteilter Anwendungen.
+OpenTracing stellt dabei ein standardisiertes, plattformunabhängiges API zur Instrumentarisierung von Microservices zur Verfügung.
+Dabei können zusammenhängende Requests zwischen den Services über eine eindeutige Request-ID mittels grafischer Tools wie [Zipkin](https://zipkin.io/) oder [Jaeger](https://www.jaegertracing.io/) nachverfolgt werden.
+
+MicroProfile OpenTracing ermöglicht es, Anwendungen ohne explizites Hinzufügen von Code um verteiltes Tracing zu erweitern.
+Dabei werden Backends, welche das OpenTracing-Protokoll unterstützen, wie z.B. Jaeger unterstützt.
+
 ## Verwendung in Services
+
+Bei Verwendung von MicroProfile OpenTracing werden laut Standard standardmäßig alle JAX-RS-Handler und MicroProfile Rest Client-Aufrufe um Tracing erweitert.
+Wir haben darüber hinaus in beiden Services die Geschäftslogik und im Timetable-Service mittels einer Extension von Quarkus die JDBC-Aufrufe um Tracing erweitert.
 
 ## Implementierung
 
+Der schwierigste Teil ist die Konfiguration des OpenTracing-Client.
+Für Quarkus ist die [Dokumentation](https://quarkus.io/guides/opentracing#create-the-configuration) sehr gut und da man diese praktisch unverändert übernehmen kann, verweisen wir auf diese.
+Für Wildfly beschreibt der [folgende Annoncement-Post](https://wildfly.org/news/2020/03/19/Micro_Profile_OpenTracing_Comes_To_WildFly/) die Verbindung zum Jaeger-Backend sehr gut.
+Die Konfiguration für unsere Services ist ebenfalls im später folgenden Konfigurations-Abschnitt wiedergegeben.
+Mit diesen Einstellungen werden bereits die JAX-RS-Endpoint-Aufrufe sowie die MicroProfile Rest Client-Aufrufe über Servicegrenzen getraced.
+
+Ebenso kann mittels Annotationen festgelegt werden, dass Aufrufe einzelner Methoden oder aller Methoden einer Klasse getraced werden sollen.
+Hierzu ist über die Klasse oder Metohde einfach die Annotation `@Traced` einzufügen.
+Unsere Implementierung verwendet dies, um alle Aufrufe der Methoden der Geschäftslogikschicht zu verfolgen.
+Unten folgt noch ein Beispiel eines solchen Tracing-Aufrufes.
+
+```java
+@RequestScoped
+@Transactional
+@Traced
+public class RouteManagerCdi implements RouteManager {
+	// ...
+}
+```
+
+Um JDBC-Aufrufe nachverfolgen zu können, bietet Quarkus noch eine Erweiterung an.
+Der erste Schritt zur Aktivierung dieser ist es, die Dependency zum entsprechenden JAR-File in die Datei `pom.xml` des Projektes einzutragen, wie das folgende Beispiel zeigt.
+
+```xml
+<dependencies>
+	<dependency>
+        <groupId>io.opentracing.contrib</groupId>
+        <artifactId>opentracing-jdbc</artifactId>
+    </dependency>
+</dependencies>
+```
+
+Der JDBC-Tracer wrappt den JDBC-Treiber und augmentiert die Aufrufe um Tracing.
+Daher müssen noch die Verbindungseinstellungen zur Datenbank überarbeitet werden:
+
+1. Die URL des JDBC-Treibers muss um `:tracing` erweitert werden, sodass der Tracing-JDBC-Treiber aktiviert wird. Das folgende Beispiel zeigt die URL für die Timetable-Datenbank: `jdbc:tracing:postgresql://127.0.0.1:5432/timetable`
+2. Der Tracing-Treiber muss explizit als JDBC-Treiber verwendet werden. Hierzu muss der Wert `io.opentracing.contrib.jdbc.TracingDriver` für den Schlüssel `quarkus.datasource.jdbc.driver` gesetzt werden.
+3. Da nun der JDBC-Tracing-Treiber verwendet wird, muss der Dialekt für JPA noch gesetzt werden. Um diesen für PostgreSQL zu konfigurieren, ist für der Wert `org.hibernate.dialect.PostgreSQLDialect` für den Schlüssel `quarkus.hibernate-orm.dialect` zu setzen.
+
+Das Jaeger-Tracing-Backend kann zu Entwicklungszwecken einfach mittels eines Docker-Containers betrieben werden, wozu das unten zu sehende Kommando auszuführen ist.
+
+```bash
+docker run -d --name jaeger -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268 -p 14250:14250 -p 9411:9411 --rm        jaegertracing/all-in-one:1.17
+```
+
 ## Ergebnisse
+
+Von nun an sollten die Aufrufe der REST-Endpunkte, der Geschäftslogik und die JDBC-Aufrufe des Timetable-Service über die Jaeger-Web-UI nachverfolgbar sein.
+
+In der Jaeger-UI sollten nun Traces für den Service angezeigt werden, wie die folgende Abbildung zeigt.
+
+![Überblick aller Traces für den Booking-Service](doc/img/jaegerUiOverview.png)
+
+Nun kann man beispielsweise den oben zu sehenden Trace für die Methode `postBooking` auswählen und nun ergibt sich, wie in der folgenden Abbildung zu sehen ist, ein Bild über alle Methodenaufrufe, die bei der Abarbeitung des Requests ausgeführt werden.
+Dies funktioniert auch über Servicegrenzen hinweg: So ist der Booking-Service blau eingefärbt, während der Timetable-Service gelb eingefärbt ist.
+Ebenfalls zu sehen ist, dass die JAX-RS-Endpunkt-Aufrufe, die Geschäftslogikaufrufe und die MicroProfile Rest Client-Aufrufe des Booking-Service verfolgt werden.
+Für den Timetable-Service werden ebenfalls die JAX-RS-Endpunkt-Aufrufe und die Geschäftslogikaufrufe sowie zusätzlich die JDBC-Aufrufe nachverfolgt.
+
+![Traces, die sich bei der Buchung einer Fahrkarte ergeben](doc/img/jaegerUiTraceBooking.png)
 
 # Ergebnisse
 
