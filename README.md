@@ -117,6 +117,18 @@ Diesen lädt die Konfigurationsdatei über eine weitere Konfigurationsdatei im J
 Die JSON-Datei muss den Namen `redisConfiguration.json` haben und sich in der Wurzel des Ressourcenverzeichnisses befinden.
 Neben dem Präfix (entweder `booking` oder `timetable`) enthält diese Datei noch die Konfiguration zum Zugriff auf Redis.
 Zum Parsen der Datei wird JSON-P verwendet.
+Der folgende Auszug zeigt die Konfigurationsdatei für den Timetable-Service:
+
+```json
+{
+  "hostname": "127.0.0.1",
+  "port": 6379,
+  "timeout": 3000,
+  "maximumPoolSize": 5,
+
+  "prefix": "timetable"
+}
+```
 
 Um die benutzerdefinierte Konfigurationsquelle als Service zu registrieren, ist der vollständig qualifizierte Name der Klasse in der Datei `org.eclipse.microprofile.config.spi.ConfigSource` im Verzeichnis `src/main/resources/META-INF/services` anzugeben.
 Für die von uns definierte Datei hat die Konfiguration den folgenden Inhalt:
@@ -129,6 +141,22 @@ eu.nighttrains.configuration.redis.RedisConfigurationSource
 
 Wie bereits erwähnt, wird sowohl die URL des Timetable-REST-Endpunkts im Booking-Service als auch die gesamte Konfiguration des Quarkus-basierten Timetable-Services aus einer Redis-KV-Datenbank geladen.
 Leider bietet MicroProfile Config nicht sehr viele visuelle Möglichkeiten, es ist aber eine wichtige Basistechnologie für andere MicroProfile-APIs.
+
+Interessant ist noch die Ausführung des Kommandos `CLIENT LIST` auf der Redis CLI, nachdem die Server gestartet wurden.
+Wie im folgenden Ausgabeauszu ersichtlich, 
+
+```
+127.0.0.1:6379> CLIENT LIST
+id=3 addr=127.0.0.1:35536 fd=8 name= age=37 idle=7 flags=N db=0 sub=0 psub=0 multi=-1 qbuf=0 qbuf-free=0 obl=0 oll=0 omem=0 events=r cmd=ping
+id=4 addr=127.0.0.1:35542 fd=9 name= age=36 idle=6 flags=N db=0 sub=0 psub=0 multi=-1 qbuf=0 qbuf-free=0 obl=0 oll=0 omem=0 events=r cmd=ping
+id=5 addr=127.0.0.1:35546 fd=10 name= age=34 idle=4 flags=N db=0 sub=0 psub=0 multi=-1 qbuf=0 qbuf-free=0 obl=0 oll=0 omem=0 events=r cmd=ping
+id=7 addr=127.0.0.1:35586 fd=12 name= age=22 idle=19 flags=N db=0 sub=0 psub=0 multi=-1 qbuf=0 qbuf-free=0 obl=0 oll=0 omem=0 events=r cmd=hget
+id=8 addr=127.0.0.1:35598 fd=11 name= age=2 idle=0 flags=N db=0 sub=0 psub=0 multi=-1 qbuf=26 qbuf-free=32742 obl=0 oll=0 omem=0 events=r cmd=client
+```
+
+Die Clients mit den IDs 3 bis 5 sind jene Clients des Timetable-Services, während der Client mit der ID 7 jener Client des Booking-Services ist.
+Die höhere Anzahl an Redis-Clients des Timetable-Services erklärt sich dadurch, dass wesentlich mehr Teile der Konfiguration des Timetable-Services aus dem Redis-Server geladen werden, während für den Booking-Service nur die Ordinalnummer der Priorität der Konfigurationsquelle sowie die URL des Timetable-Services aus Redis geladen werden.
+Der Client mit der ID 8 ist lediglich der CLI-basierte Redis-Client.
 
 # MicroProfile RestClient
 
