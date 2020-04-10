@@ -35,6 +35,72 @@ Ursprünglich wollten wir die Implementierung des Timetable-Services mit [Thornt
 Allerdings wird Thorntail laut [einem Blogpost](https://thorntail.io/posts/thorntail-community-announcement-on-quarkus/) nicht mehr mit voller Teamstärke weiterentwickelt und die Zukunft liegt in Quarkus.
 Dies ist allerdings auf der Thorntail-Projektseite mit Stand April 2020 nur schwer ersichtlich.
 
+## Automatisierte Tests
+
+Quarkus hat eine herausragende Unterstützung für automatisierte Tests auf mehreren Stufen:
+
+- Mittels Rest-Easy können einfach Integrationstests der REST-Endpunkte durchgeführt werden, wobei das zurückgelieferte JSON-Dokument von der Test-Suite inspiziert werden muss.
+- Da auch im Testmodus Dependency-Injection via CDI vollständig unterstützt wird, können Integrationstests über mehrere Schichten des Systems durchgeführt werden. Die Unterstützung geht sogar so weit, dass z.B. Annotationen der JTA wie `@Transactional` unterstützt werden.
+- Natürlich können über die mitgelieferte Bibliothekt JUnit 5 auch Unit-Tests durchgeführt werden.
+
+Wir haben uns für den Timetable-Service auf Integrationstests der Geschäftslogik festgelegt, da wir somit die volle Funktionalität der Bibliothek JUnit auf Java-Objekten ausnutzen können, was insbesondere gegenüber Tests der REST-Controller erhebliche Vorteile bietet.
+So ist es wesentlich einfacher die Inhalte einer Java-Collection zu prüfen als ein JSON-Dokument.
+Außerdem sind unsere REST-Controller lediglich sehr dünne Wrapper um die Geschäftslogik und durch Tests der Geschäftslogik werden bereits weite Teile des Systems automatisch getestet.
+
+### Ergebnisse
+
+Die Tests werden in dem Standard-Ordner von Maven (`src/test/java`) abgelegt.
+Als Beispiel folgt unten ein Auszug aus unserer Testsuite für das Suchen von Verbindungen zwischen zwei Bahnhöfen.
+Die Testmethode `testFindRouteWithConnection` sucht eine Verbindung zwischen Berlin und Zürich und überprüft, ob eine Verbindung zurückgegeben wird und ob diese über die gewünschte anzahl von Zwischenhalten verfügt.
+Die Testmethode `testFindRouteForNonExistingStop` stellt sicher, dass eine entsprechende Exception ausgelöst wird, wenn es keine Verbindung zwischen zwei Bahnhöfen gibt.
+
+```java
+@QuarkusTest
+public class RouteManagerTest {
+    @Inject
+    private RouteManager routeManager;
+
+    @Test
+    public void testFindRouteWithConnection() throws NoRouteException {
+        var connections = this.routeManager.findAllStopsBetween(43L, 14L);
+        assertNotNull(connections);
+        assertTrue(connections.size() > 0);
+        assertEquals(29, connections.size());
+    }
+
+    @Test
+    public void testFindRouteForNonExistingStop() {
+        assertThrows(
+                NoRouteException.class,
+                () -> this.routeManager.findAllStopsBetween(0L, -1L)
+        );
+    }
+}
+```
+
+Das Ausführen der Tests funktioniert, wie gewohnt, über das Maven-Goal `test`.
+Unten folgt noch ein Auszug aus dem Testprotokoll, welches die Ausführung des zuvor genannten Maven-Goals ergibt.
+
+```
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.104 s - in eu.nighttrains.timetable.test.RailwayStationManagerTest
+[INFO] Running eu.nighttrains.timetable.test.RouteManagerTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.117 s - in eu.nighttrains.timetable.test.RouteManagerTest
+[INFO] Running eu.nighttrains.timetable.test.TrainConnectionManagerTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.079 s - in eu.nighttrains.timetable.test.TrainConnectionManagerTest
+17:42:19 INFO  traceId=, spanId=, sampled= [io.quarkus] (main) Quarkus stopped in 0.039s
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  12.016 s
+[INFO] Finished at: 2020-04-10T17:42:19+02:00
+[INFO] ------------------------------------------------------------------------
+```
+
 # Wildfly mit Microprofile
 
 Alexander
