@@ -1,6 +1,14 @@
 # Architektur
 
-Alexander --> Architekturdiagramm
+Die Architektur setzt sich im wesentlichen aus vier Komponenten zusammen.
+In Docker werden ein Jaeger Container, ein PostgreSql Container und ein Redis Container gehostet. Der PostgreSql Container beinhaltet ein DBMS mit zwei Datenbanken (timetable und booking, welche von dem entsprechenden Service genutzt werden).
+Innerhalb des Quarkus Applikationsservers läuft der Timetable-Service. Dieser kommuniziert mit den Docker Containern und stellt eine REST-Schnittstelle nach Außen zur Verfügung.
+Innerhalb des Wildfly Applikationsservers läuft der Booking-Service. Dieser kommuniziert ebenfalls mit den Docker Containern und stellt eine REST-Schnittstelle nach Außen zur Verfügung. Das React Frontend kommuniziert über die REST-Schnittstellen mit dem Timetable- und dem Booking-Service.
+![Komponenten Diagramm](doc/img/component-diagram.png)
+
+## Ablauf der Kommunikation
+Das nachfolgende Sequenzdiagramm stellt den Ablauf des Buchens einer Zugverbindung von A nach B in einer etwas vereinfachten Form dar. Das Frontend interagiert sowohl mit dem Timetable-Service, als auch mit dem Booking-Service. Weiters kommuniziert der Booking-Service mit dem Timetable-Service um Informationen zu den Verbindungen sowie zu den einzelnen Stationen und Zügen zu bekommen, da diese Informationen vom Timetable-Service verwaltet werden.
+![Vereinfachte Darstellung des Buchens von Verbindungen](doc/img/sequence-diagram.png)
 
 ## Timetable-Service
 
@@ -8,7 +16,176 @@ Lukas
 
 ## Booking-Service
 
-Alexander
+Der Booking-Service ist für das Reservieren von Plätzen in den Waggons eines Zugs, sowie für das Anlegen der Fahrscheine/Tickets, welche benötigt werden um von A nach B zu kommen, zuständig. Eine Buchung umfasst bei der vorliegenden Implementierung ein oder mehrere Tickets. Ein Ticket ist einem Zug zugeordnet und enthält alle Reservierungen für die jeweiligen Verbindungen, welche mit diesem Zug gefahren werden. Zum Erstellen einer Buchung bekommt der Booking-Service das Startdatum, eine OriginId, eine DestinationId sowie den Waggontyp welcher reserviert werden soll übergeben. Die OriginId unf die DestinationId verweisen auf Stationen, welche vom Timetable-Service verwaltet werden.
+
+### Ticket
+Um eine Buchung anlegen zu können werden Informationen zu den einzelnen Verbindungen zwischen dem Startbahnhof und dem Zielbahnhof benötigt. Diese stellt der Timetable-Service zur Verfügung. Dabei kann es sein, dass man ein, oder mehrmals umsteigen muss (= Zug wechseln). Dies wurde so implementiert, dass für jeden Zug ein eigenes Ticket ausgestellt wird. Da der Timetable-Service alle Verbindungen auf einaml sendet, unabhängig davon, ob der Fahrgast umsteigen muss oder nicht, um die Netzwerklast zu reduzieren, ist es Aufgabe des Booking-Service die Verbinungen den jeweiligen Zügen zuzuordnen um auch entsprechend die Reservierungen durchführen zu können. 
+
+### Reservierung
+Die Züge haben Waggons, welche geordnet sind, eine gewisse Kapazität aufweisen und einer Kategorie (SEATER, SLEEPER, COUCH) zugewiesen sind. Die gewünschte Kategorie muss bei der Buchung angegeben werden. Weiters gehen wir in unserem Anwendungsfall davon aus, dass alle Züge jeden Tag zur selben Uhrzeit fahren. Demnach muss bei der Reservierung auch das Datum berücksichtigt werden. So ermittelt der Booking-Service zuerst für alle Verbindungen das dazugehörige Datum ausgehend vom Startdatum der Buchung. Da es Verbindungen gibt, welche sich über mehrere Tage erstrecken muss dies ebenfalls bei der Reservierung berücksichtigt werden.
+
+Bei der Reservierung wird so vorgegangen, dass ein Platz in einem Waggon der gwünschten Kategorie getätigt wird. Dabei werden die Waggons von vorne (vorderes Ende des Zugs) nach hinten aufegfüllt. Der Booking-Service ermittelt anhand der bereits bestehenden Buchungen ob und in welchem Waggon der gewünschten Kategorie für eine Verbindung zum benötigten Datum noch ein Platz frei ist und reserviert diesen.
+
+
+### Endpunkte
+Um die oben beschriebene Funktionalität nach außen zugänglich zu machen stellt der Booking-Service einen REST-Endpunkt zur Verfügung welcher mit den Methoden POST und GET angesprochen werden kann.
+```java
+@RequestScoped
+@Path("/bookings")
+public class BookingResource {
+        // ...
+        @POST
+        @Path("/")
+        @Produces(MediaType.APPLICATION_JSON)
+        // ...
+        public Response postBooking(@Valid BookingRequestDto2 bookingRequest) {
+                // ...
+        }
+
+        @GET
+        @Path("/{id}")
+        @Produces(MediaType.APPLICATION_JSON)
+        // ...
+        public Response findById(@PathParam("id") Long id) {
+                // ...
+        }
+        // ...
+}
+```
+
+### Verwendung
+#### Create Booking Request
+![POST](doc/img/booking/post.png)
+```json
+{
+    "originId": 0,
+    "destinationId": 4,
+    "journeyStartDate": "2020-04-26",
+    "trainCarType": "SEAT"
+}
+```
+#### Create Booking Response
+![Response Header](doc/img/booking/created-response.png)
+```json
+{
+    "bookingId": 27
+}
+```
+#### Find Booking By ID Request
+![GET](doc/img/booking/get.png)
+#### Find Booking By ID Response
+```json
+{
+    "id": 27,
+    "originId": 0,
+    "originStationName": "Wien Hauptbahnhof",
+    "destinationId": 4,
+    "destinationStationName": "Linz/Donau",
+    "departureDate": "2020-04-26",
+    "tickets": [
+        {
+            "id": 26,
+            "originId": 0,
+            "destinationId": 4,
+            "trainCode": "NJ 466",
+            "stops": [
+                {
+                    "connection": {
+                        "date": "2020-04-26",
+                        "departureStation": {
+                            "id": 0,
+                            "name": "Wien Hauptbahnhof"
+                        },
+                        "arrivalStation": {
+                            "id": 1,
+                            "name": "Wien Meidling"
+                        },
+                        "departureTime": "21:27:00",
+                        "arrivalTime": "21:32:00"
+                    },
+                    "reservation": {
+                        "id": 22,
+                        "trainCar": {
+                            "id": 5,
+                            "number": 25,
+                            "type": "SEAT"
+                        }
+                    }
+                },
+                {
+                    "connection": {
+                        "date": "2020-04-26",
+                        "departureStation": {
+                            "id": 1,
+                            "name": "Wien Meidling"
+                        },
+                        "arrivalStation": {
+                            "id": 2,
+                            "name": "St. PÃ¶lten"
+                        },
+                        "departureTime": "21:35:00",
+                        "arrivalTime": "22:00:00"
+                    },
+                    "reservation": {
+                        "id": 23,
+                        "trainCar": {
+                            "id": 5,
+                            "number": 25,
+                            "type": "SEAT"
+                        }
+                    }
+                },
+                {
+                    "connection": {
+                        "date": "2020-04-26",
+                        "departureStation": {
+                            "id": 2,
+                            "name": "St. PÃ¶lten"
+                        },
+                        "arrivalStation": {
+                            "id": 3,
+                            "name": "Amstetten"
+                        },
+                        "departureTime": "22:02:00",
+                        "arrivalTime": "22:27:00"
+                    },
+                    "reservation": {
+                        "id": 24,
+                        "trainCar": {
+                            "id": 5,
+                            "number": 25,
+                            "type": "SEAT"
+                        }
+                    }
+                },
+                {
+                    "connection": {
+                        "date": "2020-04-26",
+                        "departureStation": {
+                            "id": 3,
+                            "name": "Amstetten"
+                        },
+                        "arrivalStation": {
+                            "id": 4,
+                            "name": "Linz/Donau"
+                        },
+                        "departureTime": "22:29:00",
+                        "arrivalTime": "22:55:00"
+                    },
+                    "reservation": {
+                        "id": 25,
+                        "trainCar": {
+                            "id": 5,
+                            "number": 25,
+                            "type": "SEAT"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
+```
 
 # Quarkus
 
@@ -37,7 +214,46 @@ Dies ist allerdings auf der Thorntail-Projektseite mit Stand April 2020 nur schw
 
 # Wildfly mit Microprofile
 
-Alexander
+[Wildfly](https://wildfly.org/) ist ein Application Server nach dem Java-EE-Standard und Teil des JBoss Middleware-Frameworks. Wildfly ist in der Programmiersprache Java implementiert und ist plattformunabhängig.  Weiters bildet Wildfly die Grundlage der kommerziellen Version der IBM Red Hat JBoss Enterprise Application Plattform (EAP). In der Version **17.0.1** wurde Wildfly als Jakarta EE 8 kompatible Implementierung zertifiziert. Seit der Version **18.0.1** unterstützt WildFly MicroProfile 3.0 ([Wildfly 18](https://wildfly.org/news/2019/10/03/WildFly18-Final-Released/)). Dabei wird Eclipse-Microprofile out of the box vom WildFly Applikationsserver unterstützt.
+
+
+## Unsere Erfahrungen
+Um die Microprofile Implementierungen von Wildfly einzubinden war es notwendig die folgende "Bill Of Material" (BOM - org.wildfly.bom [Example Bom Wildfly](https://github.com/wildfly/boms/blob/master/microprofile/pom.xml)) in die Datei pom.xml einzubinden ([Tutorial](http://www.mastertheboss.com/javaee/eclipse-microservices/how-to-build-microprofile-application-on-wildfly)). Damit IntelliJ die Bibliotheken erkennt war es weiters notwendig die BOM Abhängigkeit nicht nur direkt als dependency unter dependencies anzugeben, sondern diese in das dependencyManagement Element zu geben. Weiters hat dieses Vorgehen zum Einbinden der Microprofile Abhängigkeiten für die Wildfly Version 18.0.1 nicht funktioniert. Deshalb haben wir uns zu einem Upgrade entschieden und in unserem Projekt die Wildfly Version 19.0.1 verwendet, mit welcher es sehr gut funktioniert hat.
+
+```xml
+<dependencyManagement>
+        <dependencies>
+                <dependency>
+                <groupId>org.wildfly.bom</groupId>
+                <artifactId>wildfly-microprofile</artifactId>
+                <version>19.0.0.Final</version>
+                <scope>import</scope>
+                <type>pom</type>
+                </dependency>
+        </dependencies>
+</dependencyManagement>
+
+<dependencies>
+        <dependency>
+                <groupId>org.eclipse.microprofile.openapi</groupId>
+                <artifactId>microprofile-openapi-api</artifactId>
+        </dependency>
+        <dependency>
+                <groupId>org.eclipse.microprofile.rest.client</groupId>
+                <artifactId>microprofile-rest-client-api</artifactId>
+        </dependency>
+        <dependency>
+                <groupId>org.eclipse.microprofile.opentracing</groupId>
+                <artifactId>microprofile-opentracing-api</artifactId>
+        </dependency>
+        <dependency>
+                <groupId>org.eclipse.microprofile.config</groupId>
+                <artifactId>microprofile-config-api</artifactId>
+        </dependency>
+<!-- ... -->
+</dependencies>
+```
+Ansonsten kann man sagen, dass es keine wirklich gute Dokumentation von seiten Wildflys gibt, welche die Implementierung von Anwendungen mit Eclipse-Microprofile unterstützen. Abgesehen von den Schwierigkeiten mit den Abhängigkeiten zu Beginn gab es jedoch keine weiteren Probleme in Zusammenhang mit Wildfly zu bewältigen.
 
 # OpenLiberty
 
@@ -160,15 +376,88 @@ Der Client mit der ID 8 ist lediglich der CLI-basierte Redis-Client.
 
 # MicroProfile RestClient
 
-Alexander
-
 ## Beschreibung
 
+Der MicroProfile Rest Client vereinfacht das Erstellen von REST-Clients indem RESTful Services typsicher über HTTP aufgerufen werden können ([MicroProfile-WhitePaper](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=2ahUKEwi0-dqIn97oAhXtwMQBHXaRDiEQFjAAegQIBxAB&url=https%3A%2F%2Fmicroprofile.io%2Fdownload%2F6339%2F&usg=AOvVaw1ltq2WmqqPUhOWaji-TxT7)). Der Rest Client setzt dabei auf die JAX-RS 2.1 APIs auf. MicroProfile Rest Clients ermöglichen es dem Entwickler normale Java Interfaces zu verwenden, um einen RESTful Service aufzurufen. Über das Interface wird mittels Annotationen das Mapping zwischen der Methode und dem dazugehörigen REST Aufruf festgelegt. Das erzeugen eines Proxys, welcher das Interface implementiert, kann implizit mittels CDI, oder explizit durch den `RestClientBuilder` erfolgen ([microprofile-rest-client](https://github.com/eclipse/microprofile-rest-client)).
+
+
 ## Verwendung in Services
+Das Booking-Service verwendet MicroProfile Rest Client für die Kommunikation mit dem Timetable-Service. Es müssen Verbindungen zwischen dem Start- und dem Zielbahnhof geladen werden sowie Informationen zu den Bahnhöfen, den Zügen und deren Waggons.
 
 ## Implementierung
 
+### Interface Definition
+Mittels der Annotation `@RegisterRestClient` kann ein Proxy, welcher diese Interface implementiert, über CDI verwendet werden. Weiters kann mittels dieser Annotation die Basis-URL für den REST Aufruf angegeben werden, wie nachfolgend dargestellt.
+```java
+@RegisterRestClient(configKey = "timetableService",
+        baseUri = "http://localhost:8082/")
+```
+In unserer Implementierung wird jedoch nur der `configKey` gesetzt. Dabei wird die zuvor beschriebene MicroProfile Config verwendet. Anhand dieses Keys laden wir die benötigten Konfigurationen aus unseren Konfigurations-Quellen und können demnach dieselben Konfigurationen bei all unseren Rest Clients verwenden. Dadurch können Code Duplizierung sowie ein vermehrter Änderungsaufwand, wenn sich beispielsweise die `baseUri` ändern sollte, vermieden werden. Konkret wird der nachfolgende Wert aus der Config geladen.
+```
+timetableService/mp-rest/uri "http://localhost:8082"
+```
+
+Der nachfolgende Code stellt die Implementierung des Microprofile Rest Client für den Endpunkt `/trainConnection` des Timetable-Service dar. 
+```java
+@RegisterRestClient(configKey = "timetableService")
+@Path("/trainConnection")
+public interface TrainConnectionClient extends AutoCloseable {
+    @GET
+    @Path("/")
+    List<TrainConnection> findAllTrainConnections()
+            throws UnknownUriException, ProcessingException;
+
+    @GET
+    @Path("/{id}")
+    TrainConnection findTrainConnectionById(@PathParam("id") long id)
+            throws UnknownUriException, ProcessingException;
+
+    @GET
+    @Path("/code/{code}")
+    TrainConnection findTrainConnectionByCode(@PathParam("code") String code)
+            throws UnknownUriException, ProcessingException;
+
+    @GET
+    @Path("/{id}/cars")
+    List<TrainCar> findAllTrainCarsById(@PathParam("id") long id)
+            throws UnknownUriException, ProcessingException;
+
+    @GET
+    @Path("/code/{code}/cars")
+    List<TrainCar> findAllTrainCarsByCode(@PathParam("code") String code)
+            throws UnknownUriException, ProcessingException;
+}
+```
+
+### Verwendung mittels CDI
+Bei der Verwendung des Rest Client haben wir uns dazu entschieden, den Rest Client aus Architektursicht wie ein Dao zu verwenden. Demnach wird der Rest Client mittels CDI einer Manager Klasse injeziert, welche als Wrapper dient und eine weitere Abstraktionsstufe bildet. Injeziert wird der Rest Client in den `TrainConnectionManager` durch die Angabe der CDI Annotationen `@Inject` und `@RestClient`.
+
+```java
+@RequestScoped
+public class TrainConnectionManagerCdi implements TrainConnectionManager {
+    @Inject
+    @RestClient
+    private TrainConnectionClient trainConnectionClient;
+    @Inject @LoggerQualifier(type = LoggerType.CONSOLE)
+    private Logger logger;
+
+    @Override
+    public List<TrainConnection> findAllTrainConnections(){
+        try {
+            return trainConnectionClient.findAllTrainConnections();
+        } catch(Exception ex) {
+            logger.info(ex.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    // ...
+}
+```
+
 ## Ergebnisse
+
+Ergebnis der Verwendung von MicroProfile Rest Client ist die erfolgreiche Kommunikation des Booking-Service mit dem Timetable-Service sowie das erfolgreiche auslagern und laden der `baseUri` in eine Konfigurations-Quelle.
 
 # MicroProfile OpenAPI
 
@@ -519,18 +808,83 @@ Durch Klick auf den Link zum Finden einer Verbindung, wird auf die bereits bekan
 
 # Setup
 
-Alexander
-
 ## Docker-Container
 
 ### PostgreSQL
 
+```
+docker run --name postgres-docker -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
+```
+
 ### Jaeger
 
+```
+docker run -d --name jaeger -p 6831:6831/udp -p 5778:5778 -p 14268:14268 -p 16686:16686 --rm jaegertracing/all-in-one:1.16
+```
+
+
 ### Redis
+
+```
+docker run --name redis-sve2 -p 6379:6379 -d redis
+docker exec -it redis-sve2 redis-cli
+```
 
 ## Timetable-Service
 
 ## Booking-Service
 
+### Initialisierung der Konfigurations-Datenbank (REDIS)
+
+```
+SET booking:ordinal 600
+HMSET booking timetableService/mp-rest/uri "http://localhost:8082"
+```
+### Wildfly Jaeger Opentracing
+```
+# wildfly jaeger configuration
+$bin = Join-Path $([Environment]::GetEnvironmentVariable("JBOSS_HOME", "User")) "bin"
+
+# using udp: define an outbound socket binding towards the Jaeger tracer.
+$cmd1='/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=jaeger:add(host=localhost, port=6831)'
+& $bin\jboss-cli.ps1 --connect --command="$cmd1"
+
+# define MPOT tracer configuration
+$cmd2='/subsystem=microprofile-opentracing-smallrye/jaeger-tracer=jaeger-demo:add(sampler-type=const, sampler-param=1, reporter-log-spans=true, sender-binding=jaeger)'
+& $bin\jboss-cli.ps1 --connect --command="$cmd2"
+
+#setting the default tracer
+$cmd3='/subsystem=microprofile-opentracing-smallrye:write-attribute(name=default-tracer, value=jaeger-demo)'
+& $bin\jboss-cli.ps1 --connect --command="$cmd3"
+```
+
+### Wildfly Benutzer
+Einen Benutzer zu Wildfly hinzufügen.
+```
+$bin = Join-Path $([Environment]::GetEnvironmentVariable("JBOSS_HOME", "User")) "bin"
+
+& $bin\add-user.ps1 -u admin -p admin123!
+```
+
+### Wildfly Datenbank-Treiber und DataSource
+Datenbank-Treiber für PostgreSql und DataSource zu Wildfly hinzufügen. 
+```
+$bin = Join-Path $([Environment]::GetEnvironmentVariable("JBOSS_HOME", "User")) "bin"
+
+$cmd1='module add --name=org.postgres --resources=postgresql-42.2.11.jar --dependencies=javax.api,javax.transaction.api'
+& $bin\jboss-cli.ps1 --connect --command="$cmd1"
+
+$cmd2='/subsystem=datasources/jdbc-driver=postgres:add(driver-name="postgres",driver-module-name="org.postgres",driver-class-name=org.postgresql.Driver)'
+& $bin\jboss-cli.ps1 --connect --command="$cmd2"
+
+$cmd3='data-source add --jndi-name=java:/PostGreDS --name=PostgrePool --connection-url=jdbc:postgresql://localhost:5432/booking --driver-name=postgres --user-name=postgres --password=postgres'
+& $bin\jboss-cli.ps1 --connect --command="$cmd3"
+```
+
 ## Frontend
+```
+npm install
+```
+```
+npm start
+```
