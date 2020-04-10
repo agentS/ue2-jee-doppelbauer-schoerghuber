@@ -4,10 +4,12 @@ Die Architektur setzt sich im wesentlichen aus vier Komponenten zusammen.
 In Docker werden ein Jaeger Container, ein PostgreSql Container und ein Redis Container gehostet. Der PostgreSql Container beinhaltet ein DBMS mit zwei Datenbanken (timetable und booking, welche von dem entsprechenden Service genutzt werden).
 Innerhalb des Quarkus Applikationsservers läuft der Timetable-Service. Dieser kommuniziert mit den Docker Containern und stellt eine REST-Schnittstelle nach Außen zur Verfügung.
 Innerhalb des Wildfly Applikationsservers läuft der Booking-Service. Dieser kommuniziert ebenfalls mit den Docker Containern und stellt eine REST-Schnittstelle nach Außen zur Verfügung. Das React Frontend kommuniziert über die REST-Schnittstellen mit dem Timetable- und dem Booking-Service.
+
 ![Komponenten Diagramm](doc/img/component-diagram.png)
 
 ## Ablauf der Kommunikation
 Das nachfolgende Sequenzdiagramm stellt den Ablauf des Buchens einer Zugverbindung von A nach B in einer etwas vereinfachten Form dar. Das Frontend interagiert sowohl mit dem Timetable-Service, als auch mit dem Booking-Service. Weiters kommuniziert der Booking-Service mit dem Timetable-Service um Informationen zu den Verbindungen sowie zu den einzelnen Stationen und Zügen zu bekommen, da diese Informationen vom Timetable-Service verwaltet werden.
+
 ![Vereinfachte Darstellung des Buchens von Verbindungen](doc/img/sequence-diagram.png)
 
 ## Timetable-Service
@@ -898,6 +900,35 @@ docker exec -it redis-sve2 redis-cli
 
 ## Timetable-Service
 
+### Initialisierung der Konfigurations-Datenbank (REDIS)
+
+In order to initialize the configuration database you need to run the following commands from Redis CLI:
+
+```
+SET timetable:ordinal 600
+HMSET timetable quarkus.http.port 8082 quarkus.http.cors "true" quarkus.http.cors.origins "http://localhost:3000,http://127.0.0.1:3000"
+HMSET timetable openapi.server.url "http://127.0.0.1:8082"
+HMSET timetable quarkus.datasource.db-kind "postgresql" quarkus.datasource.username "lukas" quarkus.datasource.password "Cisco0" quarkus.datasource.jdbc.url "jdbc:tracing:postgresql://127.0.0.1:5432/timetable" quarkus.datasource.jdbc.driver "io.opentracing.contrib.jdbc.TracingDriver" quarkus.hibernate-orm.dialect "org.hibernate.dialect.PostgreSQLDialect" quarkus.hibernate-orm.database.generation "drop-and-create"
+HMSET timetable quarkus.jaeger.service-name "timetable" quarkus.jaeger.sampler-type "const" quarkus.jaeger.sampler-param 1 quarkus.log.console.format "%d{HH:mm:ss} %-5p traceId=%X{traceId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n"
+```
+
+### Initialisierung der Konfigurationsdatei zum Zugriff auf die Konfigurations-Datenbank
+
+This issue is on quite a meta level, but the configuration source for reading the configuration from Redis uses a configuration file containing the information required to access Redis.
+The configuration file has to reside in the resource directory (`src/main/resources`) and has to be named `redisConfiguration.json`.
+The following example outlines the file's structure:
+
+```json
+{
+  "hostname": "127.0.0.1",
+  "port": 6379,
+  "timeout": 3000,
+  "maximumPoolSize": 5,
+
+  "prefix": "timetable"
+}
+```
+
 ## Booking-Service
 
 ### Initialisierung der Konfigurations-Datenbank (REDIS)
@@ -906,6 +937,24 @@ docker exec -it redis-sve2 redis-cli
 SET booking:ordinal 600
 HMSET booking timetableService/mp-rest/uri "http://localhost:8082"
 ```
+
+### Initialisierung der Konfigurationsdatei zum Zugriff auf die Konfigurations-Datenbank
+
+This issue is on quite a meta level, but the configuration source for reading the configuration from Redis uses a configuration file containing the information required to access Redis.
+The configuration file has to reside in the resource directory (`src/main/resources`) and has to be named `redisConfiguration.json`.
+The following example outlines the file's structure:
+
+```json
+{
+  "hostname": "127.0.0.1",
+  "port": 6379,
+  "timeout": 3000,
+  "maximumPoolSize": 5,
+
+  "prefix": "booking"
+}
+```
+
 ### Wildfly Jaeger Opentracing
 ```
 # wildfly jaeger configuration
