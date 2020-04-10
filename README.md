@@ -57,7 +57,7 @@ public class BookingResource {
 
 ### Verwendung
 #### Create Booking Request
-![POST](doc/img/booking/post.png)
+![POST](doc/img/booking/post.PNG)
 ```json
 {
     "originId": 0,
@@ -67,14 +67,14 @@ public class BookingResource {
 }
 ```
 #### Create Booking Response
-![Response Header](doc/img/booking/created-response.png)
+![Response Header](doc/img/booking/created-response.PNG)
 ```json
 {
     "bookingId": 27
 }
 ```
 #### Find Booking By ID Request
-![GET](doc/img/booking/get.png)
+![GET](doc/img/booking/get.PNG)
 #### Find Booking By ID Response
 ```json
 {
