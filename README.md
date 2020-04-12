@@ -1,7 +1,7 @@
 # Architektur
 
 Die Architektur setzt sich im wesentlichen aus vier Komponenten zusammen.
-In Docker werden ein Jaeger Container, ein PostgreSql Container und ein Redis Container gehostet. Der PostgreSql Container beinhaltet ein DBMS mit zwei Datenbanken (timetable und booking, welche von dem entsprechenden Service genutzt werden).
+In Docker werden ein Jaeger-Container, ein PostgreSQL-Container und ein Redis-Container gehostet. Der PostgreSQL-Container beinhaltet ein DBMS mit zwei Datenbanken (timetable und booking, welche von dem entsprechenden Service genutzt werden).
 Innerhalb des Quarkus Applikationsservers läuft der Timetable-Service. Dieser kommuniziert mit den Docker Containern und stellt eine REST-Schnittstelle nach Außen zur Verfügung.
 Innerhalb des Wildfly Applikationsservers läuft der Booking-Service. Dieser kommuniziert ebenfalls mit den Docker Containern und stellt eine REST-Schnittstelle nach Außen zur Verfügung. Das React Frontend kommuniziert über die REST-Schnittstellen mit dem Timetable- und dem Booking-Service.
 
@@ -14,11 +14,25 @@ Das nachfolgende Sequenzdiagramm stellt den Ablauf des Buchens einer Zugverbindu
 
 ## Timetable-Service
 
-Lukas
+Der Timetable-Service ist für das Auslesen des Fahrplans und der Assets (Bahnhöfe, Zuggarnituren) verantwortlich.
+Die folgende Aufzählung zeigt die wichtigsten Funktionalitäten des Services auf:
+
+- Finden einer Verbindung zwischen zwei Bahnhöfen
+- Anzeigen aller von einem Bahnhof erreichbaren Ziele
+- Anzeigen aller Bahnhöfen und Suchen nach Bahnhöfen per Namen inkl. Funktionalität für Autocomplete im Frontend
+- Anzeigen aller Zuggarnituren und Suche nach Zuggarnituren
+
+**TODO: UML-Klassendiagramm des Domänenmodells**
+
+**TODO: Beschreibung der Verbindungen (Hop-by-Hop zwischen Bahnhöfen)**
+
+**TODO: Beschreibung der rekursiven Abfrage und des Iterative-Deepening-Search-Algorithmus**
+
+**TODO: Beschreibung des Übergangs zu DTOs**
 
 ## Booking-Service
 
-Der Booking-Service ist für das Reservieren von Plätzen in den Waggons eines Zugs, sowie für das Anlegen der Fahrscheine/Tickets, welche benötigt werden um von A nach B zu kommen, zuständig. Eine Buchung umfasst bei der vorliegenden Implementierung ein oder mehrere Tickets. Ein Ticket ist einem Zug zugeordnet und enthält alle Reservierungen für die jeweiligen Verbindungen, welche mit diesem Zug gefahren werden. Zum Erstellen einer Buchung bekommt der Booking-Service das Startdatum, eine OriginId, eine DestinationId sowie den Waggontyp welcher reserviert werden soll übergeben. Die OriginId unf die DestinationId verweisen auf Stationen, welche vom Timetable-Service verwaltet werden.
+Der Booking-Service ist für das Reservieren von Plätzen in den Waggons eines Zugs, sowie für das Anlegen der Fahrscheine/Tickets, welche benötigt werden um von A nach B zu kommen, zuständig. Eine Buchung umfasst bei der vorliegenden Implementierung ein oder mehrere Tickets. Ein Ticket ist einem Zug zugeordnet und enthält alle Reservierungen für die jeweiligen Verbindungen, welche mit diesem Zug gefahren werden. Zum Erstellen einer Buchung bekommt der Booking-Service das Startdatum, eine OriginId, eine DestinationId sowie den Waggontyp, welcher reserviert werden soll, übergeben. Die OriginId unf die DestinationId verweisen auf Stationen, welche vom Timetable-Service verwaltet werden.
 
 ### Ticket
 Um eine Buchung anlegen zu können werden Informationen zu den einzelnen Verbindungen zwischen dem Startbahnhof und dem Zielbahnhof benötigt. Diese stellt der Timetable-Service zur Verfügung. Dabei kann es sein, dass man ein, oder mehrmals umsteigen muss (= Zug wechseln). Dies wurde so implementiert, dass für jeden Zug ein eigenes Ticket ausgestellt wird. Da der Timetable-Service alle Verbindungen auf einaml sendet, unabhängig davon, ob der Fahrgast umsteigen muss oder nicht, um die Netzwerklast zu reduzieren, ist es Aufgabe des Booking-Service die Verbinungen den jeweiligen Zügen zuzuordnen um auch entsprechend die Reservierungen durchführen zu können. 
@@ -26,7 +40,7 @@ Um eine Buchung anlegen zu können werden Informationen zu den einzelnen Verbind
 ### Reservierung
 Die Züge haben Waggons, welche geordnet sind, eine gewisse Kapazität aufweisen und einer Kategorie (SEATER, SLEEPER, COUCH) zugewiesen sind. Die gewünschte Kategorie muss bei der Buchung angegeben werden. Weiters gehen wir in unserem Anwendungsfall davon aus, dass alle Züge jeden Tag zur selben Uhrzeit fahren. Demnach muss bei der Reservierung auch das Datum berücksichtigt werden. So ermittelt der Booking-Service zuerst für alle Verbindungen das dazugehörige Datum ausgehend vom Startdatum der Buchung. Da es Verbindungen gibt, welche sich über mehrere Tage erstrecken muss dies ebenfalls bei der Reservierung berücksichtigt werden.
 
-Bei der Reservierung wird so vorgegangen, dass ein Platz in einem Waggon der gwünschten Kategorie getätigt wird. Dabei werden die Waggons von vorne (vorderes Ende des Zugs) nach hinten aufegfüllt. Der Booking-Service ermittelt anhand der bereits bestehenden Buchungen ob und in welchem Waggon der gewünschten Kategorie für eine Verbindung zum benötigten Datum noch ein Platz frei ist und reserviert diesen.
+Bei der Reservierung wird so vorgegangen, dass ein Platz in einem Waggon der gewünschten Kategorie getätigt wird. Dabei werden die Waggons von vorne (vorderes Ende des Zugs) nach hinten aufegfüllt. Der Booking-Service ermittelt anhand der bereits bestehenden Buchungen, ob und in welchem Waggon der gewünschten Kategorie für eine Verbindung zum benötigten Datum noch ein Platz frei ist und reserviert diesen.
 
 
 ### Endpunkte
@@ -446,7 +460,7 @@ Der Client mit der ID 8 ist lediglich der CLI-basierte Redis-Client.
 
 ## Beschreibung
 
-Der MicroProfile Rest Client vereinfacht das Erstellen von REST-Clients indem RESTful Services typsicher über HTTP aufgerufen werden können ([MicroProfile-WhitePaper](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=2ahUKEwi0-dqIn97oAhXtwMQBHXaRDiEQFjAAegQIBxAB&url=https%3A%2F%2Fmicroprofile.io%2Fdownload%2F6339%2F&usg=AOvVaw1ltq2WmqqPUhOWaji-TxT7)). Der Rest Client setzt dabei auf die JAX-RS 2.1 APIs auf. MicroProfile Rest Clients ermöglichen es dem Entwickler normale Java Interfaces zu verwenden, um einen RESTful Service aufzurufen. Über das Interface wird mittels Annotationen das Mapping zwischen der Methode und dem dazugehörigen REST Aufruf festgelegt. Das erzeugen eines Proxys, welcher das Interface implementiert, kann implizit mittels CDI, oder explizit durch den `RestClientBuilder` erfolgen ([microprofile-rest-client](https://github.com/eclipse/microprofile-rest-client)).
+Der MicroProfile Rest Client vereinfacht das Erstellen von REST-Clients, indem RESTful-Services typsicher über HTTP aufgerufen werden können ([MicroProfile-WhitePaper](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=2ahUKEwi0-dqIn97oAhXtwMQBHXaRDiEQFjAAegQIBxAB&url=https%3A%2F%2Fmicroprofile.io%2Fdownload%2F6339%2F&usg=AOvVaw1ltq2WmqqPUhOWaji-TxT7)). Der Rest Client setzt dabei auf die JAX-RS 2.1 APIs auf. MicroProfile Rest Clients ermöglichen es dem Entwickler normale Java Interfaces zu verwenden, um einen RESTful Service aufzurufen. Über das Interface wird mittels Annotationen das Mapping zwischen der Methode und dem dazugehörigen REST Aufruf festgelegt. Das erzeugen eines Proxys, welcher das Interface implementiert, kann implizit mittels CDI, oder explizit durch den `RestClientBuilder` erfolgen ([microprofile-rest-client](https://github.com/eclipse/microprofile-rest-client)).
 
 
 ## Verwendung in Services
@@ -460,7 +474,7 @@ Mittels der Annotation `@RegisterRestClient` kann ein Proxy, welcher diese Inter
 @RegisterRestClient(configKey = "timetableService",
         baseUri = "http://localhost:8082/")
 ```
-In unserer Implementierung wird jedoch nur der `configKey` gesetzt. Dabei wird die zuvor beschriebene MicroProfile Config verwendet. Anhand dieses Keys laden wir die benötigten Konfigurationen aus unseren Konfigurations-Quellen und können demnach dieselben Konfigurationen bei all unseren Rest Clients verwenden. Dadurch können Code Duplizierung sowie ein vermehrter Änderungsaufwand, wenn sich beispielsweise die `baseUri` ändern sollte, vermieden werden. Konkret wird der nachfolgende Wert aus der Config geladen.
+In unserer Implementierung wird jedoch nur der `configKey` gesetzt. Dabei wird die zuvor beschriebene MicroProfile Config verwendet. Anhand dieses Keys laden wir die benötigte Basis-URL aus unseren Konfigurations-Quellen und können demnach dieselben Konfigurationen bei all unseren Rest Clients verwenden. Dadurch können Code Duplizierung sowie ein vermehrter Änderungsaufwand, wenn sich beispielsweise die `baseUri` ändern sollte, vermieden werden. Konkret wird der nachfolgende Wert aus der Config geladen.
 ```
 timetableService/mp-rest/uri "http://localhost:8082"
 ```
@@ -831,11 +845,7 @@ Für den Timetable-Service werden ebenfalls die JAX-RS-Endpunkt-Aufrufe und die 
 
 ![Traces, die sich bei der Buchung einer Fahrkarte ergeben](doc/img/jaegerUiTraceBooking.png)
 
-# Ergebnisse
-
-Lukas & Alexander
-
-## Frontend
+# Frontend
 
 Da das Frontend nicht Teil der Übungsaufgabe war, haben wir dies in dieser Dokumentation bisher kaum erwähnt.
 Jedoch bietet es eine sehr gute Möglichkeit die funktionalen Ergebnisse unserer Ausarbeitung darzustellen.
