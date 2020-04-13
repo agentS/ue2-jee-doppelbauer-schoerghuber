@@ -1,3 +1,74 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Inhaltsverzeichnis**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Architektur](#architektur)
+  - [Ablauf der Kommunikation](#ablauf-der-kommunikation)
+  - [Timetable-Service](#timetable-service)
+    - [Domänenmodell](#dom%C3%A4nenmodell)
+    - [Suchen von Verbindungen](#suchen-von-verbindungen)
+  - [Booking-Service](#booking-service)
+    - [Ticket](#ticket)
+    - [Reservierung](#reservierung)
+    - [Endpunkte](#endpunkte)
+    - [Verwendung](#verwendung)
+      - [Create Booking Request](#create-booking-request)
+      - [Create Booking Response](#create-booking-response)
+      - [Find Booking By ID Request](#find-booking-by-id-request)
+      - [Find Booking By ID Response](#find-booking-by-id-response)
+  - [DTOs](#dtos)
+- [Quarkus](#quarkus)
+  - [Unsere Erfahrungen](#unsere-erfahrungen)
+  - [Automatisierte Tests](#automatisierte-tests)
+    - [Ergebnisse](#ergebnisse)
+- [Wildfly mit Microprofile](#wildfly-mit-microprofile)
+  - [Unsere Erfahrungen](#unsere-erfahrungen-1)
+- [OpenLiberty](#openliberty)
+- [MicroProfile Config](#microprofile-config)
+  - [Beschreibung](#beschreibung)
+  - [Verwendung in Services](#verwendung-in-services)
+  - [Implementierung](#implementierung)
+    - [Zugriff auf Konfigurationsparameter](#zugriff-auf-konfigurationsparameter)
+    - [Benutzerdefinierte Konfigurationsquelle](#benutzerdefinierte-konfigurationsquelle)
+  - [Ergebnisse](#ergebnisse-1)
+- [MicroProfile RestClient](#microprofile-restclient)
+  - [Beschreibung](#beschreibung-1)
+  - [Verwendung in Services](#verwendung-in-services-1)
+  - [Implementierung](#implementierung-1)
+    - [Interface Definition](#interface-definition)
+    - [Verwendung mittels CDI](#verwendung-mittels-cdi)
+  - [Ergebnisse](#ergebnisse-2)
+- [MicroProfile OpenAPI](#microprofile-openapi)
+  - [Beschreibung](#beschreibung-2)
+  - [Verwendung in Services](#verwendung-in-services-2)
+  - [Implementierung](#implementierung-2)
+    - [Serverseitige OpenAPI-Dokument-Generierung](#serverseitige-openapi-dokument-generierung)
+    - [Generierung des Clients](#generierung-des-clients)
+  - [Ergebnisse](#ergebnisse-3)
+- [MicroProfile OpenTracing](#microprofile-opentracing)
+  - [Beschreibung](#beschreibung-3)
+  - [Verwendung in Services](#verwendung-in-services-3)
+  - [Implementierung](#implementierung-3)
+  - [Ergebnisse](#ergebnisse-4)
+- [Frontend](#frontend)
+- [Setup](#setup)
+  - [Docker-Container](#docker-container)
+    - [PostgreSQL](#postgresql)
+    - [Jaeger](#jaeger)
+    - [Redis](#redis)
+  - [Timetable-Service](#timetable-service-1)
+    - [Initialisierung der Konfigurations-Datenbank (REDIS)](#initialisierung-der-konfigurations-datenbank-redis)
+    - [Initialisierung der Konfigurationsdatei zum Zugriff auf die Konfigurations-Datenbank](#initialisierung-der-konfigurationsdatei-zum-zugriff-auf-die-konfigurations-datenbank)
+  - [Booking-Service](#booking-service-1)
+    - [Initialisierung der Konfigurations-Datenbank (REDIS)](#initialisierung-der-konfigurations-datenbank-redis-1)
+    - [Initialisierung der Konfigurationsdatei zum Zugriff auf die Konfigurations-Datenbank](#initialisierung-der-konfigurationsdatei-zum-zugriff-auf-die-konfigurations-datenbank-1)
+    - [Wildfly Jaeger Opentracing](#wildfly-jaeger-opentracing)
+    - [Wildfly Benutzer](#wildfly-benutzer)
+    - [Wildfly Datenbank-Treiber und DataSource](#wildfly-datenbank-treiber-und-datasource)
+  - [Frontend](#frontend-1)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Architektur
 
 Die Architektur setzt sich im wesentlichen aus vier Komponenten zusammen.
@@ -22,13 +93,75 @@ Die folgende Aufzählung zeigt die wichtigsten Funktionalitäten des Services au
 - Anzeigen aller Bahnhöfen und Suchen nach Bahnhöfen per Namen inkl. Funktionalität für Autocomplete im Frontend
 - Anzeigen aller Zuggarnituren und Suche nach Zuggarnituren
 
-**TODO: UML-Klassendiagramm des Domänenmodells**
+### Domänenmodell
 
-**TODO: Beschreibung der Verbindungen (Hop-by-Hop zwischen Bahnhöfen)**
+Die folgende Abbildung zeigt ein UML-Klassendiagramm des Domänenmodells.
+Die Klassen des Domänenmodell sind jeweils mit JPA-Annotationen angereichert und werden daraus folgend mittels JPA persistiert.
+
+Die Klasse `RailwayStation` dient zur Abbildung von Bahnhöfen, welche über eine ID und einen Namen verfügen.
+Die Klasse `TrainConnection` stellt eine Zugverbindung dar, welche über eine ID, einen Code zur Identifizierung durch Passagiere und Personal (z.B. NJ466) und eine Menge von Waggons verfügt.
+
+Ein Waggon (Klasse `TrainCar`) hat ebenfalls eine ID, eine Nummer, die innerhalb des Zuges eindeutig ist (z.B. 21) und Passagieren hilft, den Waggon, in welchem sich ihr Platz befindet, zu finden, einen Typ, also ob es sich um einen Schlaf-, Liege- oder Sitzwagen handelt und die Kapazität des Waggons.
+Eine Navigation von einem Waggon zu der Zugverbindung, auf welcher dieser eingesetzt wird, ist ebenfalls möglich.
+
+Den Zusammenhang welche Bahnhöfe mittels welcher Zugverbindung erreicht werden können stellt die Klasse `RailwayStationConnection` dar.
+Eine Ausprägung dieser Domänenklasse definiert einen Hop einer Verbindung.
+Ein Hop verbindet jeweils zwei aufeinanderfolgende Bahnhöfe, z.B. Wien Hauptbahnhof nach Wien Meidling auf der Verbindung von Wien Hauptbahnhof nach Zürich Hauptbahnhof.
+Die gesamte Verbindung von z.B. Wien Hauptbahnhof nach Zürich Hauptbahnhof wird als eine Sequenz von Objekten der Klasse `RailwayStationConnection` modelliert: Ausgehend von Wien Hauptbahnhof nach Wien Meidling gibt es pro Zwischenhalt ein Objekt der Klasse `RailwayStationConnection` bis der Ankunftsbahnhof Zürich Hauptbahnhof entspricht.
+Der Zielbahnhof eines Hops ist daher der Abfahrtsbahnhof des darauf folgenden Hops.
+So ist z.B. Wien Meidlung der Ankunftsbahnhof des Hops von Wien Hauptbahnhof nach Wien Meidling und gleichzeitig der Ausgangsbahnhof des Hops von Wien Meidling nach St. Pölten.
+Alle Hops einer direkten Zugverbindung (z.B. von Wien Hauptbahnhof nach Zürich Hauptbahnhof) haben daher das gleiche Objekt vom Typ `TrainConnection` zugeordnet.
+Ein Umsteigen (z.B. in Wien Hauptbahnhof auf der Verbindung von Rom nach Berlin Hauptbahnhof) wird durch einen Wechsel des Objekts vom Typ `TrainConnection` signalisiert, wie er eben im Hop mit Ankunftsbahnhof Wien Hauptbahnhof zum nächsten Hop mit Abfahrtsbahnhof Wien Hauptbahnhof stattfindet.
+
+![Klassendiagramm des Domänenmodells des Timetable-Services](doc/img/timetable/domainModellClassDiagram.svg)
+
+### Suchen von Verbindungen
 
 **TODO: Beschreibung der rekursiven Abfrage und des Iterative-Deepening-Search-Algorithmus**
 
-**TODO: Beschreibung des Übergangs zu DTOs**
+Die Suche einer Verbindung zwischen zwei Bahnhöfen ist einer der komplexeren Prozesse unserer Geschäftslogik, welchen wir daher hier explizit beschreiben möchten.
+
+Der erste Schritt ist eine rekursive SQL-Abfrage, welche alle Hop-by-Hop-Verbindungen, die vom Abfahrtsbahnhof erreicht werden können, ermittelt.
+Diese Abfrage, welche unten dargestellt ist, verwendet die Common-Table-Expressions des ANSI-SQL-1999-Standards, was eine Übertragbarkeit zwischen verschiedenen DBMS gewährleistet.
+Da auch Zugverbindungen in die Gegenrichtung definiert sind, kommt es in der Abfrage zu Zyklen.
+Um diese zu erkennen und die Suche beim Auftreten von Zyklen zu beenden, wird ein Array der Bahnhof-IDs des Suchpfades mitgeführt. Sobald eine ID doppelt vorkommt, wird der Suchzweig beendet.
+Dieser Suchpfad ist ebenfalls für den nächsten Schritt, das Umwandeln in eine Suchbaumstruktor, von entscheidender Bedeutung.
+
+```java
+@RequestScoped
+@Transactional
+public class RailwayStationConnectionDaoJpa implements RailwayStationConnectionDao {
+    // ...
+
+    private static final String QUERY_ALL_CONNECTIONS_FROM =
+            "WITH RECURSIVE connections_to(departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime, depth, searchpath, cycle) AS "
+            + "("
+            + "SELECT departurestation_id, arrivalstation_id, trainconnection_id, departuretime, arrivaltime, 1, ARRAY[departurestation_id], false "
+            + "FROM railwaystationconnection "
+            + "WHERE departurestation_id = :departureStationId "
+            + "UNION ALL "
+            + "SELECT R.departurestation_id, R.arrivalstation_id, R.trainconnection_id, R.departuretime, R.arrivaltime, C.depth + 1, searchpath || R.departurestation_id, R.arrivalstation_id = ANY(searchpath) "
+            + "FROM connections_to AS C INNER JOIN railwaystationconnection AS R ON C.arrivalstation_id = R.departurestation_id "
+            + "WHERE NOT cycle"
+            + ") "
+            + "SELECT C.departurestation_id, D.name AS departurestation_name, C.arrivalstation_id, A.name AS arrivalstation_name, C.trainconnection_id, T.code AS trainconnection_code, C.departuretime AS departuretime, C.arrivaltime AS arrivaltime, C.searchpath AS searchpath FROM connections_to AS C "
+            + "INNER JOIN railwaystation AS D ON D.id = C.departurestation_id "
+            + "INNER JOIN railwaystation AS A ON A.id = C.arrivalstation_id "
+            + "INNER JOIN trainconnection AS T ON T.id = C.trainconnection_id "
+            + "WHERE NOT cycle "
+            + "ORDER BY C.searchpath ASC;";
+
+    // ...
+}
+```
+
+Nach dem Ermitteln aller Hop-by-Hop-Verbindungen wird die schnellste Verbindung mittels Iterative-Deepening-Search ermittelt.
+Die Logik wurde in generischer Form von uns implementiert und befindet sich in der Methode `SearchGraphAlgorithms::findPathIterativeDeepeningSearch`.
+Allerdings liegen die Hop-by-Hop-Verbindungen noch nicht in Form eines Suchbaums vor und müssen daher entsprechend konvertiert werden.
+Die Logik hierzu findet sich in der Klasse `RailwayStationConnectionSearchGraph`, genauer gesagt in dessen Methode `createFromConnections`.
+Jene Methode baut den Suchbaum von der Wurzel, also dem Abfahrtsbahnhof, entlang des in der SQL-Abfrage ermittelten Suchpfades auf.
+
+Nach Ermittlung des Pfades konvertiert die Geschäftslogik das Ergebnis noch in entsprechende DTOs.
 
 ## Booking-Service
 
@@ -202,6 +335,20 @@ public class BookingResource {
     ]
 }
 ```
+
+## DTOs
+
+Wir haben unsere Anwendungen nach dem Dreischichtenmuster entworfen.
+Eine Frage, die sich bei der Verwendung von JPA stellt, sind, [wann und wo die Transaktionsgrenzen gezogen werden](https://stackoverflow.com/questions/23118789/why-we-shouldnt-make-a-spring-mvc-controller-transactional).
+Wir haben uns dafür entschieden, die REST-Controller nicht in die Transaktion eingreifend zu halten.
+Jedoch kann es in diesem Fall zu Problemen mit dem Lazy-Loading-Feature der JPA kommen.
+Um dies zu vermeiden, haben wir uns entschieden, DTOs (Data-Transfer-Objects) einzuführen, welche von den Methoden der Geschäftslogik mit den benötigten Daten aus den Domänenobjekten befüllt werden.
+Ein weiterer Vorteil dieses Ansatzes ist, dass wir somit eine Trennung von Domänenmodell zu den von den REST-Endpunkten verwendeten DTO-Klassen erhalten und beide somit unabhängig entwickeln können.
+
+Die DTO-Klassen spiegeln in den meisten Fällen die Domänenklassen wieder, es gibt aber auch DTO-Klassen, für die es keine Domänenklassen gibt.
+Ein Beispiel ist die DTO-Klasse `RailwayStationDestinationsDto`, welche für einen Abfahrtsbahnhof alle erreichbaren Bahnhöfe angibt.
+
+Darüber hinaus ermöglicht es diese Trennung REST-spezifische Annotationen, wie z.B. jene von MicroProfile OpenAPI von datenbankspezifischen, wie jenen der JPA, zu trennen.
 
 # Quarkus
 

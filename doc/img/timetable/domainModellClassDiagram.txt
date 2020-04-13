@@ -1,0 +1,47 @@
+@startuml
+
+class RailwayStation {
+	- id: Long
+	- name: String
+}
+
+enum TrainCarType {
+	SEAT
+	COUCHETTE
+	SLEEPER
+}
+
+class TrainConnection {
+	- id: Long
+	- code: String
+	- trainCars: Set<TrainCar>
+}
+
+class TrainCar {
+	- id: Long
+	- number: Integer
+	- type: TrainCarType
+	- capacity: Integer
+	- trainConnection: TrainConnection
+}
+
+class RailwayStationConnection {
+	- id: RailwayStationConnectionKey
+	- departureStation: RailwayStation
+	- arrivalStation: RailwayStation
+	- departureTime: LocalTime
+	- arrivalTime: LocalTime
+	- trainConnection: TrainConnection
+}
+class RailwayStationConnectionKey {
+	- departureStationId: Long
+	- arrivalStationId: Long
+	- trainConnectionId: Long
+}
+
+TrainConnection "1" *-- "1..*" TrainCar
+RailwayStationConnection "1" *-- "1" RailwayStationConnectionKey
+RailwayStation "1" -- "0..*" RailwayStationConnection : is departure station >
+RailwayStation "1" -- "0..*" RailwayStationConnection : is arrival station >
+TrainConnection "1" -- "1..*" RailwayStationConnection
+@enduml
