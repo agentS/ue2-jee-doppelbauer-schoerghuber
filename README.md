@@ -118,7 +118,7 @@ Ein Umsteigen (z.B. in Wien Hauptbahnhof auf der Verbindung von Rom nach Berlin 
 
 ### Suchen von Verbindungen
 
-Die Suche einer Verbindung zwischen zwei Bahnhöfen ist einer der komplexeren Prozesse unserer Geschäftslogik, welchen wir daher hier explizit beschreiben möchten.
+Die Suche einer Verbindung zwischen zwei Bahnhöfen ist einer der komplexeren Prozesse unserer Geschäftslogik, welchen wir daher hier kurz beschreiben möchten.
 
 Der erste Schritt ist eine rekursive SQL-Abfrage, welche alle Hop-by-Hop-Verbindungen, die vom Abfahrtsbahnhof erreicht werden können, ermittelt.
 Diese Abfrage, welche unten dargestellt ist, verwendet die Common-Table-Expressions des ANSI-SQL-1999-Standards, was eine Übertragbarkeit zwischen verschiedenen DBMS gewährleistet.
