@@ -9,8 +9,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.ProcessingException;
 import java.util.List;
 
-//http://localhost:8000/destinations/from/0/to/1
-//@RegisterRestClient(configKey = "destinationsClient", baseUri = "http://localhost:8000")
 @RegisterRestClient(configKey = "timetableService")
 // @RegisterProvider(UnknownUriExceptionMapper.class)
 @Path("/destinations")
