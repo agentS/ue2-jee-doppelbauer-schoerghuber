@@ -117,8 +117,6 @@ Ein Umsteigen (z.B. in Wien Hauptbahnhof auf der Verbindung von Rom nach Berlin 
 
 ### Suchen von Verbindungen
 
-**TODO: Beschreibung der rekursiven Abfrage und des Iterative-Deepening-Search-Algorithmus**
-
 Die Suche einer Verbindung zwischen zwei Bahnhöfen ist einer der komplexeren Prozesse unserer Geschäftslogik, welchen wir daher hier explizit beschreiben möchten.
 
 Der erste Schritt ist eine rekursive SQL-Abfrage, welche alle Hop-by-Hop-Verbindungen, die vom Abfahrtsbahnhof erreicht werden können, ermittelt.
