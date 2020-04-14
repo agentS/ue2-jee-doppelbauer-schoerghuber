@@ -1099,6 +1099,11 @@ The following example outlines the file's structure:
 
 ## Booking-Service
 
+### Starten von Wildfly
+
+Wildfly muss mit der Konfigurationsdatei `standalone-microprofile.xml` gestartet werden, um die Features des Eclipse MicroProfiles zu aktivieren.
+Wir haben dies über die JVM-Option `-Djboss.server.default.config=standalone-microprofile.xml` realisiert.
+
 ### Initialisierung der Konfigurations-Datenbank (REDIS)
 
 Um die Konfigurationsdatenbank mit den für den Booking-Service benötigten Konfigurationen zu initialisieren müssen folgende Kommandos auf der Redis CLI ausgeführt werden: 
