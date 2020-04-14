@@ -5,10 +5,10 @@
 - [Architektur](#architektur)
   - [Ablauf der Kommunikation](#ablauf-der-kommunikation)
   - [Timetable-Service](#timetable-service)
-    - [Domänenmodell](#dom%c3%a4nenmodell)
+    - [Domänenmodell](#dom%C3%A4nenmodell)
     - [Suchen von Verbindungen](#suchen-von-verbindungen)
   - [Booking-Service](#booking-service)
-    - [Domänenmodell](#dom%c3%a4nenmodell-1)
+    - [Domänenmodell](#dom%C3%A4nenmodell-1)
     - [Ticket](#ticket)
     - [Reservierung](#reservierung)
     - [Endpunkte](#endpunkte)
@@ -61,6 +61,7 @@
     - [Initialisierung der Konfigurations-Datenbank (REDIS)](#initialisierung-der-konfigurations-datenbank-redis)
     - [Initialisierung der Konfigurationsdatei zum Zugriff auf die Konfigurations-Datenbank](#initialisierung-der-konfigurationsdatei-zum-zugriff-auf-die-konfigurations-datenbank)
   - [Booking-Service](#booking-service-1)
+    - [Starten von Wildfly](#starten-von-wildfly)
     - [Initialisierung der Konfigurations-Datenbank (REDIS)](#initialisierung-der-konfigurations-datenbank-redis-1)
     - [Initialisierung der Konfigurationsdatei zum Zugriff auf die Konfigurations-Datenbank](#initialisierung-der-konfigurationsdatei-zum-zugriff-auf-die-konfigurations-datenbank-1)
     - [Wildfly Jaeger Opentracing](#wildfly-jaeger-opentracing)
@@ -1082,9 +1083,7 @@ HMSET timetable quarkus.jaeger.service-name "timetable" quarkus.jaeger.sampler-t
 
 ### Initialisierung der Konfigurationsdatei zum Zugriff auf die Konfigurations-Datenbank
 
-This issue is on quite a meta level, but the configuration source for reading the configuration from Redis uses a configuration file containing the information required to access Redis.
-The configuration file has to reside in the resource directory (`src/main/resources`) and has to be named `redisConfiguration.json`.
-The following example outlines the file's structure:
+Der Inhalt der Datei zur Konfiguration der Verbindung zu Redis, welche sich im Ordner `src/main/resources` befindet und den Namen `redisConfiguration.json` haben muss, ist unten zu sehen:
 
 ```json
 {
@@ -1099,6 +1098,11 @@ The following example outlines the file's structure:
 
 ## Booking-Service
 
+### Starten von Wildfly
+
+Wildfly muss mit der Konfigurationsdatei `standalone-microprofile.xml` gestartet werden, um die Features des Eclipse MicroProfiles zu aktivieren.
+Wir haben dies über die JVM-Option `-Djboss.server.default.config=standalone-microprofile.xml` realisiert.
+
 ### Initialisierung der Konfigurations-Datenbank (REDIS)
 
 Um die Konfigurationsdatenbank mit den für den Booking-Service benötigten Konfigurationen zu initialisieren müssen folgende Kommandos auf der Redis CLI ausgeführt werden: 
@@ -1110,9 +1114,7 @@ HMSET booking timetableService/mp-rest/uri "http://localhost:8082"
 
 ### Initialisierung der Konfigurationsdatei zum Zugriff auf die Konfigurations-Datenbank
 
-This issue is on quite a meta level, but the configuration source for reading the configuration from Redis uses a configuration file containing the information required to access Redis.
-The configuration file has to reside in the resource directory (`src/main/resources`) and has to be named `redisConfiguration.json`.
-The following example outlines the file's structure:
+Der Inhalt der Datei zur Konfiguration der Verbindung zu Redis, welche sich im Ordner `src/main/resources` befindet und den Namen `redisConfiguration.json` haben muss, ist im folgenden Snippet zu sehen:
 
 ```json
 {
